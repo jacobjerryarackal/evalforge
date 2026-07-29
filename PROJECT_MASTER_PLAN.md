@@ -14,14 +14,14 @@ EvalForge strictly adheres to **Clean Architecture** and **Domain-Driven Design 
 
 ```
        Infrastructure Layer (SQLite repositories, raw HTTP clients, mock GDS toolkits)
-                                        │
-                                        ▼
+                                         │
+                                         ▼
        Adapter Layer (Gemini SDK, OpenRouter REST client, SQLite DB adapter, Rich Console CLI)
-                                        │
-                                        ▼
+                                         │
+                                         ▼
        Use Case Layer (BenchmarkRunner orchestrator, Metric evaluators)
-                                        │
-                                        ▼
+                                         │
+                                         ▼
        Domain Layer (Entities: Step, Trajectory, GoldenTestCase; Value Objects: Cost, Latency)
 ```
 
@@ -33,40 +33,121 @@ EvalForge strictly adheres to **Clean Architecture** and **Domain-Driven Design 
 ---
 
 ## 3. Compressed Roadmap Overview
-EvalForge is developed in **5 compressed Engineering Sprints** designed to fit a 1-week timeline:
+EvalForge is developed in **6 compressed Engineering Sprints** designed to fit a 1-week timeline (Days 1–6):
 
-1. **Sprint 1: Pluggable Core Engine & Environments**: Implement concrete LLM adapters (Gemini, Ollama, OpenRouter) and a Mock Travel SUT agent wrapper exposing flight, hotel, and weather APIs.
-2. **Sprint 2: Heuristic & Retrieval Metrics**: Implement deterministic checks (token usages, budgets, loop tracking, tool formats) and retrieval metrics (Context Precision, Context Recall).
-3. **Sprint 3: Cognitive Metrics (LLM-as-a-Judge)**: Implement Groundedness, Faithfulness, and Answer Correctness metrics with Pydantic JSON schema judges.
-4. **Sprint 4: Safety & Policy Auditing**: Implement safety evaluations (prompt injection, prompt leaks, PII) and versioned golden datasets/regression checks.
-5. **Sprint 5: Persistence, Dashboard & HTML Reporting**: Implement SQLite db storage, a Rich CLI console dashboard, and static HTML reports exports.
-
----
-
-## 4. Progress Tracking & Phase Completion
-Progress is monitored sprint-by-sprint. A sprint is completed only when it clears the **Engineering Gate** defined in the Playbook.
-
-| Sprint | Objective | Target Completion | Actual Completion | Status |
+| Sprint | Objective | Duration | Target Date | Status |
 | :--- | :--- | :--- | :--- | :--- |
-| **Sprint 0** | Engineering OS Initialization | Day 1 | 2026-07-29 | **Completed** |
-| **Sprint 1** | Pluggable Engine & Environments | Day 2 | - | *Pending* |
-| **Sprint 2** | Heuristic & Retrieval Metrics | Day 3 | - | *Pending* |
-| **Sprint 3** | Cognitive Metrics (LLM Judge) | Day 4 | - | *Pending* |
-| **Sprint 4** | Safety & Policy Auditing | Day 5 | - | *Pending* |
-| **Sprint 5** | Persistence & Dashboard Reporting | Day 6 | - | *Pending* |
+| **Sprint 0** | Engineering OS Initialization | Day 1 | Day 1 | **Completed** |
+| **Sprint 1** | Pluggable Core Engine & SUT Integration | Days 1–2 | Day 2 | *Pending* |
+| **Sprint 2** | Heuristic & Retrieval Metrics | Day 3 | Day 3 | *Pending* |
+| **Sprint 3** | Cognitive Metrics (LLM Judge) | Day 4 | Day 4 | *Pending* |
+| **Sprint 4** | Safety & Policy Auditing | Day 5 | Day 5 | *Pending* |
+| **Sprint 5** | Database Persistence & Dashboard Reporting | Day 6 | Day 6 | *Pending* |
 
 ---
 
-## 5. Dependencies
-- **Runtime**: Python 3.11+
-- **Validation**: Pydantic v2 (for robust parsing and type assertions)
-- **APIs**: Httpx (async requests), Google Generative AI (Gemini SDK), OpenAI SDK (for OpenRouter compatibility)
-- **Data & Reports**: Pandas/Polars (tabular logs), Jinja2 (HTML generation), Rich (CLI dashboards)
-- **Quality Assurance**: Pytest (testing), Ruff (linting), Black (formatting), Mypy (type checking)
+## 4. Sprint Specifications
+
+### Sprint 0: Engineering OS Initialization
+- **Goal**: Establish development environment, folder structure, pure domain models, core interfaces, and concurrent evaluation runner.
+- **Deliverables**:
+  - Virtual environment configuration, `pyproject.toml`, and `.gitignore`.
+  - Pure domain value objects: [TokenUsage](file:///d:/AI/evalforge/src/domain/value_objects/__init__.py), `Cost`, `Latency`.
+  - Domain entities: `Step`, `Trajectory`, `GoldenTestCase`, `GoldenDataset`, `EvaluationRun`.
+  - Repository interfaces & concurrent [BenchmarkRunner](file:///d:/AI/evalforge/src/use_cases/runners/benchmark_runner.py) with bounded concurrency semaphores.
+- **Definition of Done (DoD)**:
+  - 100% of unit tests pass.
+  - Ruff and black formats check out clean. Mypy runs with zero type errors.
+  - Engineering operating system documents are initialized.
+- **Verification**:
+  - Run `pytest` on `tests/unit/test_domain_models.py` and `tests/unit/test_benchmark_runner.py`.
+- **Interview Topics**:
+  - Clean Architecture boundaries and DIP benefits.
+  - Mutability vs. Immutability of Domain Value Objects.
+  - Implementing thread-safe / task-safe bounded concurrency with asyncio Semaphores.
+
+### Sprint 1: Pluggable Core Engine & SUT Integration
+- **Goal**: Implement concrete LLM adapters and a mock Travel Agent SUT with travel tool APIs.
+- **Deliverables**:
+  - `GeminiProvider`, `OpenRouterProvider`, and `OllamaProvider` in `src/adapters/llm/`.
+  - `TravelAgentSUT` mock agent implementing the `AgentSUT` interface.
+  - Mock Tool APIs: flight search, hotel availability, weather lookup.
+- **Definition of Done (DoD)**:
+  - All providers implement [LLMProvider](file:///d:/AI/evalforge/src/domain/interfaces/llm_provider.py) cleanly.
+  - TravelAgentSUT correctly calls APIs and handles tools.
+  - Trajectory captures step outputs and costs.
+- **Verification**:
+  - Integration tests running mock queries against `TravelAgentSUT` and capturing a multi-turn trajectory.
+- **Interview Topics**:
+  - Integration of Gemini and OpenAI SDKs.
+  - Mocking third-party tooling APIs.
+  - Managing multi-turn context trajectories and handling API rate limits/timeouts.
+
+### Sprint 2: Heuristic & Retrieval Metrics
+- **Goal**: Implement deterministic metric checkers and context retrieval precision/recall metrics.
+- **Deliverables**:
+  - Heuristics: `TokenBudgetEvaluator`, `CostConstraintEvaluator`, `ToolCallValidator` (loop checker).
+  - Retrieval: `ContextPrecisionEvaluator`, `ContextRecallEvaluator` under `src/use_cases/evaluators/`.
+- **Definition of Done (DoD)**:
+  - Metric evaluators extend `BaseEvaluator` contract.
+  - Infinite tool-call loops are successfully detected and aborted.
+  - Precision/recall metrics calculations verify correctly against mock indexes.
+- **Verification**:
+  - Unit tests in `tests/unit/test_retrieval_metrics.py` asserting metric outputs.
+- **Interview Topics**:
+  - Precision and Recall in information retrieval.
+  - Implementing execution boundary guards for agent safety.
+  - Profiling token usages and calculating live API costs.
+
+### Sprint 3: Cognitive Metrics (LLM-as-a-Judge)
+- **Goal**: Build advanced cognitive metrics using a secondary model with structured outputs and error handling.
+- **Deliverables**:
+  - Cognitive Evaluators: `FaithfulnessEvaluator`, `GroundednessEvaluator`, `AnswerCorrectnessEvaluator`.
+  - Structured judge wrapper enforcing Pydantic JSON outputs from LLM adapters with auto-retry loops on parse errors.
+- **Definition of Done (DoD)**:
+  - Secondary judge queries models using strict JSON schemas.
+  - Parse failures are caught and retried cleanly.
+- **Verification**:
+  - Integration tests validating LLM judge outputs against pre-defined hallucinated responses.
+- **Interview Topics**:
+  - Design of LLM-as-a-judge pipelines.
+  - Resolving non-determinism in model grading.
+  - Cost/latency trade-offs of running judge evaluations in parallel.
+
+### Sprint 4: Safety & Policy Auditing
+- **Goal**: Implement safety policy metrics and golden dataset versioning to run regression sweeps.
+- **Deliverables**:
+  - Safety: `PromptInjectionEvaluator`, `PolicyComplianceEvaluator`.
+  - Dataset Versioning: schemas to compare results of Agent versions A and B.
+- **Definition of Done (DoD)**:
+  - Evaluators reliably flag injection templates and credential leaks.
+  - Comparison reports calculate score deltas (regressions) accurately.
+- **Verification**:
+  - Run regression evaluation suite, checking variance between mock agent versions.
+- **Interview Topics**:
+  - Guarding agents against jailbreaks and prompt injections.
+  - Policy enforcement and compliance checkers.
+  - Designing dataset schemas for long-term backward compatibility.
+
+### Sprint 5: Database Persistence & Dashboard Reporting
+- **Goal**: Implement database storage and terminal/HTML visualization displays.
+- **Deliverables**:
+  - SQLite database schema & repository implementation (`sqlite_repository.py`).
+  - Rich CLI dashboard displaying live execution status and metrics.
+  - Jinja2 HTML report generator to compile static reports.
+- **Definition of Done (DoD)**:
+  - Evaluation results, costs, and trajectories persist fully in SQLite.
+  - HTML reports compile and open successfully in standard web browsers.
+- **Verification**:
+  - End-to-end integration test creating a run, storing results in SQLite, and generating a report file.
+- **Interview Topics**:
+  - SQLite write locks mitigation under concurrent workloads.
+  - Building high-fidelity CLI dashboards.
+  - Designing static HTML report files for team alignment.
 
 ---
 
-## 6. Definition of Done (DoD)
+## 5. Definition of Done (DoD) - Global Gate
 For any feature or sprint to be declared "Done" and merged, it must satisfy:
 1. **Design Alignment**: Architectural design verified against clean layers; no domain logic leaks into adapters.
 2. **Type Safety**: Mypy type check runs clean with zero issues.
