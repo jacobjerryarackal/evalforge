@@ -5,18 +5,22 @@ This document tracks the current sprint, active phase, completed milestones, eng
 ---
 
 ## 1. Active State
-- **Current Sprint**: **Sprint 1: Pluggable Core Engine & SUT Integration** (Completed)
-- **Current Phase**: Phase 1 (Core Execution Backbone Setup)
-- **Completion Percentage**: **40%** (Core backbone, providers, simulation services, SQLite repository, SUT, and E2E evaluation flow are complete)
-- **Next Sprint**: **Sprint 2: Heuristic & Retrieval Metrics** (Scheduled)
+- **Current Sprint**: **Sprint 2A: Framework Decoupling & Reference Implementation** (Completed)
+- **Current Phase**: Phase 2 (Evaluation Metrics & Decoupled Architecture)
+- **Completion Percentage**: **50%** (Framework decoupled, reference implementation isolated, SQL persistence and LLM adapters complete)
+- **Next Sprint**: **Sprint 2B: Heuristic & Retrieval Metrics** (Scheduled)
 
 ---
 
-## 2. Completed Work (Sprint 1)
+## 2. Completed Work (Sprint 2A)
+- **Decoupled Architecture**: Refactored package boundaries to make the core evaluation engine entirely domain-independent.
+- **Reference Implementation**: Created `examples/travel_agent/` housing the Travel Agent SUT and travel catalog simulation services.
+- **Imports Restructuring**: Cleaned all import footprints in the core framework (`src/`) to ensure absolutely zero dependency on travel business concepts.
+- **Test Isolation**: Updated and verified all unit and E2E tests, ensuring they remain 100% green with zero modifications to runtime agent behaviors.
+
+## Completed Work (Sprint 1)
 - **SQLite Evaluation Repository**: Implemented [SqliteEvaluationRepository](file:///d:/AI/evalforge/src/adapters/repositories/sqlite_repository.py) wrapping blocking `sqlite3` calls inside `asyncio.to_thread` for concurrent safety.
 - **Pluggable LLM Adapters**: Created [GeminiProvider](file:///d:/AI/evalforge/src/adapters/llm/gemini.py), [OllamaProvider](file:///d:/AI/evalforge/src/adapters/llm/ollama.py), and [OpenRouterProvider](file:///d:/AI/evalforge/src/adapters/llm/openrouter.py) with mock fallback modes for offline developer setups.
-- **Travel Simulation Layer**: Created deterministic catalog services under [services.py](file:///d:/AI/evalforge/src/infrastructure/travel_simulation/services.py) (Flights, Hotels, Weather, Currency, Attractions, Policy, and User Profiles).
-- **Travel Agent SUT**: Built [TravelAgentSUT](file:///d:/AI/evalforge/src/infrastructure/mock_sut/travel_agent_sut.py) executing multi-turn reasoning loops, making tool calls, and generating trajectory data.
 - **E2E Integration**: Connected golden datasets, SUT execution, trajectories, evaluators, and SQLite database storage in [test_e2e_evaluation.py](file:///d:/AI/evalforge/tests/integration/test_e2e_evaluation.py).
 - **Verification**: Created 19 new tests, achieving 29/29 passing tests. Codebase is 100% Black-formatted, Ruff-compliant, and Mypy type-safe.
 
@@ -33,10 +37,10 @@ This document tracks the current sprint, active phase, completed milestones, eng
 ---
 
 ## 3. Pending Work (Roadmap)
-- **Sprint 2**: Heuristic constraint checks and Retrieval metrics (Context Recall/Precision).
+- **Sprint 2B**: Heuristic constraint checks and Retrieval metrics (Context Recall/Precision).
 - **Sprint 3**: Cognitive LLM-as-a-judge metrics (Faithfulness, Groundedness, Answer Correctness).
 - **Sprint 4**: Safety evaluation metrics and golden dataset versioning / regression suites.
-- **Sprint 5**: Rich CLI dashboard, and Jinja2 HTML report generator (Note: SQLite persistence implemented in Sprint 1).
+- **Sprint 5**: Rich CLI dashboard, and Jinja2 HTML report generator.
 
 ---
 
