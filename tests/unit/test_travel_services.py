@@ -1,6 +1,6 @@
 import pytest
 
-from src.infrastructure.travel_simulation.services import (
+from examples.travel_agent.services import (
     AttractionsService,
     BookingPolicyService,
     CurrencyService,

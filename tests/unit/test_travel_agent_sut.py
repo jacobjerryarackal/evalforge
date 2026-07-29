@@ -1,6 +1,6 @@
 import pytest
 
-from src.infrastructure.mock_sut.travel_agent_sut import TravelAgentSUT
+from examples.travel_agent.travel_agent_sut import TravelAgentSUT
 
 
 @pytest.mark.anyio

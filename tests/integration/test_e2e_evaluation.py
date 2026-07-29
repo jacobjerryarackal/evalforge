@@ -1,9 +1,9 @@
 import pytest
 
+from examples.travel_agent.travel_agent_sut import TravelAgentSUT
 from src.adapters.repositories.sqlite_repository import SqliteEvaluationRepository
 from src.domain.entities import GoldenDataset, GoldenTestCase, MetricResult, Trajectory
 from src.domain.interfaces.evaluator import BaseEvaluator
-from src.infrastructure.mock_sut.travel_agent_sut import TravelAgentSUT
 from src.use_cases.runners.benchmark_runner import BenchmarkRunner
 
 
