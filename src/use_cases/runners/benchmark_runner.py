@@ -16,6 +16,8 @@ from src.domain.interfaces.evaluator import BaseEvaluator
 from src.domain.interfaces.repository import EvaluationRepository
 from src.domain.interfaces.sut import AgentSUT
 from src.domain.value_objects import Latency
+from src.use_cases.metrics.aggregation import AggregationEngine
+from src.use_cases.metrics.registry import MetricRegistry
 
 logger = logging.getLogger("evaluation.benchmark_runner")
 
@@ -26,11 +28,15 @@ class BenchmarkRunner:
     def __init__(
         self,
         repository: EvaluationRepository,
-        evaluators: Sequence[BaseEvaluator],
+        registry: MetricRegistry,
+        metric_names: Sequence[str] | None = None,
+        aggregation_engine: AggregationEngine | None = None,
     ):
-        """Initializes the runner with a storage repository and evaluation metrics."""
+        """Initializes the runner with storage repository, metric registry and aggregator."""
         self.repository = repository
-        self.evaluators = evaluators
+        self.registry = registry
+        self.metric_names = metric_names
+        self.aggregation_engine = aggregation_engine or AggregationEngine()
 
     async def run_evaluation(
         self,
@@ -68,8 +74,8 @@ class BenchmarkRunner:
             parameters=parameters,
         )
 
-        # Calculate aggregations and summary
-        run.compute_summary()
+        # Calculate aggregations and summary via AggregationEngine
+        run.summary = self.aggregation_engine.aggregate(run.cases)
 
         # Persist run results
         await self.repository.save_run(run)
@@ -118,9 +124,10 @@ class BenchmarkRunner:
                 )
             )
 
-        # 2. Run all evaluators concurrently on the generated trajectory
+        # 2. Run all selected metrics concurrently on the generated trajectory
+        names_to_run = self.metric_names or self.registry.list_evaluators()
         evaluator_tasks = [
-            self._safe_evaluate(evaluator, case, trajectory) for evaluator in self.evaluators
+            self._safe_evaluate(self.registry.get(name), case, trajectory) for name in names_to_run
         ]
 
         metric_results_list = await asyncio.gather(*evaluator_tasks)
