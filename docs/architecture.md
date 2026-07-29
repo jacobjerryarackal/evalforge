@@ -97,3 +97,25 @@ During a single evaluation bench run:
 
 ## 3. Pluggable Providers
 To remain provider-agnostic, Use Cases interact solely with `LLMProvider`. Providers must handle authentication internally (using keys from environment variables like `GEMINI_API_KEY`) and map their outputs back to domain models.
+
+---
+
+## 4. Metrics Engine
+
+The Metrics Engine uses a decoupled, registry-based flow to score agent trajectories without coupling the core execution runner (`BenchmarkRunner`) to concrete metric implementations.
+
+### 4.1 Registry Pattern
+The `MetricRegistry` class acts as the centralized container:
+- All evaluators (such as `LatencyEvaluator` or custom cognitive LLM judges) inherit from the [BaseEvaluator](file:///d:/AI/evalforge/src/domain/interfaces/evaluator.py) contract and are registered in [MetricRegistry](file:///d:/AI/evalforge/src/use_cases/metrics/registry.py).
+- `BenchmarkRunner` retrieves evaluators dynamically from the registry using metric name strings. It never instantiates concrete metrics itself, satisfying Dependency Inversion.
+
+### 4.2 Aggregation Flow
+Aggregation of runs is separated from evaluation execution:
+- The [AggregationEngine](file:///d:/AI/evalforge/src/use_cases/metrics/aggregation.py) takes individual `TestCaseEvaluation` outputs, sums tokens/costs/latencies, averages evaluator scores, and generates the final `EvaluationRun.summary` dictionary.
+- This decoupling allows developers to easily extend or adjust calculations (e.g. adding P95 latency, stddev, or weights) in a single class.
+
+### 4.3 Extension Points
+To add a new metric:
+1. Create a class that implements `BaseEvaluator` (defining its unique `name` and `evaluate` method).
+2. Register the instance in the `MetricRegistry` using `registry.register(new_evaluator)`.
+3. Pass the registry to `BenchmarkRunner`. The runner will automatically discover and run it.
