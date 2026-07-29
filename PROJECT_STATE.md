@@ -5,14 +5,21 @@ This document tracks the current sprint, active phase, completed milestones, eng
 ---
 
 ## 1. Active State
-- **Current Sprint**: **Sprint 2A: Framework Decoupling & Reference Implementation** (Completed)
+- **Current Sprint**: **Sprint 2B: Metrics Engine Foundation** (Completed)
 - **Current Phase**: Phase 2 (Evaluation Metrics & Decoupled Architecture)
-- **Completion Percentage**: **50%** (Framework decoupled, reference implementation isolated, SQL persistence and LLM adapters complete)
-- **Next Sprint**: **Sprint 2B: Heuristic & Retrieval Metrics** (Scheduled)
+- **Completion Percentage**: **60%** (Metrics engine, registry, aggregation, and 6 standard evaluators implemented and verified)
+- **Next Sprint**: **Sprint 3: Cognitive Metrics (LLM-as-a-judge)** (Scheduled)
 
 ---
 
-## 2. Completed Work (Sprint 2A)
+## 2. Completed Work (Sprint 2B)
+- **Metric Registry**: Built [MetricRegistry](file:///d:/AI/evalforge/src/use_cases/metrics/registry.py) which handles evaluator registration, duplicate checking, discovery, and retrieval by name.
+- **Aggregated Statistics**: Created [AggregationEngine](file:///d:/AI/evalforge/src/use_cases/metrics/aggregation.py) which separates scoring logic from `EvaluationRun` data models, facilitating custom averages/totals computations.
+- **Refactored Runner**: Decoupled [BenchmarkRunner](file:///d:/AI/evalforge/src/use_cases/runners/benchmark_runner.py) using the Registry pattern; it no longer imports or directly instantiates concrete evaluators.
+- **Concrete Evaluators**: Implemented 6 deterministic evaluators under [evaluators.py](file:///d:/AI/evalforge/src/use_cases/metrics/evaluators.py): `Latency`, `TokenUsage`, `Cost`, `ToolCalling`, `ContextPrecision`, and `ContextRecall`.
+- **Verification**: Created 12 new tests (totaling 41 passed tests). Ruff linter, Black formatting, and Mypy type checks are completely clean.
+
+## Completed Work (Sprint 2A)
 - **Decoupled Architecture**: Refactored package boundaries to make the core evaluation engine entirely domain-independent.
 - **Reference Implementation**: Created `examples/travel_agent/` housing the Travel Agent SUT and travel catalog simulation services.
 - **Imports Restructuring**: Cleaned all import footprints in the core framework (`src/`) to ensure absolutely zero dependency on travel business concepts.
@@ -37,7 +44,6 @@ This document tracks the current sprint, active phase, completed milestones, eng
 ---
 
 ## 3. Pending Work (Roadmap)
-- **Sprint 2B**: Heuristic constraint checks and Retrieval metrics (Context Recall/Precision).
 - **Sprint 3**: Cognitive LLM-as-a-judge metrics (Faithfulness, Groundedness, Answer Correctness).
 - **Sprint 4**: Safety evaluation metrics and golden dataset versioning / regression suites.
 - **Sprint 5**: Rich CLI dashboard, and Jinja2 HTML report generator.
@@ -61,3 +67,5 @@ We document architectural choices sequentially:
 2. **[ADR-0002: Tech Stack and Architectural Patterns](file:///d:/AI/evalforge/docs/adr/0002-tech-stack-and-architecture-patterns.md)**: Approves Python, Clean Architecture, Pydantic v2, and Repository pattern.
 3. **[ADR-0003: Pluggable LLM Provider & Evaluation Metrics Specification](file:///d:/AI/evalforge/docs/adr/0003-pluggable-llm-provider-and-metrics-specification.md)**: Lays out the base evaluator structure and provider interfaces.
 4. **[ADR-0004: SQLite Repository and Travel Agent SUT Design](file:///d:/AI/evalforge/docs/adr/0004-sqlite-repository-and-travel-agent-sut.md)**: Details SQLite schemas, thread wrapping, and SUT tool mocking.
+5. **[ADR-0005: Metrics Engine Registry and Aggregation Design](file:///d:/AI/evalforge/docs/adr/0005-metrics-engine-registry-and-aggregation.md)**: Details registry pattern, aggregation engine, and default metrics.
+
