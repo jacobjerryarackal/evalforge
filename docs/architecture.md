@@ -47,9 +47,13 @@ We strictly separate our codebase into four layers as dictated by Clean Architec
 - **CLI**: Entrypoints for commands (`run-evaluation`, `create-dataset`).
 
 ### Infrastructure Layer (`src/infrastructure/`)
-- Houses low-level service implementations, environment configurations, and the mock System Under Test (SUT) execution loops.
-- **Mock SUT**: [TravelAgentSUT](file:///d:/AI/evalforge/src/infrastructure/mock_sut/travel_agent_sut.py) implementing [AgentSUT](file:///d:/AI/evalforge/src/domain/interfaces/sut.py). This agent parses queries and coordinates multi-turn reasoning steps.
-- **Travel Simulation Layer**: Deterministic catalog services under [services.py](file:///d:/AI/evalforge/src/infrastructure/travel_simulation/services.py) including:
+- Houses global environment variables configurations, third-party client bootstrapper tools, and low-level helpers.
+- *Constraint*: The infrastructure layer of the core framework remains strictly domain-independent.
+
+### Reference Implementation (`examples/travel_agent/`)
+Demonstrates how to plug any AI Agent system into EvalForge:
+- **Travel Agent SUT**: [TravelAgentSUT](file:///d:/AI/evalforge/examples/travel_agent/travel_agent_sut.py) implementing the [AgentSUT](file:///d:/AI/evalforge/src/domain/interfaces/sut.py) contract. Coordinates multi-turn reasoning steps for travel requests.
+- **Travel Simulation Layer**: Deterministic catalog services under [services.py](file:///d:/AI/evalforge/examples/travel_agent/services.py) including:
   - `FlightService`: Searches flight listings.
   - `HotelService`: Searches hotel listings.
   - `WeatherService`: Fetches mock weather forecasts.
