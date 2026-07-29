@@ -42,15 +42,24 @@ We strictly separate our codebase into four layers as dictated by Clean Architec
 
 ### Adapters Layer (`src/adapters/`)
 - Bridges our use cases with concrete tools, libraries, and external systems.
-- **LLM**: Concrete adapters such as `GeminiProvider` or `OllamaProvider`.
-- **Repositories**: Adapters like `JSONFileRepository` or `SqliteRepository` that serialize and store runs/datasets.
+- **LLM**: Concrete adapters such as [GeminiProvider](file:///d:/AI/evalforge/src/adapters/llm/gemini.py), [OllamaProvider](file:///d:/AI/evalforge/src/adapters/llm/ollama.py), and [OpenRouterProvider](file:///d:/AI/evalforge/src/adapters/llm/openrouter.py) implementing [LLMProvider](file:///d:/AI/evalforge/src/domain/interfaces/llm_provider.py).
+- **Repositories**: Concrete SQL persistence via [SqliteEvaluationRepository](file:///d:/AI/evalforge/src/adapters/repositories/sqlite_repository.py) implementing [EvaluationRepository](file:///d:/AI/evalforge/src/domain/interfaces/repository.py).
 - **CLI**: Entrypoints for commands (`run-evaluation`, `create-dataset`).
 
 ### Infrastructure Layer (`src/infrastructure/`)
-- Houses raw components, environment variables parsing, mock servers, and the System Under Test (SUT) mock.
-- **Mock SUT**: A local mock travel agent that acts as our SUT for testing evaluations.
+- Houses low-level service implementations, environment configurations, and the mock System Under Test (SUT) execution loops.
+- **Mock SUT**: [TravelAgentSUT](file:///d:/AI/evalforge/src/infrastructure/mock_sut/travel_agent_sut.py) implementing [AgentSUT](file:///d:/AI/evalforge/src/domain/interfaces/sut.py). This agent parses queries and coordinates multi-turn reasoning steps.
+- **Travel Simulation Layer**: Deterministic catalog services under [services.py](file:///d:/AI/evalforge/src/infrastructure/travel_simulation/services.py) including:
+  - `FlightService`: Searches flight listings.
+  - `HotelService`: Searches hotel listings.
+  - `WeatherService`: Fetches mock weather forecasts.
+  - `CurrencyService`: Converts exchange rates.
+  - `AttractionsService`: Retrieves sightseeing lists.
+  - `BookingPolicyService`: Checks corporate policies.
+  - `UserProfileService`: Retrieves user budgets/tags.
 
 ---
+
 
 ## 2. Core Domain Data Flow
 
