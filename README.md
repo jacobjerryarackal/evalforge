@@ -1,6 +1,21 @@
-# AI Agent Evaluation Framework for Travel and Accommodation Platform (Booking.com 2026 Inspired)
+# AI Agent Evaluation Framework (Booking.com 2026 Inspired)
 
 This repository contains a production-grade AI Agent Evaluation Framework designed to benchmark, audit, and observe AI agents running on travel and accommodation platforms.
+
+---
+
+## 🛠️ Engineering Operating System (EOS)
+
+The repository's development guidelines, roadmaps, and designs are managed through the following documents:
+
+- 📖 **[ENGINEERING_PLAYBOOK.md](file:///d:/AI/evalforge/ENGINEERING_PLAYBOOK.md)**: Permanent handbook for engineering workflows (Design Template, GStack, Agentic SWE, Genesis Kit).
+- 🧠 **[PROJECT_KNOWLEDGE.md](file:///d:/AI/evalforge/PROJECT_KNOWLEDGE.md)**: Project's long-term memory containing vision, architectural patterns, and known limitations.
+- 💻 **[TECH_STACK.md](file:///d:/AI/evalforge/TECH_STACK.md)**: Details and justifications of all technologies selected.
+- 🎯 **[PROJECT_MASTER_PLAN.md](file:///d:/AI/evalforge/PROJECT_MASTER_PLAN.md)**: Core planning document specifying deliverables, definition of done, and verification for each sprint.
+- 📈 **[ROADMAP.md](file:///d:/AI/evalforge/ROADMAP.md)**: Compressed 1-week execution schedule.
+- 🚦 **[PROJECT_STATE.md](file:///d:/AI/evalforge/PROJECT_STATE.md)**: Tracks active state, risks, ADR index, and completion %.
+
+---
 
 ## 🚀 Key Features
 - **Evaluation Datasets**: Multi-turn travel itineraries and bookings with complex constraints (budget, location, family size).
