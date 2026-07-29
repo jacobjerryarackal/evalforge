@@ -75,8 +75,7 @@ class BenchmarkRunner:
         await self.repository.save_run(run)
         success_rate = run.summary.get("success_rate", 0.0)
         logger.info(
-            f"Evaluation run {run_id} completed and stored. "
-            f"Success rate: {success_rate:.2%}"
+            f"Evaluation run {run_id} completed and stored. " f"Success rate: {success_rate:.2%}"
         )
 
         return run
