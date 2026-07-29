@@ -18,7 +18,8 @@ The repository's development guidelines, roadmaps, and designs are managed throu
 ---
 
 ## 🚀 Key Features
-- **Evaluation Datasets**: Multi-turn travel itineraries and bookings with complex constraints (budget, location, family size).
+- **Domain Agnostic Core**: Core execution and benchmarking engines are entirely domain-independent.
+- **Reference Implementation**: Includes a simulated travel agent assistant ([examples/travel_agent](file:///d:/AI/evalforge/examples/travel_agent)) demonstrating E2E agent evaluation.
 - **Pluggable Providers**: Fully decoupled LLM interface supporting Gemini, Ollama, and OpenRouter.
 - **Clean Architecture**: Decoupled domain model, strict use-case orchestrators, interchangeable adapters, and modular infrastructure.
 - **Comprehensive Metrics**:
@@ -30,14 +31,13 @@ The repository's development guidelines, roadmaps, and designs are managed throu
 
 ## 📂 Repository Structure
 ```
-├── .agents/                    # Workspace Customizations
-│   └── AGENTS.md               # Custom agent rules
 ├── docs/
 │   ├── adr/                    # Architecture Decision Records
-│   │   ├── 0001-record-architecture-decisions.md
-│   │   ├── 0002-tech-stack-and-architecture-patterns.md
-│   │   └── 0003-pluggable-llm-provider-and-metrics-specification.md
 │   └── architecture.md         # Overall architectural blueprint
+├── examples/
+│   └── travel_agent/           # Reference Implementation (SUT & Simulation)
+│       ├── services.py         # Mock flight/hotel/weather catalog services
+│       └── travel_agent_sut.py # Mock travel assistant agent SUT
 ├── src/
 │   ├── domain/                 # Core Entities, Value Objects & interfaces
 │   │   ├── entities/           # Trajectory, Step, Dataset, EvaluationRun
@@ -45,7 +45,7 @@ The repository's development guidelines, roadmaps, and designs are managed throu
 │   │   └── interfaces/         # Contracts for LLM, Repositories, Evaluators
 │   ├── use_cases/              # Evaluation logic & metric calculators
 │   ├── adapters/               # Concrete integrations (Gemini, Sqlite)
-│   └── infrastructure/         # Environment setup & Mock System under Test
+│   └── infrastructure/         # Global environment & config infrastructure
 ├── tests/
 │   ├── unit/                   # Unit tests (Domain objects, rules validation)
 │   └── integration/            # Multi-component flow validations
