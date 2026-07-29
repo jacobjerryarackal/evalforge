@@ -33,8 +33,9 @@ EvalForge strictly adheres to **Clean Architecture** and **Domain-Driven Design 
 
 - **Domain (`src/domain/`)**: Houses core, pure business models (e.g., [EvaluationRun](file:///d:/AI/evalforge/src/domain/entities/evaluation_run.py) or [Trajectory](file:///d:/AI/evalforge/src/domain/entities/trajectory.py)). No dependencies on external frameworks or databases. Defines boundaries via abstract interfaces (e.g., [LLMProvider](file:///d:/AI/evalforge/src/domain/interfaces/llm_provider.py)).
 - **Use Cases (`src/use_cases/`)**: Contains application rules (e.g., [BenchmarkRunner](file:///d:/AI/evalforge/src/use_cases/runners/benchmark_runner.py) and various metric evaluators).
-- **Adapters (`src/adapters/`)**: Bridges interfaces with concrete technologies, such as LLM client adapters (`GeminiProvider`, `OllamaProvider`) and data repositories (`InMemoryEvaluationRepository`).
-- **Infrastructure (`src/infrastructure/`)**: Standard environment loaders, database connection setups, and the mock system under test (SUT) APIs.
+- **Adapters (`src/adapters/`)**: Bridges interfaces with concrete technologies, such as LLM client adapters (`GeminiProvider`, `OllamaProvider`, `OpenRouterProvider`) and database repositories ([SqliteEvaluationRepository](file:///d:/AI/evalforge/src/adapters/repositories/sqlite_repository.py)).
+- **Infrastructure (`src/infrastructure/`)**: Standard environment loaders and database setup components.
+- **Examples (`examples/`)**: Houses reference implementations of SUTs and catalog simulations, such as the [TravelAgentSUT](file:///d:/AI/evalforge/examples/travel_agent/travel_agent_sut.py) and [services.py](file:///d:/AI/evalforge/examples/travel_agent/services.py), illustrating how external agents plug into the framework's interfaces.
 
 ---
 
