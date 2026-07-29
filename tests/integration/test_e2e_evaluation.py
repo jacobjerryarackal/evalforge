@@ -95,14 +95,15 @@ async def test_e2e_evaluation_pipeline(db_path):
     # 3. Instantiate TravelAgentSUT
     sut = TravelAgentSUT()
 
-    # 4. Instantiate Evaluators
-    evaluators = [
-        SimpleMockEvaluator("Faithfulness", 1.0),
-        SimpleMockEvaluator("Groundedness", 0.9),
-    ]
+    # 4. Instantiate Registry and Evaluators
+    from src.use_cases.metrics.registry import MetricRegistry
+
+    registry = MetricRegistry()
+    registry.register(SimpleMockEvaluator("Faithfulness", 1.0))
+    registry.register(SimpleMockEvaluator("Groundedness", 0.9))
 
     # 5. Run Benchmark
-    runner = BenchmarkRunner(repository=repo, evaluators=evaluators)
+    runner = BenchmarkRunner(repository=repo, registry=registry)
     run_id = "run-e2e-test-100"
 
     evaluation_run = await runner.run_evaluation(

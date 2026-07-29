@@ -13,6 +13,7 @@ from src.domain.entities import (
 )
 from src.domain.interfaces import AgentSUT, BaseEvaluator
 from src.domain.value_objects import Cost, Latency, TokenUsage
+from src.use_cases.metrics.registry import MetricRegistry
 from src.use_cases.runners.benchmark_runner import BenchmarkRunner
 
 # --- Mock Implementations for Testing ---
@@ -112,7 +113,10 @@ async def test_benchmark_runner_success_flow():
     eval2 = MockMetricEvaluator(name="Groundedness", score=0.8, reasoning="Substantially grounded")
 
     repo = InMemoryEvaluationRepository()
-    runner = BenchmarkRunner(repository=repo, evaluators=[eval1, eval2])
+    registry = MetricRegistry()
+    registry.register(eval1)
+    registry.register(eval2)
+    runner = BenchmarkRunner(repository=repo, registry=registry)
 
     # 3. Run Benchmark
     run = await runner.run_evaluation(
@@ -161,7 +165,9 @@ async def test_benchmark_runner_sut_crash_isolation():
     sut = CrashingTravelAgentSUT()
     evaluator = MockMetricEvaluator(name="Safety", score=1.0)
     repo = InMemoryEvaluationRepository()
-    runner = BenchmarkRunner(repository=repo, evaluators=[evaluator])
+    registry = MetricRegistry()
+    registry.register(evaluator)
+    runner = BenchmarkRunner(repository=repo, registry=registry)
 
     # 3. Run Benchmark (Ensure SUT crash doesn't bubble up and fail the execution)
     run = await runner.run_evaluation(run_id="run-crash-sut", dataset=dataset, sut=sut)
@@ -199,7 +205,10 @@ async def test_benchmark_runner_evaluator_crash_isolation():
     eval2 = CrashingMetricEvaluator()
 
     repo = InMemoryEvaluationRepository()
-    runner = BenchmarkRunner(repository=repo, evaluators=[eval1, eval2])
+    registry = MetricRegistry()
+    registry.register(eval1)
+    registry.register(eval2)
+    runner = BenchmarkRunner(repository=repo, registry=registry)
 
     # 3. Run Benchmark (Ensure evaluator crash is caught safely)
     run = await runner.run_evaluation(run_id="run-crash-eval", dataset=dataset, sut=sut)
@@ -231,7 +240,8 @@ async def test_benchmark_runner_concurrency_bounding():
     # 2. Setup SUT with delay
     sut = MockTravelAgentSUT(delay=0.05)  # 50ms delay per run
     repo = InMemoryEvaluationRepository()
-    runner = BenchmarkRunner(repository=repo, evaluators=[])
+    registry = MetricRegistry()
+    runner = BenchmarkRunner(repository=repo, registry=registry)
 
     # 3. Test running with max_concurrency = 2
     # Total time should be roughly: 4 cases * 50ms / 2 threads = 100ms + overhead
