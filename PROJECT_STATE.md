@@ -5,9 +5,10 @@ This document tracks the current sprint, active phase, completed milestones, eng
 ---
 
 ## 1. Active State
-- **Current Sprint**: **Sprint 0: Engineering Operating System Initialization**
+- **Current Sprint**: **Sprint 0: Engineering Operating System Initialization** (Completed)
 - **Current Phase**: Phase 0 (Foundations & Requirements Setup)
 - **Completion Percentage**: **20%** (Project spine, environment, core runner engine, domain entities, and OS documents are complete)
+- **Next Sprint**: **Sprint 1: Pluggable Core Engine & SUT Integration** (Scheduled)
 
 ---
 
@@ -36,15 +37,15 @@ This document tracks the current sprint, active phase, completed milestones, eng
 
 | Risk Description | Severity | Mitigation Plan |
 | :--- | :--- | :--- |
-| **LLM Provider Rate Limiting (429 Errors)** | High | Bounded concurrency (Semaphore) restricts parallel cases. Sprint 3 will add retry-backoff wrappers. |
-| **Non-Deterministic LLM Judge Scores** | Medium | Structured Pydantic schema validation for JSON judge outputs, coupled with failure retry loops. |
-| **Concurrent DB Locks during parallel writes** | Medium | Implement serialized database writes or queue transactions in the SQLite Repository adapter. |
+| **LLM Provider Rate Limiting (429 Errors)** | High | Bounded concurrency (Semaphore) restricts parallel cases. Sprint 1 LLM Adapters and Sprint 3 LLM Judges will add retry-backoff wrappers. |
+| **Non-Deterministic LLM Judge Scores** | Medium | Structured Pydantic schema validation for JSON judge outputs, coupled with temperature=0.0 and failure retry loops. |
+| **Concurrent DB Locks during parallel writes** | Medium | Implement serialized database writes or queue transactions in the SQLite Repository adapter (Sprint 5). |
+| **Model Format Instability** | Medium | Implement format-checking schema validators to enforce expected JSON shapes and auto-retry on parsing error. |
 
 ---
 
 ## 5. ADR Index
 We document architectural choices sequentially:
-
-1. **[ADR-0001: Record Architecture Decisions](file:///d:/AI/AI%20Agent%20Evaluation%20Framework/docs/adr/0001-record-architecture-decisions.md)**: Establishes ADR rules and sequential template.
-2. **[ADR-0002: Tech Stack and Architectural Patterns](file:///d:/AI/AI%20Agent%20Evaluation%20Framework/docs/adr/0002-tech-stack-and-architecture-patterns.md)**: Approves Python, Clean Architecture, Pydantic v2, and Repository pattern.
-3. **[ADR-0003: Pluggable LLM Provider & Evaluation Metrics Specification](file:///d:/AI/AI%20Agent%20Evaluation%20Framework/docs/adr/0003-pluggable-llm-provider-and-metrics-specification.md)**: Lays out the base evaluator structure and provider interfaces.
+1. **[ADR-0001: Record Architecture Decisions](file:///d:/AI/evalforge/docs/adr/0001-record-architecture-decisions.md)**: Establishes ADR rules and sequential template.
+2. **[ADR-0002: Tech Stack and Architectural Patterns](file:///d:/AI/evalforge/docs/adr/0002-tech-stack-and-architecture-patterns.md)**: Approves Python, Clean Architecture, Pydantic v2, and Repository pattern.
+3. **[ADR-0003: Pluggable LLM Provider & Evaluation Metrics Specification](file:///d:/AI/evalforge/docs/adr/0003-pluggable-llm-provider-and-metrics-specification.md)**: Lays out the base evaluator structure and provider interfaces.
