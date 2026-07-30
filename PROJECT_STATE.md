@@ -5,14 +5,22 @@ This document tracks the current sprint, active phase, completed milestones, eng
 ---
 
 ## 1. Active State
-- **Current Sprint**: **Sprint 2B: Metrics Engine Foundation** (Completed)
-- **Current Phase**: Phase 2 (Evaluation Metrics & Decoupled Architecture)
-- **Completion Percentage**: **60%** (Metrics engine, registry, aggregation, and 6 standard evaluators implemented and verified)
-- **Next Sprint**: **Sprint 3: Cognitive Metrics (LLM-as-a-judge)** (Scheduled)
+- **Current Sprint**: **Sprint 3: Dataset & Experiment Engine** (Completed)
+- **Current Phase**: Phase 3 (Dataset Control & Experiment Tracking)
+- **Completion Percentage**: **80%** (Dataset Registry, Validator, Loader, BenchmarkConfig, SUT Retries, Experiment comparisons & persistence fully implemented and verified)
+- **Next Sprint**: **Sprint 4: Cognitive Metrics (LLM-as-a-judge)** (Scheduled)
 
 ---
 
-## 2. Completed Work (Sprint 2B)
+## 2. Completed Work (Sprint 3)
+- **Dataset Registry**: Built [DatasetRegistry](file:///d:/AI/evalforge/src/use_cases/datasets/registry.py) which handles dataset registration, compound key uniqueness validation on `(dataset_id, version)`, and discovery.
+- **Dataset Loader**: Built [DatasetLoader](file:///d:/AI/evalforge/src/use_cases/datasets/loader.py) with full support for JSON and line-by-line JSONL datasets, containing advanced diagnostic line-numbered syntax reporting.
+- **Dataset Validator**: Built [DatasetValidator](file:///d:/AI/evalforge/src/use_cases/datasets/validator.py) which enforces SemVer version strings, required fields, unique case IDs, and validates type constraints.
+- **Benchmark Configuration**: Created [BenchmarkConfig](file:///d:/AI/evalforge/src/domain/entities/benchmark_config.py) and integrated it into the runner, adding SUT exponential backoff retries and metrics execution filters.
+- **Experiment Engine**: Implemented [Experiment](file:///d:/AI/evalforge/src/domain/entities/experiment.py) domain model and [ExperimentEngine](file:///d:/AI/evalforge/src/use_cases/experiments/engine.py) to save experiments, compute performance deltas relative to baseline runs, and compile rich markdown summary reports.
+- **Verification**: Created 12 new tests (totaling 53 passed tests). Ruff linter, Black formatting, and Mypy type-checking are completely clean.
+
+## Completed Work (Sprint 2B)
 - **Metric Registry**: Built [MetricRegistry](file:///d:/AI/evalforge/src/use_cases/metrics/registry.py) which handles evaluator registration, duplicate checking, discovery, and retrieval by name.
 - **Aggregated Statistics**: Created [AggregationEngine](file:///d:/AI/evalforge/src/use_cases/metrics/aggregation.py) which separates scoring logic from `EvaluationRun` data models, facilitating custom averages/totals computations.
 - **Refactored Runner**: Decoupled [BenchmarkRunner](file:///d:/AI/evalforge/src/use_cases/runners/benchmark_runner.py) using the Registry pattern; it no longer imports or directly instantiates concrete evaluators.
