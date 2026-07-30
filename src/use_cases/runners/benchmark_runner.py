@@ -72,7 +72,20 @@ class BenchmarkRunner:
         """Runs the benchmark suite using a centralized BenchmarkConfig."""
         logger.info(
             f"Starting benchmark run {run_id} | Dataset: {config.dataset.dataset_id} "
-            f"(v{config.dataset.version}) | SUT: {sut.version} | Concurrency: {config.concurrency}"
+            f"(v{config.dataset.version}) | SUT: {sut.version} | Concurrency: {config.concurrency}",
+            extra={
+                "benchmark_id": run_id,
+                "experiment_id": (
+                    config.execution_parameters.get("experiment_id", "none")
+                    if config.execution_parameters
+                    else "none"
+                ),
+                "dataset_version": config.dataset.version,
+                "provider": config.provider,
+                "retries": config.retry_policy.max_retries if config.retry_policy else 0,
+                "latency": 0.0,
+                "execution_outcome": "pending",
+            },
         )
 
         semaphore = asyncio.Semaphore(config.concurrency)
@@ -102,7 +115,20 @@ class BenchmarkRunner:
         await self.repository.save_run(run)
         success_rate = run.summary.get("success_rate", 0.0)
         logger.info(
-            f"Benchmark run {run_id} completed and stored. Success rate: {success_rate:.2%}"
+            f"Benchmark run {run_id} completed and stored. Success rate: {success_rate:.2%}",
+            extra={
+                "benchmark_id": run_id,
+                "experiment_id": (
+                    config.execution_parameters.get("experiment_id", "none")
+                    if config.execution_parameters
+                    else "none"
+                ),
+                "dataset_version": config.dataset.version,
+                "provider": config.provider,
+                "retries": config.retry_policy.max_retries if config.retry_policy else 0,
+                "latency": float(run.summary.get("avg_latency", 0.0)),
+                "execution_outcome": "success" if success_rate >= 0.5 else "failure",
+            },
         )
 
         return run
