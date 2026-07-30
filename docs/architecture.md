@@ -187,3 +187,50 @@ The Experiment Engine coordinates the comparison, history tracking, and reportin
 - **[ExperimentComparer](file:///d:/AI/evalforge/src/use_cases/experiments/engine.py)**: Takes multiple runs and calculates performance deltas (success rates, token counts, costs, and latencies) against a baseline (the first chronological run).
 - **[ExperimentSummaryGenerator](file:///d:/AI/evalforge/src/use_cases/experiments/engine.py)**: Formats the comparison results, rendering a clean, rich markdown summary illustrating baseline comparison deltas and highlighting the best-performing configuration.
 
+---
+
+## 7. LLM Judge Engine
+
+The LLM Judge Engine provides a reusable and extensible architecture for qualitative evaluators (LLM-as-a-judge) to grade SUT behaviors.
+
+```
+                    ┌─────────────────────────┐
+                    │     BenchmarkRunner     │
+                    └────────────┬────────────┘
+                                 │ (executes)
+                                 ▼
+                    ┌─────────────────────────┐
+                    │      BaseLLMJudge       │
+                    └────────────┬────────────┘
+                                 │ (delegates)
+                                 ▼
+                    ┌─────────────────────────┐
+                    │     LLMJudgeEngine      │
+                    └────────────┬────────────┘
+                                 ├────────────────────────────┐
+                                 ▼                            ▼
+                    ┌─────────────────────────┐   ┌─────────────────────────┐
+                    │   LLMProvider (Adapter) │   │   JudgePromptTemplate   │
+                    └─────────────────────────┘   └─────────────────────────┘
+```
+
+### 7.1 Key Components
+- **[BaseLLMJudge](file:///d:/AI/evalforge/src/use_cases/judges/base.py)**: An abstract base class that implements `BaseEvaluator`. Any LLM Judge inherits from this base class, making it completely compatible with the framework's standard `MetricRegistry` and `BenchmarkRunner` without any architectural changes.
+- **[LLMJudgeEngine](file:///d:/AI/evalforge/src/use_cases/judges/engine.py)**: A reusable execution engine that handles prompt construction, LLM provider interaction, structured Pydantic parsing (`LLMJudgeOutputSchema`), error handling, and confidence tracking. It attempts structured responses first and falls back to text generation and manual JSON block extraction if parsing fails, retrying with exponential backoff on transient errors.
+- **[JudgeRegistry](file:///d:/AI/evalforge/src/use_cases/judges/registry.py)**: A dedicated registry for registering, retrieving, and discovering LLM Judges, enforcing uniqueness by preventing duplicate judge name registrations.
+- **[JudgePromptTemplate](file:///d:/AI/evalforge/src/use_cases/judges/templates.py)**: Reusable prompt structures separating system instructions, evaluation prompts, and scoring rubrics from formatting logic.
+
+### 7.2 Initial Judges
+- **[FaithfulnessJudge](file:///d:/AI/evalforge/src/use_cases/judges/faithfulness.py)**: Checks if the SUT response is supported *only* by the retrieved context.
+- **[GroundednessJudge](file:///d:/AI/evalforge/src/use_cases/judges/groundedness.py)**: Checks if the SUT response addresses the query and satisfies constraints.
+- **[AnswerCorrectnessJudge](file:///d:/AI/evalforge/src/use_cases/judges/correctness.py)**: Evaluates semantic and factual correctness against reference ground truth.
+- **[HallucinationJudge](file:///d:/AI/evalforge/src/use_cases/judges/hallucination.py)**: Scans specifically for fabricated claims or contradictions compared to the context.
+
+### 7.3 Extension Points
+To add a new LLM-based judge:
+1. Create a class that inherits from `BaseLLMJudge`.
+2. Define a `JudgePromptTemplate` containing custom system instructions and scoring rubrics.
+3. Implement `prepare_variables(self, test_case, trajectory)` to extract prompt parameters.
+4. Register the judge in the `JudgeRegistry` and `MetricRegistry`.
+
+
