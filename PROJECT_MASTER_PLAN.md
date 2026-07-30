@@ -38,10 +38,10 @@ EvalForge is developed in **6 compressed Engineering Sprints** designed to fit a
 | Sprint | Objective | Duration | Target Date | Status |
 | :--- | :--- | :--- | :--- | :--- |
 | **Sprint 0** | Engineering OS Initialization | Day 1 | Day 1 | **Completed** |
-| **Sprint 1** | Pluggable Core Engine & SUT Integration | Days 1–2 | Day 2 | *Pending* |
-| **Sprint 2** | Heuristic & Retrieval Metrics | Day 3 | Day 3 | *Pending* |
-| **Sprint 3** | Cognitive Metrics (LLM Judge) | Day 4 | Day 4 | *Pending* |
-| **Sprint 4** | Safety & Policy Auditing | Day 5 | Day 5 | *Pending* |
+| **Sprint 1** | Pluggable Core Engine & SUT Integration | Days 1–2 | Day 2 | **Completed** |
+| **Sprint 2** | Heuristic & Retrieval Metrics | Day 3 | Day 3 | **Completed** |
+| **Sprint 3** | Dataset & Experiment Engine | Day 4 | Day 4 | **Completed** |
+| **Sprint 4** | Cognitive Metrics (LLM Judge) | Day 5 | Day 5 | *Pending* |
 | **Sprint 5** | Database Persistence & Dashboard Reporting | Day 6 | Day 6 | *Pending* |
 
 ---
@@ -99,7 +99,25 @@ EvalForge is developed in **6 compressed Engineering Sprints** designed to fit a
   - Implementing execution boundary guards for agent safety.
   - Profiling token usages and calculating live API costs.
 
-### Sprint 3: Cognitive Metrics (LLM-as-a-Judge)
+### Sprint 3: Dataset & Experiment Engine
+- **Goal**: Make datasets, benchmark configurations, and experiments first-class entities with version control, loading, and structured comparison.
+- **Deliverables**:
+  - `DatasetRegistry`, `DatasetValidator`, `DatasetLoader` in `src/use_cases/datasets/`.
+  - `BenchmarkConfig`, `RetryPolicy` Pydantic models in `src/domain/entities/`.
+  - `Experiment` domain model and `ExperimentEngine` in `src/use_cases/experiments/`.
+  - Persistence implementations for experiments in SQLite and InMemory repositories.
+- **Definition of Done (DoD)**:
+  - JSON and JSONL datasets parse and validate cleanly.
+  - SUT executions retry with exponential backoff on transient errors.
+  - Experiment runs are stored, retrieved, and summarized.
+- **Verification**:
+  - Unit tests verifying Registry, Loader, Validator, Config retries, and Experiment comparisons.
+- **Interview Topics**:
+  - Rationale for versioning evaluation datasets.
+  - Benefits of decoupling BenchmarkConfig from runner orchestration.
+  - Treating experiments as first-class objects to track deltas over time.
+
+### Sprint 4: Cognitive Metrics (LLM-as-a-Judge)
 - **Goal**: Build advanced cognitive metrics using a secondary model with structured outputs and error handling.
 - **Deliverables**:
   - Cognitive Evaluators: `FaithfulnessEvaluator`, `GroundednessEvaluator`, `AnswerCorrectnessEvaluator`.
@@ -114,20 +132,6 @@ EvalForge is developed in **6 compressed Engineering Sprints** designed to fit a
   - Resolving non-determinism in model grading.
   - Cost/latency trade-offs of running judge evaluations in parallel.
 
-### Sprint 4: Safety & Policy Auditing
-- **Goal**: Implement safety policy metrics and golden dataset versioning to run regression sweeps.
-- **Deliverables**:
-  - Safety: `PromptInjectionEvaluator`, `PolicyComplianceEvaluator`.
-  - Dataset Versioning: schemas to compare results of Agent versions A and B.
-- **Definition of Done (DoD)**:
-  - Evaluators reliably flag injection templates and credential leaks.
-  - Comparison reports calculate score deltas (regressions) accurately.
-- **Verification**:
-  - Run regression evaluation suite, checking variance between mock agent versions.
-- **Interview Topics**:
-  - Guarding agents against jailbreaks and prompt injections.
-  - Policy enforcement and compliance checkers.
-  - Designing dataset schemas for long-term backward compatibility.
 
 ### Sprint 5: Database Persistence & Dashboard Reporting
 - **Goal**: Implement database storage and terminal/HTML visualization displays.
