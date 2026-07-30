@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from src.domain.entities import EvaluationRun, GoldenDataset
+from src.domain.entities import EvaluationRun, Experiment, GoldenDataset
 
 
 class EvaluationRepository(ABC):
@@ -36,4 +36,19 @@ class EvaluationRepository(ABC):
     @abstractmethod
     async def list_runs(self, dataset_id: str | None = None) -> list[EvaluationRun]:
         """Lists past evaluation runs, optionally filtered by dataset ID."""
+        pass
+
+    @abstractmethod
+    async def save_experiment(self, experiment: Experiment) -> None:
+        """Saves or updates an experiment in the repository."""
+        pass
+
+    @abstractmethod
+    async def get_experiment(self, experiment_id: str) -> Experiment | None:
+        """Retrieves a specific experiment by its ID."""
+        pass
+
+    @abstractmethod
+    async def list_experiments(self) -> list[Experiment]:
+        """Lists all experiments stored in the repository."""
         pass
