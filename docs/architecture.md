@@ -266,8 +266,8 @@ The REST API resides in `src/adapters/api/app.py` and exposes:
 - **Async Execution**: `POST /api/benchmarks/run` triggers evaluations asynchronously via FastAPI `BackgroundTasks`, returning a `run_id` immediately to avoid blocking client threads.
 - **Execution Reports**: endpoints to download formatted markdown run summaries.
 
-### 8.2 Next.js Dashboard
-An interactive Single Page App inside the `dashboard/` directory using TypeScript:
+### 8.2 Next.js Frontend
+An interactive Single Page App inside the `frontend/` directory using TypeScript:
 - **Overview Dashboard**: displays total evaluations, success rate trends, and aggregated cost/latency charts.
 - **Test Hub**: launches execution runs, configures max retries, and defines concurrency constraints.
 - **Trajectory Inspector**: explores step-by-step SUT thoughts, tool calls, and LLM judge reasoning logs.
