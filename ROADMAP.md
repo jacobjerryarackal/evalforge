@@ -40,7 +40,21 @@ This document maps out our compressed 5-sprint roadmap to build and verify **Eva
 
 ---
 
-## Sprint 3: Cognitive Metrics (LLM-as-a-Judge) (Day 4)
+## Sprint 3: Dataset & Experiment Engine (Day 4)
+- **Goal**: Make datasets, benchmark configurations, and experiments first-class entities with version control, loading, and structured comparison.
+- **Key Deliverables**:
+  - **Dataset Engine** in `src/use_cases/datasets/`:
+    - `DatasetRegistry`, `DatasetValidator`, `DatasetLoader`.
+  - **Benchmark Configuration**:
+    - `BenchmarkConfig`, `RetryPolicy` Pydantic models.
+  - **Experiment Engine** in `src/use_cases/experiments/`:
+    - `Experiment` domain model, `ExperimentEngine`, `ExperimentComparer` and `ExperimentSummaryGenerator`.
+- **Verification Gate**:
+  - Run unit tests verifying dataset registry uniqueness, JSON/JSONL loading and parsing errors, validator constraints checking, SUT retry exponential backoffs, and experiment comparisons.
+
+---
+
+## Sprint 4: Cognitive Metrics (LLM-as-a-Judge) (Day 5)
 - **Goal**: Build advanced cognitive metrics that use a secondary model to grade the quality and correctness of the SUT responses, implementing structured outputs and retry shielding.
 - **Key Deliverables**:
   - **Cognitive Evaluators** in `src/use_cases/evaluators/`:
@@ -52,19 +66,6 @@ This document maps out our compressed 5-sprint roadmap to build and verify **Eva
     - Adds retry handlers to recover from format parsing errors.
 - **Verification Gate**:
   - Run integration tests comparing LLM judge outputs against pre-defined hallucinated responses, verifying they receive low faithfulness scores.
-
----
-
-## Sprint 4: Safety & Policy Auditing (Day 5)
-- **Goal**: Implement safety evaluation metrics to audit policy compliance and build golden dataset versioning to run regression sweeps.
-- **Key Deliverables**:
-  - **Safety Evaluators** in `src/use_cases/evaluators/`:
-    - `PromptInjectionEvaluator`: Identifies if the SUT yielded to jailbreaks or prompt injection attacks in the input query.
-    - `PolicyComplianceEvaluator`: Grades SUT outputs against custom safety guidelines (e.g. leaking API credentials or system prompts).
-  - **Dataset Versioning**:
-    - Implement metadata schema and version comparisons to compute delta changes (performance improvements or regressions) between agent versions.
-- **Verification Gate**:
-  - Run regression evaluation suite, checking output metrics variance between mock agent versions.
 
 ---
 
