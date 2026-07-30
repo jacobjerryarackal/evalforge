@@ -233,4 +233,53 @@ To add a new LLM-based judge:
 3. Implement `prepare_variables(self, test_case, trajectory)` to extract prompt parameters.
 4. Register the judge in the `JudgeRegistry` and `MetricRegistry`.
 
+---
+
+## 8. Platform & Productization
+
+EvalForge is productized as a dual-service containerized platform exposing the evaluation engine over REST APIs and a visual dashboard.
+
+```
+       ┌────────────────────────┐
+       │   Next.js Dashboard    │
+       │ (Port 3000 / React)    │
+       └───────────┬────────────┘
+                   │ (HTTP REST / JSON)
+                   ▼
+       ┌────────────────────────┐
+       │    FastAPI Backend     │
+       │ (Port 8000 / Uvicorn)  │
+       └───────────┬────────────┘
+                   │ (Orchestrates)
+                   ▼
+       ┌────────────────────────┐
+       │     EvalForge Core     │
+       │ (Repo, Runner, Judges) │
+       └────────────────────────┘
+```
+
+### 8.1 FastAPI Backend Adapter
+The REST API resides in `src/adapters/api/app.py` and exposes:
+- **Health Checks**: `/health` verifying service availability.
+- **Dataset Catalog**: endpoints to list, view, and register golden datasets.
+- **Experiment Engine**: endpoints to create and list experiment sweeps, resolving performance deltas.
+- **Async Execution**: `POST /api/benchmarks/run` triggers evaluations asynchronously via FastAPI `BackgroundTasks`, returning a `run_id` immediately to avoid blocking client threads.
+- **Execution Reports**: endpoints to download formatted markdown run summaries.
+
+### 8.2 Next.js Dashboard
+An interactive Single Page App inside the `dashboard/` directory using TypeScript:
+- **Overview Dashboard**: displays total evaluations, success rate trends, and aggregated cost/latency charts.
+- **Test Hub**: launches execution runs, configures max retries, and defines concurrency constraints.
+- **Trajectory Inspector**: explores step-by-step SUT thoughts, tool calls, and LLM judge reasoning logs.
+
+### 8.3 Reporting Engine
+The `MarkdownReportGenerator` inside `src/use_cases/reporting/markdown.py` compiles single-run execution summaries containing:
+- Executive summary metrics (Success rate, token count, cost, average latency).
+- Evaluator tables comparing deterministic check results against qualitative cognitive judge scores.
+- Trajectory tracing and trace comments.
+
+### 8.4 Observability
+- **JSON Structured Logging**: `JSONFormatter` in `src/infrastructure/logging/formatter.py` serializes all Python logs as machine-parseable JSON lines.
+- **Trace Context**: `BenchmarkRunner` injects metadata context (`benchmark_id`, `experiment_id`, `dataset_version`, `provider`, `retries`, `latency`, `outcome`) into the logging pipeline.
+
 
