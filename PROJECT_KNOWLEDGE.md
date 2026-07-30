@@ -115,3 +115,27 @@ Evaluating AI agents is an iterative, experimental science:
 - An [Experiment](file:///d:/AI/evalforge/src/domain/entities/experiment.py) binds related runs together to test a specific hypothesis (e.g., prompt optimization, model switches, temperature adjustments).
 - By storing experiments formally in the [EvaluationRepository](file:///d:/AI/evalforge/src/domain/interfaces/repository.py), teams can query historical progress, calculate deltas relative to a baseline prompt, and automatically generate comparison summaries to decide which agent version is ready for production.
 
+---
+
+## 11. LLM Judge Engine (Sprint 4)
+
+### 11.1 Decoupling Deterministic Metrics from LLM Judges
+Deterministic metrics (latency, token usage, tool calling counts) and qualitative LLM Judges represent fundamentally different evaluation paradigms:
+- **Heuristics & Performance Metrics**: These are highly deterministic, fast, cheap to run, and calculate metrics using simple program boundaries (e.g. system clocks, token API meters, regex mappings).
+- **LLM-as-a-Judge**: These are non-deterministic, slow, expensive, and require a language model wrapper to grade complex reasoning (e.g., faithfulness, groundedness, correctness).
+By separating them into distinct classes but letting them both implement the [BaseEvaluator](file:///d:/AI/evalforge/src/domain/interfaces/evaluator.py) contract, we ensure that:
+1. The standard execution engine `BenchmarkRunner` remains completely agnostic to whether a metric is a simple timer or a complex LLM-as-a-judge call.
+2. We can configure different retry policies, costs, and token thresholds for heuristic vs LLM-based metrics.
+
+### 11.2 Reusable Prompt Templates
+LLM Judges are prompt-driven. Hardcoding prompts in evaluator logic violates the Single Responsibility Principle:
+- **[JudgePromptTemplate](file:///d:/AI/evalforge/src/use_cases/judges/templates.py)** isolates system instructions, scoring criteria, and schemas from execution code.
+- This allows prompt engineering teams to optimize prompts, rubrics, and instructions without altering the underlying python source code.
+- We avoid string formatting conflicts (KeyErrors) on literal JSON braces by separating user variable interpolation (instructions) from static JSON schemas.
+
+### 11.3 Pluggable LLM Judge Registry
+The **[JudgeRegistry](file:///d:/AI/evalforge/src/use_cases/judges/registry.py)** acts as the single source of truth for qualitative graders:
+- It manages discovery and duplicate validation specifically for LLM-based judges.
+- It bridges the LLM Judge ecosystem to the framework's main `MetricRegistry`, ensuring any registered LLM Judge is automatically available to the benchmark execution pipeline.
+
+
