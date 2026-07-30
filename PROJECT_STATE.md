@@ -6,15 +6,15 @@ This document tracks the current sprint, active phase, completed milestones, eng
 
 ## 1. Active State
 - **Current Sprint**: **Sprint 5: Platform & Productization** (Completed)
-- **Current Phase**: Phase 5 (REST APIs, Next.js Dashboard, Reporting, Docker)
-- **Completion Percentage**: **100%** (FastAPI backend, Next.js dashboard workspace, markdown reports, structured logging, Docker deployment assets, and CI workflows completed and verified)
+- **Current Phase**: Phase 5 (REST APIs, Next.js Frontend, Reporting, Docker)
+- **Completion Percentage**: **100%** (FastAPI backend, Next.js frontend workspace, markdown reports, structured logging, Docker deployment assets, and CI workflows completed and verified)
 - **Next Sprint**: None (Framework & Platform is production-grade)
 
 ---
 
 ## 2. Completed Work (Sprint 5)
 - **FastAPI Backend REST API**: Implemented endpoints in [app.py](file:///d:/AI/evalforge/src/adapters/api/app.py) for datasets cataloging, experiment comparing, async run execution via background task workers, run details, and health check.
-- **Next.js Dashboard**: Implemented a visual UI workspace in [page.tsx](file:///d:/AI/evalforge/dashboard/src/app/page.tsx) with state tabs, run creation form inputs, comparative delta tables, and run trajectory inspect traces.
+- **Next.js Frontend**: Implemented a visual UI workspace in [page.tsx](file:///d:/AI/evalforge/frontend/src/app/page.tsx) with state tabs, run creation form inputs, comparative delta tables, and run trajectory inspect traces.
 - **Markdown Reporting**: Created [markdown.py](file:///d:/AI/evalforge/src/use_cases/reporting/markdown.py) to compile rich markdown reports summarizing scores, metrics, cost, tokens, and trajectory step lists.
 - **Observability structured logs**: Created [formatter.py](file:///d:/AI/evalforge/src/infrastructure/logging/formatter.py) implementing a `JSONFormatter`, and updated `BenchmarkRunner` to emit execution parameters in logs.
 - **Deployment & CI assets**: Created backend and frontend [Dockerfile](file:///d:/AI/evalforge/Dockerfile), root [docker-compose.yml](file:///d:/AI/evalforge/docker-compose.yml), and GitHub Action workflow [ci.yml](file:///d:/AI/evalforge/.github/workflows/ci.yml).
@@ -69,7 +69,7 @@ This document tracks the current sprint, active phase, completed milestones, eng
 ---
 
 ## 3. Pending Work (Roadmap)
-- **All Sprints Completed**: Core framework, dataset and experiment engines, LLM cognitive judges, REST APIs, Next.js dashboard, structured JSON logging, and Docker compose assets are fully implemented.
+- **All Sprints Completed**: Core framework, dataset and experiment engines, LLM cognitive judges, REST APIs, Next.js frontend, structured JSON logging, and Docker compose assets are fully implemented.
 
 ---
 
