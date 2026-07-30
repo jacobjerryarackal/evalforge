@@ -119,3 +119,71 @@ To add a new metric:
 1. Create a class that implements `BaseEvaluator` (defining its unique `name` and `evaluate` method).
 2. Register the instance in the `MetricRegistry` using `registry.register(new_evaluator)`.
 3. Pass the registry to `BenchmarkRunner`. The runner will automatically discover and run it.
+
+---
+
+## 5. Dataset Engine
+
+The Dataset Engine makes evaluation datasets first-class Citizens in EvalForge, providing tools for version control, syntax loading, and semantic validation.
+
+```
+                  ┌─────────────────┐
+                  │  DatasetLoader  │
+                  └────────┬────────┘
+                           │ (parses JSON/JSONL)
+                           ▼
+                  ┌─────────────────┐
+                  │ GoldenDataset   │
+                  └────────┬────────┘
+                           │ (validates)
+                           ▼
+                  ┌─────────────────┐
+                  │DatasetValidator │
+                  └────────┬────────┘
+                           │ (registers)
+                           ▼
+                  ┌─────────────────┐
+                  │ DatasetRegistry │
+                  └─────────────────┘
+```
+
+- **[DatasetRegistry](file:///d:/AI/evalforge/src/use_cases/datasets/registry.py)**: Manages and indexes datasets, ensuring uniqueness using a compound key of `(dataset_id, version)`. It allows lookups by specific versions or automatic resolution to the latest semantic version.
+- **[DatasetValidator](file:///d:/AI/evalforge/src/use_cases/datasets/validator.py)**: Audits the datasets, ensuring required fields (`dataset_id`, `name`, `version`, `case_id`, `input_query`) exist, that test case IDs are unique, that versions conform to semantic versioning (SemVer), and that constraints values are typed correctly.
+- **[DatasetLoader](file:///d:/AI/evalforge/src/use_cases/datasets/loader.py)**: Reads and parses datasets from `JSON` (complete dataset schema) and `JSONL` (where each line is a test case, optionally prepended with a metadata line or complemented by parameter overrides). Line numbers are tracked to throw highly diagnostic errors on parsing/schema violations.
+
+---
+
+## 6. Experiment Engine
+
+The Experiment Engine coordinates the comparison, history tracking, and reporting of multiple evaluation runs testing specific hypotheses.
+
+```
+ ┌─────────────────┐       ┌─────────────────┐
+ │  EvaluationRun  │       │  EvaluationRun  │
+ │     (Run A)     │       │     (Run B)     │
+ └────────┬────────┘       └────────┬────────┘
+          │                         │
+          └───────────┬─────────────┘
+                      │ (aggregates)
+                      ▼
+             ┌─────────────────┐
+             │   Experiment    │
+             └────────┬────────┘
+                      │ (analyzes)
+                      ▼
+             ┌─────────────────┐
+             │ExperimentEngine │
+             └────────┬────────┘
+                      ├───────────────────────────┐
+                      ▼                           ▼
+            ┌──────────────────┐        ┌──────────────────┐
+            │ExperimentComparer│        │ SummaryGenerator │
+            │ (delta analysis) │        │ (markdown report)│
+            └──────────────────┘        └──────────────────┘
+```
+
+- **[Experiment](file:///d:/AI/evalforge/src/domain/entities/experiment.py)**: A domain entity grouping multiple `EvaluationRun`s, enabling regression sweeps and comparison.
+- **[ExperimentEngine](file:///d:/AI/evalforge/src/use_cases/experiments/engine.py)**: Coordinates creation, run registration, persistence, and reporting of experiments.
+- **[ExperimentComparer](file:///d:/AI/evalforge/src/use_cases/experiments/engine.py)**: Takes multiple runs and calculates performance deltas (success rates, token counts, costs, and latencies) against a baseline (the first chronological run).
+- **[ExperimentSummaryGenerator](file:///d:/AI/evalforge/src/use_cases/experiments/engine.py)**: Formats the comparison results, rendering a clean, rich markdown summary illustrating baseline comparison deltas and highlighting the best-performing configuration.
+
