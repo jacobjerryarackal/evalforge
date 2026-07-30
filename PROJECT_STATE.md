@@ -5,14 +5,22 @@ This document tracks the current sprint, active phase, completed milestones, eng
 ---
 
 ## 1. Active State
-- **Current Sprint**: **Sprint 3: Dataset & Experiment Engine** (Completed)
-- **Current Phase**: Phase 3 (Dataset Control & Experiment Tracking)
-- **Completion Percentage**: **80%** (Dataset Registry, Validator, Loader, BenchmarkConfig, SUT Retries, Experiment comparisons & persistence fully implemented and verified)
-- **Next Sprint**: **Sprint 4: Cognitive Metrics (LLM-as-a-judge)** (Scheduled)
+- **Current Sprint**: **Sprint 4: LLM Judge Engine** (Completed)
+- **Current Phase**: Phase 4 (Cognitive Evaluation & LLM-as-a-Judge)
+- **Completion Percentage**: **90%** (LLM Judge execution engine, registries, templates, and initial four cognitive judges fully implemented and verified)
+- **Next Sprint**: **Sprint 5: Database Persistence & Dashboard Reporting** (Scheduled)
 
 ---
 
-## 2. Completed Work (Sprint 3)
+## 2. Completed Work (Sprint 4)
+- **LLM Judge Engine**: Built [LLMJudgeEngine](file:///d:/AI/evalforge/src/use_cases/judges/engine.py) implementing Pydantic structured output parsing, text fallback manual JSON block extraction, rate limit retry loops with exponential backoff, and confidence validation.
+- **Base Judge Interface**: Built [BaseLLMJudge](file:///d:/AI/evalforge/src/use_cases/judges/base.py) representing the core base class for qualitative LLM Judges, inheriting from `BaseEvaluator` for seamless execution.
+- **Judge Prompt Templates**: Built [JudgePromptTemplate](file:///d:/AI/evalforge/src/use_cases/judges/templates.py) separating prompts and scoring rubrics from Python logic, with default templates for cognitive assessments.
+- **Cognitive Judges**: Implemented `FaithfulnessJudge`, `GroundednessJudge`, `AnswerCorrectnessJudge`, and `HallucinationJudge`.
+- **Judge Registry**: Implemented [JudgeRegistry](file:///d:/AI/evalforge/src/use_cases/judges/registry.py) managing registration and duplicate validation of LLM Judges.
+- **Verification**: Created 11 new tests (totaling 64 passed tests). Ruff linter, Black formatting, and Mypy type checks are completely clean.
+
+## Completed Work (Sprint 3)
 - **Dataset Registry**: Built [DatasetRegistry](file:///d:/AI/evalforge/src/use_cases/datasets/registry.py) which handles dataset registration, compound key uniqueness validation on `(dataset_id, version)`, and discovery.
 - **Dataset Loader**: Built [DatasetLoader](file:///d:/AI/evalforge/src/use_cases/datasets/loader.py) with full support for JSON and line-by-line JSONL datasets, containing advanced diagnostic line-numbered syntax reporting.
 - **Dataset Validator**: Built [DatasetValidator](file:///d:/AI/evalforge/src/use_cases/datasets/validator.py) which enforces SemVer version strings, required fields, unique case IDs, and validates type constraints.
