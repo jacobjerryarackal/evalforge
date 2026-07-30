@@ -2,6 +2,7 @@ import logging
 from typing import Dict, List
 
 from src.domain.interfaces.evaluator import BaseEvaluator
+from src.domain.interfaces.llm_provider import LLMProvider
 
 logger = logging.getLogger("evaluation.metrics.registry")
 
@@ -35,7 +36,7 @@ class MetricRegistry:
         return list(self._evaluators.values())
 
 
-def create_default_registry() -> MetricRegistry:
+def create_default_registry(llm_provider: LLMProvider | None = None) -> MetricRegistry:
     """Helper to instantiate a registry prepopulated with standard evaluators."""
     from src.use_cases.metrics.evaluators import (
         ContextPrecisionEvaluator,
@@ -53,4 +54,16 @@ def create_default_registry() -> MetricRegistry:
     registry.register(ToolCallingEvaluator())
     registry.register(ContextPrecisionEvaluator())
     registry.register(ContextRecallEvaluator())
+
+    if llm_provider is not None:
+        from src.use_cases.judges.correctness import AnswerCorrectnessJudge
+        from src.use_cases.judges.faithfulness import FaithfulnessJudge
+        from src.use_cases.judges.groundedness import GroundednessJudge
+        from src.use_cases.judges.hallucination import HallucinationJudge
+
+        registry.register(FaithfulnessJudge(llm_provider))
+        registry.register(GroundednessJudge(llm_provider))
+        registry.register(AnswerCorrectnessJudge(llm_provider))
+        registry.register(HallucinationJudge(llm_provider))
+
     return registry
