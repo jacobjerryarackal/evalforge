@@ -4,10 +4,12 @@ from datetime import datetime, timezone
 from typing import Sequence
 
 from src.domain.entities import (
+    BenchmarkConfig,
     EvaluationRun,
     GoldenDataset,
     GoldenTestCase,
     MetricResult,
+    RetryPolicy,
     Step,
     TestCaseEvaluation,
     Trajectory,
@@ -48,17 +50,36 @@ class BenchmarkRunner:
     ) -> EvaluationRun:
         """Runs the benchmark suite on the given dataset using the target agent SUT.
 
-        Uses a Semaphore to restrict the number of concurrent test cases, protecting
-        against SUT or evaluator API rate limits.
+        Maintained for backward compatibility. Wraps parameters in BenchmarkConfig
+        and calls run_benchmark.
         """
-        parameters = parameters or {}
+        config = BenchmarkConfig(
+            dataset=dataset,
+            provider="unknown",
+            evaluators=list(self.metric_names) if self.metric_names else [],
+            concurrency=max_concurrency,
+            retry_policy=RetryPolicy(max_retries=0),
+            execution_parameters=parameters or {},
+        )
+        return await self.run_benchmark(run_id, config, sut)
+
+    async def run_benchmark(
+        self,
+        run_id: str,
+        config: BenchmarkConfig,
+        sut: AgentSUT,
+    ) -> EvaluationRun:
+        """Runs the benchmark suite using a centralized BenchmarkConfig."""
         logger.info(
-            f"Starting evaluation run {run_id} | Dataset: {dataset.dataset_id} "
-            f"(v{dataset.version}) | SUT: {sut.version} | Concurrency: {max_concurrency}"
+            f"Starting benchmark run {run_id} | Dataset: {config.dataset.dataset_id} "
+            f"(v{config.dataset.version}) | SUT: {sut.version} | Concurrency: {config.concurrency}"
         )
 
-        semaphore = asyncio.Semaphore(max_concurrency)
-        tasks = [self._evaluate_case_bounded(case, sut, semaphore) for case in dataset.test_cases]
+        semaphore = asyncio.Semaphore(config.concurrency)
+        tasks = [
+            self._evaluate_case_bounded(case, sut, semaphore, config)
+            for case in config.dataset.test_cases
+        ]
 
         # Run all test cases with bounded concurrency
         case_evaluations = await asyncio.gather(*tasks)
@@ -66,12 +87,12 @@ class BenchmarkRunner:
         # Build the final run results
         run = EvaluationRun(
             run_id=run_id,
-            dataset_id=dataset.dataset_id,
-            dataset_version=dataset.version,
+            dataset_id=config.dataset.dataset_id,
+            dataset_version=config.dataset.version,
             sut_version=sut.version,
             timestamp=datetime.now(timezone.utc),
             cases=list(case_evaluations),
-            parameters=parameters,
+            parameters=config.execution_parameters,
         )
 
         # Calculate aggregations and summary via AggregationEngine
@@ -81,7 +102,7 @@ class BenchmarkRunner:
         await self.repository.save_run(run)
         success_rate = run.summary.get("success_rate", 0.0)
         logger.info(
-            f"Evaluation run {run_id} completed and stored. " f"Success rate: {success_rate:.2%}"
+            f"Benchmark run {run_id} completed and stored. Success rate: {success_rate:.2%}"
         )
 
         return run
@@ -91,41 +112,75 @@ class BenchmarkRunner:
         case: GoldenTestCase,
         sut: AgentSUT,
         semaphore: asyncio.Semaphore,
+        config: BenchmarkConfig | None = None,
     ) -> TestCaseEvaluation:
         """Acquires the concurrency semaphore and evaluates a single test case."""
         async with semaphore:
-            return await self._evaluate_case(case, sut)
+            return await self._evaluate_case(case, sut, config)
 
     async def _evaluate_case(
         self,
         case: GoldenTestCase,
         sut: AgentSUT,
+        config: BenchmarkConfig | None = None,
     ) -> TestCaseEvaluation:
         """Executes the SUT on the test case, runs all evaluators, and checks thresholds."""
         logger.info(f"Executing case {case.case_id}: {case.input_query[:40]}...")
         start_time = datetime.now(timezone.utc)
 
-        # 1. Run the agent SUT and capture trajectory
-        sut_failed = False
-        try:
-            trajectory = await sut.run(case.input_query)
-        except Exception as e:
-            logger.error(f"SUT crashed on case {case.case_id}: {e}", exc_info=True)
-            sut_failed = True
-            # Create a failed trajectory with a terminal error step
-            trajectory = Trajectory()
-            duration = (datetime.now(timezone.utc) - start_time).total_seconds()
-            trajectory.add_step(
-                Step(
-                    step_number=1,
-                    thought="SUT execution failed with an unhandled exception.",
-                    metadata={"error": str(e), "exception_type": type(e).__name__},
-                    latency=Latency(seconds=duration),
-                )
+        if config is None:
+            config = BenchmarkConfig(
+                dataset=GoldenDataset(dataset_id="unknown", name="unknown", test_cases=[case]),
+                provider="unknown",
+                evaluators=list(self.metric_names) if self.metric_names else [],
+                retry_policy=RetryPolicy(max_retries=0),
             )
 
+        # 1. Run the agent SUT and capture trajectory with retry loop
+        sut_failed = False
+        trajectory = Trajectory()
+
+        max_retries = config.retry_policy.max_retries
+        delay = config.retry_policy.initial_delay
+        backoff_factor = config.retry_policy.backoff_factor
+
+        for attempt in range(max_retries + 1):
+            try:
+                trajectory = await sut.run(case.input_query)
+                sut_failed = False
+                break
+            except Exception as e:
+                sut_failed = True
+                logger.warning(
+                    f"SUT execution attempt {attempt + 1}/{max_retries + 1} "
+                    f"failed on case {case.case_id}: {e}"
+                )
+                if attempt < max_retries:
+                    await asyncio.sleep(delay)
+                    delay *= backoff_factor
+                else:
+                    logger.error(
+                        f"SUT crashed on case {case.case_id} after {max_retries + 1} attempts: {e}",
+                        exc_info=True,
+                    )
+                    # Create a failed trajectory with a terminal error step
+                    trajectory = Trajectory()
+                    duration = (datetime.now(timezone.utc) - start_time).total_seconds()
+                    trajectory.add_step(
+                        Step(
+                            step_number=1,
+                            thought="SUT execution failed with an unhandled exception.",
+                            metadata={"error": str(e), "exception_type": type(e).__name__},
+                            latency=Latency(seconds=duration),
+                        )
+                    )
+
         # 2. Run all selected metrics concurrently on the generated trajectory
-        names_to_run = self.metric_names or self.registry.list_evaluators()
+        names_to_run = (
+            config.evaluators
+            if config.evaluators
+            else (self.metric_names or self.registry.list_evaluators())
+        )
         evaluator_tasks = [
             self._safe_evaluate(self.registry.get(name), case, trajectory) for name in names_to_run
         ]
