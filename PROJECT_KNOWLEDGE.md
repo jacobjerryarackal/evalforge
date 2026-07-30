@@ -93,6 +93,25 @@ We evaluate agent performance across 4 categories:
 
 ---
 
-## 9. Future Roadmap Notes
 - **UI Dashboard**: While initial dashboards are terminal-based (`rich`), a Next.js frontend or a lightweight static HTML reporter (Jinja2) will serve to share reports across product teams.
-- **Regression Analysis**: Add version control tracking for agents so that developers can compare scores of Agent `v1.2` against Agent `v1.3` across the same golden datasets.
+- **Regression Analysis**: Implemented in Sprint 3 via [ExperimentEngine](file:///d:/AI/evalforge/src/use_cases/experiments/engine.py), enabling chronological baseline comparison deltas (success rate, latency, cost, and tokens) across agent versions.
+
+---
+
+## 10. Dataset & Experiment Engine (Sprint 3)
+
+### 10.1 Why Version Datasets?
+Evaluation datasets (Golden Cases) are code-adjacent. As agents are deployed to production, customer behaviors and edge cases evolve, necessitating dataset updates. Without semantic versioning (`major.minor.patch`) on datasets:
+- Regressions cannot be accurately isolated, as changes in evaluation scores could stem from dataset modifications rather than SUT changes.
+- Reproducibility is lost. Historical benchmark runs are invalidated if the underlying test cases are silently mutated.
+
+### 10.2 Why Decouple BenchmarkConfig?
+By separating [BenchmarkConfig](file:///d:/AI/evalforge/src/domain/entities/benchmark_config.py) from runner execution signatures:
+- We promote the Single Responsibility Principle. The [BenchmarkRunner](file:///d:/AI/evalforge/src/use_cases/runners/benchmark_runner.py) only handles execution orchestration, while `BenchmarkConfig` houses parameters.
+- We enable reproducibility. A `BenchmarkConfig` can be saved as a configuration file (JSON/YAML) and re-run at any time to guarantee identical execution parameters (concurrency limits, retry policies, evaluators).
+
+### 10.3 Why Treat Experiments as First-Class Citizens?
+Evaluating AI agents is an iterative, experimental science:
+- An [Experiment](file:///d:/AI/evalforge/src/domain/entities/experiment.py) binds related runs together to test a specific hypothesis (e.g., prompt optimization, model switches, temperature adjustments).
+- By storing experiments formally in the [EvaluationRepository](file:///d:/AI/evalforge/src/domain/interfaces/repository.py), teams can query historical progress, calculate deltas relative to a baseline prompt, and automatically generate comparison summaries to decide which agent version is ready for production.
+
