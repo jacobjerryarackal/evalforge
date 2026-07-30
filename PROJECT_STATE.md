@@ -5,14 +5,20 @@ This document tracks the current sprint, active phase, completed milestones, eng
 ---
 
 ## 1. Active State
-- **Current Sprint**: **Sprint 5: Platform & Productization** (Completed)
-- **Current Phase**: Phase 5 (REST APIs, Next.js Frontend, Reporting, Docker)
-- **Completion Percentage**: **100%** (FastAPI backend, Next.js frontend workspace, markdown reports, structured logging, Docker deployment assets, and CI workflows completed and verified)
-- **Next Sprint**: None (Framework & Platform is production-grade)
+- **Current Sprint**: **Sprint 5.2: Repository Polish & Documentation** (Completed)
+- **Current Phase**: Phase 5.2 (Documentation Enhancement, Frontend Polish, Cleanups, and Release Verification)
+- **Completion Percentage**: **100%** (Rename artifacts resolved, production-quality README completed, frontend connection/empty states polished, dead code verified clean, and Docker builds validated)
+- **Next Sprint**: None (Platform is open-source and production-ready)
 
 ---
 
-## 2. Completed Work (Sprint 5)
+## 2. Completed Work (Sprint 5.2 — Repository Polish & Documentation)
+- **Resolved Rename Artifacts**: Corrected all stale references to `dashboard/` (renamed to `frontend/`) inside `docs/adr/0006-platform-and-rest-api-specification.md` and `.gitignore`.
+- **Enhanced Documentation (README)**: Transformed `README.md` into standard production documentation featuring problem statements, mermaid workflow architectures, design highlights, technical justifications, and deployment guidelines.
+- **Frontend Polish & Status Tracking**: Refined `frontend/src/app/page.tsx` by implementing reactive connection status tracking, visual status badges, and styled empty states for datasets, experiments, and runs.
+- **Verified Code & Environment Gates**: Executed static lint check (Ruff), style formatting checks (Black), type checks (Mypy), and 68 test case suites (Pytest) with 100% success. Verified multi-container Docker images build cleanly.
+
+## Completed Work (Sprint 5)
 - **FastAPI Backend REST API**: Implemented endpoints in [app.py](file:///d:/AI/evalforge/src/adapters/api/app.py) for datasets cataloging, experiment comparing, async run execution via background task workers, run details, and health check.
 - **Next.js Frontend**: Implemented a visual UI workspace in [page.tsx](file:///d:/AI/evalforge/frontend/src/app/page.tsx) with state tabs, run creation form inputs, comparative delta tables, and run trajectory inspect traces.
 - **Markdown Reporting**: Created [markdown.py](file:///d:/AI/evalforge/src/use_cases/reporting/markdown.py) to compile rich markdown reports summarizing scores, metrics, cost, tokens, and trajectory step lists.
