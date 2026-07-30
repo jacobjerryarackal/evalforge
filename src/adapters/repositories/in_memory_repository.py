@@ -1,4 +1,4 @@
-from src.domain.entities import EvaluationRun, GoldenDataset
+from src.domain.entities import EvaluationRun, Experiment, GoldenDataset
 from src.domain.interfaces.repository import EvaluationRepository
 
 
@@ -8,6 +8,7 @@ class InMemoryEvaluationRepository(EvaluationRepository):
     def __init__(self) -> None:
         self._datasets: dict[tuple[str, str], GoldenDataset] = {}  # Keyed by (dataset_id, version)
         self._runs: dict[str, EvaluationRun] = {}  # Keyed by run_id
+        self._experiments: dict[str, Experiment] = {}  # Keyed by experiment_id
 
     async def save_dataset(self, dataset: GoldenDataset) -> None:
         """Saves a dataset to the in-memory store by deep-copying it."""
@@ -54,3 +55,16 @@ class InMemoryEvaluationRepository(EvaluationRepository):
         if dataset_id is not None:
             runs = [r for r in runs if r.dataset_id == dataset_id]
         return [r.model_copy(deep=True) for r in runs]
+
+    async def save_experiment(self, experiment: Experiment) -> None:
+        """Saves an experiment to memory."""
+        self._experiments[experiment.experiment_id] = experiment.model_copy(deep=True)
+
+    async def get_experiment(self, experiment_id: str) -> Experiment | None:
+        """Retrieves a specific experiment."""
+        exp = self._experiments.get(experiment_id)
+        return exp.model_copy(deep=True) if exp else None
+
+    async def list_experiments(self) -> list[Experiment]:
+        """Lists all experiments currently stored in the repository."""
+        return [exp.model_copy(deep=True) for exp in self._experiments.values()]
