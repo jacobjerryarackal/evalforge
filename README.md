@@ -91,14 +91,14 @@ Start the FastAPI server using Uvicorn:
 - **API Swagger Documentation**: http://localhost:8000/docs
 - **Health check**: http://localhost:8000/health
 
-### Running the Next.js Dashboard
-Install dependencies and run the frontend dashboard:
+### Running the Next.js Frontend
+Install dependencies and run the frontend client:
 ```bash
-cd dashboard
+cd frontend
 npm install
 npm run dev
 ```
-- **Dashboard Web UI**: http://localhost:3000
+- **Frontend Web UI**: http://localhost:3000
 
 ### Deployment with Docker Compose
 To build and launch the integrated FastAPI backend and Next.js frontend services:
@@ -106,4 +106,5 @@ To build and launch the integrated FastAPI backend and Next.js frontend services
 docker-compose up --build
 ```
 - **Integrated Backend Endpoint**: http://localhost:8000
-- **Integrated Dashboard Client**: http://localhost:3000
+- **Integrated Frontend Client**: http://localhost:3000
+
