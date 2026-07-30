@@ -4,6 +4,7 @@ from src.domain.entities import (
     Experiment,
     GoldenDataset,
     GoldenTestCase,
+    JudgeResult,
     MetricResult,
     RetryPolicy,
     Step,
@@ -31,6 +32,7 @@ __all__ = [
     "BenchmarkConfig",
     "RetryPolicy",
     "Experiment",
+    "JudgeResult",
     # Interfaces
     "LLMProvider",
     "EvaluationRepository",
