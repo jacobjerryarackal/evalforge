@@ -58,6 +58,7 @@ export default function Dashboard() {
   const [experiments, setExperiments] = useState<Experiment[]>([]);
   const [selectedRun, setSelectedRun] = useState<any>(null);
   const [selectedExperiment, setSelectedExperiment] = useState<any>(null);
+  const [backendConnected, setBackendConnected] = useState(true);
 
   // Form states
   const [runDatasetId, setRunDatasetId] = useState("");
@@ -83,15 +84,20 @@ export default function Dashboard() {
   const fetchData = async () => {
     try {
       const dsRes = await fetch(`${API_BASE}/api/datasets`);
-      if (dsRes.ok) setDatasets(await dsRes.json());
-
       const runsRes = await fetch(`${API_BASE}/api/runs`);
-      if (runsRes.ok) setRuns(await runsRes.json());
-
       const expsRes = await fetch(`${API_BASE}/api/experiments`);
-      if (expsRes.ok) setExperiments(await expsRes.json());
+
+      if (dsRes.ok && runsRes.ok && expsRes.ok) {
+        setDatasets(await dsRes.json());
+        setRuns(await runsRes.json());
+        setExperiments(await expsRes.json());
+        setBackendConnected(true);
+      } else {
+        setBackendConnected(false);
+      }
     } catch (e) {
       console.error("API offline", e);
+      setBackendConnected(false);
     }
   };
 
@@ -382,31 +388,87 @@ export default function Dashboard() {
             <h2 style={{ fontSize: "1.75rem", fontWeight: 700, margin: 0, color: "#FFF" }}>
               {activeTab === "overview" && "Platform Overview"}
               {activeTab === "datasets" && "Dataset Hub"}
-              {activeTab === "experiments" && "Experiment swept Sweeps"}
+              {activeTab === "experiments" && "Experiment Sweeps"}
               {activeTab === "runs" && "Evaluation Trajectories"}
             </h2>
             <p style={{ margin: "0.25rem 0 0 0", color: "#6B7280", fontSize: "0.9rem" }}>
               Continuous evaluation dashboard for agentic workflows
             </p>
           </div>
-          <button
-            onClick={fetchData}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              background: "#1F2937",
-              color: "#FFF",
-              border: "1px solid #374151",
-              padding: "0.5rem 1rem",
-              borderRadius: "0.375rem",
-              cursor: "pointer",
-              fontSize: "0.9rem",
-              fontWeight: 500,
-            }}
-          >
-            <RefreshCw size={14} /> Sync Metrics
-          </button>
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+            {!backendConnected && (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  background: "rgba(239, 68, 68, 0.1)",
+                  border: "1px solid #EF4444",
+                  padding: "0.4rem 0.8rem",
+                  borderRadius: "0.375rem",
+                  color: "#EF4444",
+                  fontSize: "0.85rem",
+                  fontWeight: 600,
+                }}
+              >
+                <span
+                  style={{
+                    display: "inline-block",
+                    width: "8px",
+                    height: "8px",
+                    borderRadius: "50%",
+                    backgroundColor: "#EF4444",
+                  }}
+                />
+                Backend Offline
+              </div>
+            )}
+            {backendConnected && (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  background: "rgba(16, 185, 129, 0.1)",
+                  border: "1px solid #10B981",
+                  padding: "0.4rem 0.8rem",
+                  borderRadius: "0.375rem",
+                  color: "#10B981",
+                  fontSize: "0.85rem",
+                  fontWeight: 600,
+                }}
+              >
+                <span
+                  style={{
+                    display: "inline-block",
+                    width: "8px",
+                    height: "8px",
+                    borderRadius: "50%",
+                    backgroundColor: "#10B981",
+                  }}
+                />
+                Connected
+              </div>
+            )}
+            <button
+              onClick={fetchData}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                background: "#1F2937",
+                color: "#FFF",
+                border: "1px solid #374151",
+                padding: "0.5rem 1rem",
+                borderRadius: "0.375rem",
+                cursor: "pointer",
+                fontSize: "0.9rem",
+                fontWeight: 500,
+              }}
+            >
+              <RefreshCw size={14} /> Sync Metrics
+            </button>
+          </div>
         </div>
 
         {/* OVERVIEW TAB CONTENT */}
@@ -811,32 +873,60 @@ export default function Dashboard() {
                 <h3 style={{ fontSize: "1.2rem", margin: "0 0 1.5rem 0", color: "#FFF" }}>
                   Registered Datasets Catalog
                 </h3>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
-                  {datasets.map((d) => (
-                    <div
-                      key={`${d.dataset_id}-${d.version}`}
-                      style={{
-                        background: "#111827",
-                        border: "1px solid #1F2937",
-                        padding: "1.25rem",
-                        borderRadius: "0.5rem",
-                      }}
-                    >
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <span style={{ fontSize: "0.75rem", background: "rgba(59, 130, 246, 0.2)", color: "#3B82F6", padding: "0.25rem 0.5rem", borderRadius: "0.25rem", fontWeight: 600 }}>
-                          v{d.version}
-                        </span>
-                        <span style={{ fontSize: "0.75rem", color: "#9CA3AF" }}>
-                          {d.cases_count} Test Cases
-                        </span>
-                      </div>
-                      <h4 style={{ fontSize: "1.1rem", margin: "0.75rem 0 0.25rem 0", color: "#FFF" }}>
-                        {d.name}
-                      </h4>
-                      <code style={{ fontSize: "0.8rem", color: "#6B7280" }}>{d.dataset_id}</code>
+                {datasets.length === 0 ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "3rem 1.5rem",
+                      background: "#111827",
+                      border: "1px dashed #374151",
+                      borderRadius: "0.5rem",
+                      textAlign: "center",
+                      gap: "0.75rem",
+                      gridColumn: "span 2",
+                    }}
+                  >
+                    <Database size={32} color="#4B5563" />
+                    <div>
+                      <p style={{ margin: 0, color: "#9CA3AF", fontSize: "0.95rem", fontWeight: 500 }}>
+                        No Registered Datasets
+                      </p>
+                      <p style={{ margin: "0.25rem 0 0 0", color: "#6B7280", fontSize: "0.85rem" }}>
+                        Fill the registration form to create your first dataset.
+                      </p>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ) : (
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+                    {datasets.map((d) => (
+                      <div
+                        key={`${d.dataset_id}-${d.version}`}
+                        style={{
+                          background: "#111827",
+                          border: "1px solid #1F2937",
+                          padding: "1.25rem",
+                          borderRadius: "0.5rem",
+                        }}
+                      >
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <span style={{ fontSize: "0.75rem", background: "rgba(59, 130, 246, 0.2)", color: "#3B82F6", padding: "0.25rem 0.5rem", borderRadius: "0.25rem", fontWeight: 600 }}>
+                            v{d.version}
+                          </span>
+                          <span style={{ fontSize: "0.75rem", color: "#9CA3AF" }}>
+                            {d.cases_count} Test Cases
+                          </span>
+                        </div>
+                        <h4 style={{ fontSize: "1.1rem", margin: "0.75rem 0 0.25rem 0", color: "#FFF" }}>
+                          {d.name}
+                        </h4>
+                        <code style={{ fontSize: "0.8rem", color: "#6B7280" }}>{d.dataset_id}</code>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -915,35 +1005,62 @@ export default function Dashboard() {
                 <h3 style={{ fontSize: "1.2rem", margin: "0 0 1.5rem 0", color: "#FFF" }}>
                   Experiments Overview
                 </h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                  {experiments.map((e) => (
-                    <div
-                      key={e.experiment_id}
-                      onClick={() => inspectExperiment(e.experiment_id)}
-                      style={{
-                        background: "#111827",
-                        border: "1px solid #1F2937",
-                        padding: "1.25rem",
-                        borderRadius: "0.5rem",
-                        cursor: "pointer",
-                        transition: "all 0.2s",
-                      }}
-                    >
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <h4 style={{ fontSize: "1.1rem", margin: 0, color: "#FFF" }}>
-                          {e.name}
-                        </h4>
-                        <span style={{ fontSize: "0.75rem", color: "#3B82F6" }}>
-                          {e.runs_count} Sweeps Registered
-                        </span>
-                      </div>
-                      <p style={{ margin: "0.5rem 0 0.25rem 0", color: "#9CA3AF", fontSize: "0.9rem" }}>
-                        {e.description || "No description provided."}
+                {experiments.length === 0 ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "3rem 1.5rem",
+                      background: "#111827",
+                      border: "1px dashed #374151",
+                      borderRadius: "0.5rem",
+                      textAlign: "center",
+                      gap: "0.75rem",
+                    }}
+                  >
+                    <Award size={32} color="#4B5563" />
+                    <div>
+                      <p style={{ margin: 0, color: "#9CA3AF", fontSize: "0.95rem", fontWeight: 500 }}>
+                        No Active Experiments
                       </p>
-                      <code style={{ fontSize: "0.75rem", color: "#6B7280" }}>{e.experiment_id}</code>
+                      <p style={{ margin: "0.25rem 0 0 0", color: "#6B7280", fontSize: "0.85rem" }}>
+                        Create a sweep to group and compare evaluation runs.
+                      </p>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ) : (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                    {experiments.map((e) => (
+                      <div
+                        key={e.experiment_id}
+                        onClick={() => inspectExperiment(e.experiment_id)}
+                        style={{
+                          background: "#111827",
+                          border: "1px solid #1F2937",
+                          padding: "1.25rem",
+                          borderRadius: "0.5rem",
+                          cursor: "pointer",
+                          transition: "all 0.2s",
+                        }}
+                      >
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <h4 style={{ fontSize: "1.1rem", margin: 0, color: "#FFF" }}>
+                            {e.name}
+                          </h4>
+                          <span style={{ fontSize: "0.75rem", color: "#3B82F6" }}>
+                            {e.runs_count} Sweeps Registered
+                          </span>
+                        </div>
+                        <p style={{ margin: "0.5rem 0 0.25rem 0", color: "#9CA3AF", fontSize: "0.9rem" }}>
+                          {e.description || "No description provided."}
+                        </p>
+                        <code style={{ fontSize: "0.75rem", color: "#6B7280" }}>{e.experiment_id}</code>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -1039,35 +1156,51 @@ export default function Dashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {runs.map((r) => (
-                    <tr key={r.run_id} style={{ borderBottom: "1px solid #111827" }}>
-                      <td style={{ padding: "0.75rem" }}>`{r.run_id}`</td>
-                      <td style={{ padding: "0.75rem" }}>
-                        {r.dataset_id} (v{r.dataset_version})
-                      </td>
-                      <td style={{ padding: "0.75rem" }}>
-                        {((r.summary?.success_rate || 0) * 100).toFixed(1)}%
-                      </td>
-                      <td style={{ padding: "0.75rem" }}>{r.summary?.total_tokens || 0}</td>
-                      <td style={{ padding: "0.75rem" }}>${(r.summary?.total_cost || 0).toFixed(4)}</td>
-                      <td style={{ padding: "0.75rem" }}>
-                        <button
-                          onClick={() => inspectRun(r.run_id)}
-                          style={{
-                            background: "#3B82F6",
-                            color: "#FFF",
-                            border: "none",
-                            padding: "0.25rem 0.75rem",
-                            borderRadius: "0.25rem",
-                            cursor: "pointer",
-                            fontWeight: 500,
-                          }}
-                        >
-                          Inspect Trace
-                        </button>
+                  {runs.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} style={{ padding: "3rem 1.5rem", textAlign: "center", color: "#6B7280" }}>
+                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
+                          <Activity size={28} color="#4B5563" />
+                          <p style={{ margin: 0, fontSize: "0.95rem", fontWeight: 500, color: "#9CA3AF" }}>
+                            No Evaluation Runs Yet
+                          </p>
+                          <p style={{ margin: 0, fontSize: "0.85rem", color: "#6B7280" }}>
+                            Trigger a benchmark sweep from the Overview tab.
+                          </p>
+                        </div>
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    runs.map((r) => (
+                      <tr key={r.run_id} style={{ borderBottom: "1px solid #111827" }}>
+                        <td style={{ padding: "0.75rem" }}>`{r.run_id}`</td>
+                        <td style={{ padding: "0.75rem" }}>
+                          {r.dataset_id} (v{r.dataset_version})
+                        </td>
+                        <td style={{ padding: "0.75rem" }}>
+                          {((r.summary?.success_rate || 0) * 100).toFixed(1)}%
+                        </td>
+                        <td style={{ padding: "0.75rem" }}>{r.summary?.total_tokens || 0}</td>
+                        <td style={{ padding: "0.75rem" }}>${(r.summary?.total_cost || 0).toFixed(4)}</td>
+                        <td style={{ padding: "0.75rem" }}>
+                          <button
+                            onClick={() => inspectRun(r.run_id)}
+                            style={{
+                              background: "#3B82F6",
+                              color: "#FFF",
+                              border: "none",
+                              padding: "0.25rem 0.75rem",
+                              borderRadius: "0.25rem",
+                              cursor: "pointer",
+                              fontWeight: 500,
+                            }}
+                          >
+                            Inspect Trace
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
