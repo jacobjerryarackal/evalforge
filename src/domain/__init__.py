@@ -1,8 +1,11 @@
 from src.domain.entities import (
+    BenchmarkConfig,
     EvaluationRun,
+    Experiment,
     GoldenDataset,
     GoldenTestCase,
     MetricResult,
+    RetryPolicy,
     Step,
     TestCaseEvaluation,
     ToolCall,
@@ -25,6 +28,9 @@ __all__ = [
     "MetricResult",
     "TestCaseEvaluation",
     "EvaluationRun",
+    "BenchmarkConfig",
+    "RetryPolicy",
+    "Experiment",
     # Interfaces
     "LLMProvider",
     "EvaluationRepository",
