@@ -18,6 +18,9 @@ The repository's development guidelines, roadmaps, and designs are managed throu
 ---
 
 ## 🚀 Key Features
+- **Dataset Engine**: First-class support for registering, validating, and loading versioned golden datasets in JSON and JSONL formats with semantic versioning (SemVer) checks.
+- **Experiment Engine**: Grouping evaluation runs into experiments, comparing performance deltas against chronological baselines, and auto-generating markdown reports.
+- **Reproducible Benchmarks**: Decatur runner that uses a structured [BenchmarkConfig](file:///d:/AI/evalforge/src/domain/entities/benchmark_config.py) housing concurrency caps, retry delay backoffs, and evaluator filters.
 - **Domain Agnostic Core**: Core execution and benchmarking engines are entirely domain-independent.
 - **Reference Implementation**: Includes a simulated travel agent assistant ([examples/travel_agent](file:///d:/AI/evalforge/examples/travel_agent)) demonstrating E2E agent evaluation.
 - **Pluggable Providers**: Fully decoupled LLM interface supporting Gemini, Ollama, and OpenRouter.
