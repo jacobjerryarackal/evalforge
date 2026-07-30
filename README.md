@@ -18,6 +18,9 @@ The repository's development guidelines, roadmaps, and designs are managed throu
 ---
 
 ## 🚀 Key Features
+- **LLM Judge Engine**: Reusable, extensible execution engine for qualitative LLM Judges, supporting Pydantic structured output validation, text fallback manual JSON extraction, confidence validation, and exponential backoff retry loops.
+- **Judge Registry & Templates**: Pluggable registry and template models isolating prompt definitions and rubrics from execution code.
+- **Initial Cognitive Judges**: Built-in judges for `Faithfulness`, `Groundedness`, `AnswerCorrectness`, and `Hallucination`.
 - **Dataset Engine**: First-class support for registering, validating, and loading versioned golden datasets in JSON and JSONL formats with semantic versioning (SemVer) checks.
 - **Experiment Engine**: Grouping evaluation runs into experiments, comparing performance deltas against chronological baselines, and auto-generating markdown reports.
 - **Reproducible Benchmarks**: Decatur runner that uses a structured [BenchmarkConfig](file:///d:/AI/evalforge/src/domain/entities/benchmark_config.py) housing concurrency caps, retry delay backoffs, and evaluator filters.
