@@ -4,7 +4,13 @@ import logging
 import sqlite3
 from datetime import datetime, timezone
 
-from src.domain.entities import EvaluationRun, GoldenDataset, GoldenTestCase, TestCaseEvaluation
+from src.domain.entities import (
+    EvaluationRun,
+    Experiment,
+    GoldenDataset,
+    GoldenTestCase,
+    TestCaseEvaluation,
+)
 from src.domain.interfaces.repository import EvaluationRepository
 
 logger = logging.getLogger("evaluation.adapters.repositories.sqlite_repository")
@@ -45,6 +51,17 @@ class SqliteEvaluationRepository(EvaluationRepository):
                     parameters TEXT,
                     summary TEXT,
                     metadata TEXT
+                )
+                """)
+            # Experiments table
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS experiments (
+                    experiment_id TEXT PRIMARY KEY,
+                    name TEXT,
+                    description TEXT,
+                    run_ids TEXT,
+                    metadata TEXT,
+                    created_at TEXT
                 )
                 """)
             # Create indices for faster lookups
@@ -311,3 +328,136 @@ class SqliteEvaluationRepository(EvaluationRepository):
                 return runs
 
         return await asyncio.to_thread(_list)
+
+    async def save_experiment(self, experiment: Experiment) -> None:
+        """Saves an experiment to the SQLite database."""
+
+        def _save():
+            run_ids_json = json.dumps([r.run_id for r in experiment.runs])
+            metadata_json = json.dumps(experiment.metadata)
+            created_at_str = experiment.created_at.isoformat()
+
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute(
+                    """
+                    INSERT OR REPLACE INTO experiments
+                    (experiment_id, name, description, run_ids, metadata, created_at)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        experiment.experiment_id,
+                        experiment.name,
+                        experiment.description,
+                        run_ids_json,
+                        metadata_json,
+                        created_at_str,
+                    ),
+                )
+                conn.commit()
+
+        await asyncio.to_thread(_save)
+
+    async def get_experiment(self, experiment_id: str) -> Experiment | None:
+        """Retrieves an experiment from the SQLite database."""
+
+        def _get():
+            with sqlite3.connect(self.db_path) as conn:
+                conn.row_factory = sqlite3.Row
+                cursor = conn.cursor()
+                cursor.execute(
+                    """
+                    SELECT experiment_id, name, description, run_ids, metadata, created_at
+                    FROM experiments
+                    WHERE experiment_id = ?
+                    """,
+                    (experiment_id,),
+                )
+                row = cursor.fetchone()
+
+                if not row:
+                    return None
+
+                run_ids = json.loads(row["run_ids"])
+                metadata = json.loads(row["metadata"])
+                try:
+                    created_at = datetime.fromisoformat(row["created_at"])
+                except Exception:
+                    created_at = datetime.now(timezone.utc)
+
+                return row["name"], row["description"], run_ids, metadata, created_at
+
+        res = await asyncio.to_thread(_get)
+        if not res:
+            return None
+
+        name, description, run_ids, metadata, created_at = res
+
+        # Load runs from evaluation_runs table
+        runs = []
+        for run_id in run_ids:
+            run = await self.get_run(run_id)
+            if run:
+                runs.append(run)
+
+        return Experiment(
+            experiment_id=experiment_id,
+            name=name,
+            description=description,
+            runs=runs,
+            metadata=metadata,
+            created_at=created_at,
+        )
+
+    async def list_experiments(self) -> list[Experiment]:
+        """Lists all experiments stored in the SQLite database."""
+
+        def _list():
+            with sqlite3.connect(self.db_path) as conn:
+                conn.row_factory = sqlite3.Row
+                cursor = conn.cursor()
+                cursor.execute("""
+                    SELECT experiment_id, name, description, run_ids, metadata, created_at
+                    FROM experiments
+                    """)
+                rows = cursor.fetchall()
+
+                experiments_data = []
+                for row in rows:
+                    run_ids = json.loads(row["run_ids"])
+                    metadata = json.loads(row["metadata"])
+                    try:
+                        created_at = datetime.fromisoformat(row["created_at"])
+                    except Exception:
+                        created_at = datetime.now(timezone.utc)
+                    experiments_data.append(
+                        (
+                            row["experiment_id"],
+                            row["name"],
+                            row["description"],
+                            run_ids,
+                            metadata,
+                            created_at,
+                        )
+                    )
+                return experiments_data
+
+        exps_data = await asyncio.to_thread(_list)
+        experiments = []
+        for exp_id, name, description, run_ids, metadata, created_at in exps_data:
+            runs = []
+            for run_id in run_ids:
+                run = await self.get_run(run_id)
+                if run:
+                    runs.append(run)
+            experiments.append(
+                Experiment(
+                    experiment_id=exp_id,
+                    name=name,
+                    description=description,
+                    runs=runs,
+                    metadata=metadata,
+                    created_at=created_at,
+                )
+            )
+        return experiments
