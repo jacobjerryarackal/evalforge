@@ -138,4 +138,30 @@ The **[JudgeRegistry](file:///d:/AI/evalforge/src/use_cases/judges/registry.py)*
 - It manages discovery and duplicate validation specifically for LLM-based judges.
 - It bridges the LLM Judge ecosystem to the framework's main `MetricRegistry`, ensuring any registered LLM Judge is automatically available to the benchmark execution pipeline.
 
+---
+
+## 12. Platform & Productization (Sprint 5)
+
+### 12.1 Exposing REST APIs vs Framework Direct Access
+Exposing EvalForge via REST APIs (FastAPI) provides two major architectural benefits:
+- **Language Agnosticism**: Clients (CI/CD pipelines, dashboard interfaces, CLI tools) written in Go, NodeJS, or Bash can trigger, monitor, and query evaluations without needing a Python runtime environment.
+- **Service Isolation**: The evaluation platform can run on dedicated hardware or containers, preventing LLM evaluations or high-concurrency SUT runs from exhausting CPU/Memory resources on production application servers.
+
+### 12.2 Decoupled API Orchestration
+The API layer in `src/adapters/api/app.py` acts strictly as an adapter under Clean Architecture. It delegates execution directly to:
+- `BenchmarkRunner` for execution.
+- `ExperimentEngine` for sweep delta comparisons.
+- `SqliteEvaluationRepository` for persistence.
+This design guarantees that the REST API contains zero core business logic, preventing duplicate rule implementations and maintaining strict boundaries.
+
+### 12.3 Async Background Tasking
+Because agent evaluation suites run multiple test cases and consult slow external LLMs, requests could easily time out if blocked synchronously.
+- We utilize FastAPI `BackgroundTasks` in `POST /api/benchmarks/run` to run benchmarks asynchronously in worker threads.
+- The server instantly yields a `run_id` with a `running` status, allowing the client to poll `GET /api/runs/{run_id}` or render progress without hanging.
+
+### 12.4 Observability & Structured JSON Logs
+Standard text logging is difficult to parse programmatically at scale.
+- We implement `JSONFormatter` which outputs structured JSON lines to standard output.
+- Log routers (e.g. Datadog, Elasticsearch, AWS CloudWatch) can instantly parse, index, and alert on evaluation fields (`benchmark_id`, `latency`, `outcome`) without complex regex logic.
+
 
