@@ -54,18 +54,19 @@ This document maps out our compressed 5-sprint roadmap to build and verify **Eva
 
 ---
 
-## Sprint 4: Cognitive Metrics (LLM-as-a-Judge) (Day 5)
-- **Goal**: Build advanced cognitive metrics that use a secondary model to grade the quality and correctness of the SUT responses, implementing structured outputs and retry shielding.
+## Sprint 4: LLM Judge Engine (Day 5)
+- **Goal**: Build a reusable execution engine, registries, templates, and cognitive LLM Judges that grade qualitative agent responses.
 - **Key Deliverables**:
-  - **Cognitive Evaluators** in `src/use_cases/evaluators/`:
-    - `FaithfulnessEvaluator`: Audits if SUT's final answer is supported *only* by retrieved contexts (hallucination check).
-    - `GroundednessEvaluator`: Checks if SUT response addresses the input query constraints directly.
-    - `AnswerCorrectnessEvaluator`: Semantic and factual evaluation comparing the answer against ground truth.
-  - **Structured Judge Wrapper**:
-    - Implements prompt templates and enforces structured JSON parser models (via Pydantic schemas) for LLM judges.
-    - Adds retry handlers to recover from format parsing errors.
+  - **Base Judge Interface** in `src/use_cases/judges/base.py`:
+    - `BaseLLMJudge` inheriting from `BaseEvaluator`.
+  - **LLM Judge Engine** in `src/use_cases/judges/engine.py`:
+    - `LLMJudgeEngine` executing prompt templates, parsing schemas, retrying transient failures, and validating confidence.
+  - **Templates & Registry** in `src/use_cases/judges/`:
+    - `JudgePromptTemplate`, `JudgeRegistry`, and default cognitive templates.
+  - **Initial Judges**:
+    - `FaithfulnessJudge`, `GroundednessJudge`, `AnswerCorrectnessJudge`, `HallucinationJudge`.
 - **Verification Gate**:
-  - Run integration tests comparing LLM judge outputs against pre-defined hallucinated responses, verifying they receive low faithfulness scores.
+  - Run unit and integration tests verifying registry duplicates, templates rendering, engine fallback json parsing, retries, and all four judges under different outcomes.
 
 ---
 
