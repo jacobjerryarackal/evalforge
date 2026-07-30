@@ -31,7 +31,7 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# Enable CORS for Next.js dashboard
+# Enable CORS for Next.js frontend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
