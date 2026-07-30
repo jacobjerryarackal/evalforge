@@ -82,3 +82,28 @@ Execute the unit and integration tests using `pytest`:
 # From the root directory
 pytest
 ```
+
+### Running the REST API Backend
+Start the FastAPI server using Uvicorn:
+```bash
+.venv\Scripts\python -m uvicorn src.adapters.api.app:app --host 0.0.0.0 --port 8000 --reload
+```
+- **API Swagger Documentation**: http://localhost:8000/docs
+- **Health check**: http://localhost:8000/health
+
+### Running the Next.js Dashboard
+Install dependencies and run the frontend dashboard:
+```bash
+cd dashboard
+npm install
+npm run dev
+```
+- **Dashboard Web UI**: http://localhost:3000
+
+### Deployment with Docker Compose
+To build and launch the integrated FastAPI backend and Next.js frontend services:
+```bash
+docker-compose up --build
+```
+- **Integrated Backend Endpoint**: http://localhost:8000
+- **Integrated Dashboard Client**: http://localhost:3000
