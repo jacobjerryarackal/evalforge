@@ -276,7 +276,7 @@ async def test_hallucination_judge_execution():
     """Tests HallucinationJudge end-to-end evaluation execution."""
     provider = MockLLMProvider()
     provider.structured_responses = [
-        LLMJudgeOutputSchema(score=1.0, reasoning="No hallucinations detected", confidence=0.95)
+        LLMJudgeOutputSchema(score=0.0, reasoning="No hallucinations detected", confidence=0.95)
     ]
     judge = HallucinationJudge(provider)
 
@@ -295,7 +295,7 @@ async def test_hallucination_judge_execution():
 
     result = await judge.evaluate(case, trajectory)
     assert result.metric_name == "Hallucination"
-    assert result.score == 1.0
+    assert result.score == 0.0
 
 
 @pytest.mark.anyio
