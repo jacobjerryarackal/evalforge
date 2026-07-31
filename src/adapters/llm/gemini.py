@@ -50,7 +50,7 @@ class GeminiProvider(LLMProvider):
     def __init__(
         self,
         api_key: str | None = None,
-        model_name: str = "gemini-1.5-flash",
+        model_name: str = "models/gemini-2.5-flash",
         mock_mode: bool | None = None,
     ):
         self.model_name = model_name
@@ -113,8 +113,18 @@ class GeminiProvider(LLMProvider):
             assert client is not None
             return client.generate_content(prompt, generation_config=generation_config)
 
-        response = await asyncio.to_thread(_call)
-        return response.text
+        try:
+            response = await asyncio.to_thread(_call)
+            return response.text
+        except Exception as e:
+            logger.error(f"Gemini API text generation failed: {e}", exc_info=True)
+            error_msg = str(e)
+            if "ResourceExhausted" in error_msg or "429" in error_msg:
+                raise RuntimeError("Gemini API Rate Limit exceeded (429 Resource Exhausted). Please retry shortly.") from e
+            elif "API key" in error_msg or "Invalid API key" in error_msg or "API_KEY_INVALID" in error_msg:
+                raise ValueError("Invalid Gemini API Key. Please verify GEMINI_API_KEY in your .env.") from e
+            raise RuntimeError(f"Gemini API Call failed: {error_msg}") from e
+
 
     async def generate_structured(
         self,
@@ -148,8 +158,18 @@ class GeminiProvider(LLMProvider):
             assert client is not None
             return client.generate_content(prompt, generation_config=generation_config)
 
-        response = await asyncio.to_thread(_call)
-        text_content = response.text
+        try:
+            response = await asyncio.to_thread(_call)
+            text_content = response.text
+        except Exception as e:
+            logger.error(f"Gemini API structured generation failed: {e}", exc_info=True)
+            error_msg = str(e)
+            if "ResourceExhausted" in error_msg or "429" in error_msg:
+                raise RuntimeError("Gemini API Rate Limit exceeded (429 Resource Exhausted) during structured generation.") from e
+            elif "API key" in error_msg or "Invalid API key" in error_msg or "API_KEY_INVALID" in error_msg:
+                raise ValueError("Invalid Gemini API Key. Please verify GEMINI_API_KEY in your .env.") from e
+            raise RuntimeError(f"Gemini API Call failed: {error_msg}") from e
+
 
         try:
             parsed_json = json.loads(text_content)
