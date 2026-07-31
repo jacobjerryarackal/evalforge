@@ -272,7 +272,21 @@ async def get_run(run_id: str):
     run = await repo.get_run(run_id)
     if not run:
         raise HTTPException(status_code=404, detail=f"Run {run_id} not found")
-    return run
+    
+    # Map metrics from dict to list to prevent frontend map crash
+    run_dict = run.model_dump()
+    for case in run_dict.get("cases", []):
+        raw_metrics = case.get("metrics") or {}
+        formatted_metrics = []
+        for m_name, m_val in raw_metrics.items():
+            formatted_metrics.append({
+                "metric_name": m_name,
+                "score": m_val.get("score")
+            })
+        case["metrics"] = formatted_metrics
+        
+    return run_dict
+
 
 
 @app.get("/api/runs/{run_id}/report")
