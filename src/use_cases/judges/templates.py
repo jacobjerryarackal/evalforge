@@ -120,8 +120,8 @@ HALLUCINATION_TEMPLATE = JudgePromptTemplate(
         "Assistant Response:\n{response}"
     ),
     scoring_rubric=(
-        "Award a score of 1.0 if the response is completely hallucination-free. "
-        "Award a score of 0.0 if the response contains any hallucinated, fabricated, "
+        "Award a score of 0.0 if the response is completely hallucination-free. "
+        "Award a score of 1.0 if the response contains any hallucinated, fabricated, "
         "or context-contradicting statements."
     ),
 )
