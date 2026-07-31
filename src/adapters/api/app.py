@@ -40,6 +40,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Load environment variables from .env
+from dotenv import load_dotenv
+load_dotenv()
+
 # Setup database path and repository
 db_path = "evalforge_platform.db"
 repo = SqliteEvaluationRepository(db_path=db_path)
@@ -47,7 +51,7 @@ dataset_registry = DatasetRegistry()
 experiment_engine = ExperimentEngine(repo)
 
 # Initialize standard provider, metric registry, and benchmark runner
-default_provider = GeminiProvider(mock_mode=True)
+default_provider = GeminiProvider()
 metric_registry = create_default_registry(default_provider)
 runner = BenchmarkRunner(repository=repo, registry=metric_registry)
 
@@ -80,13 +84,61 @@ async def load_local_datasets():
 
 
 
+from pydantic import model_validator
+
 class TestCaseSchema(BaseModel):
-    case_id: str
-    input_query: str
-    expected_output: str | None = None
-    expected_tool_calls: List[str] = Field(default_factory=list)
-    constraints: Dict[str, Any] = Field(default_factory=dict)
+    id: str
+    difficulty: str = "Medium"
+    category: str = "general"
+    user_query: str
+    retrieved_context: str | None = None
+    expected_tool_calls: List[Any] = Field(default_factory=list)
+    expected_answer: str | None = None
+    latency_constraint: float | None = None
+    token_constraint: int | None = None
+    cost_constraint: float | None = None
+    expected_metrics: Dict[str, float] = Field(default_factory=dict)
+    expected_judge_scores: Dict[str, float] = Field(default_factory=dict)
+    failure_mode: str = "None"
     ground_truth_context: List[str] = Field(default_factory=list)
+    custom_constraints: Dict[str, Any] = Field(default_factory=dict)
+
+    @model_validator(mode="before")
+    @classmethod
+    def map_legacy_fields(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "case_id" in data and "id" not in data:
+                data["id"] = data["case_id"]
+            if "input_query" in data and "user_query" not in data:
+                data["user_query"] = data["input_query"]
+            if "expected_output" in data and "expected_answer" not in data:
+                data["expected_answer"] = data["expected_output"]
+            
+            if "ground_truth_context" in data and "retrieved_context" not in data:
+                gt = data["ground_truth_context"]
+                data["retrieved_context"] = gt[0] if gt else None
+            elif "retrieved_context" in data and "ground_truth_context" not in data:
+                rc = data["retrieved_context"]
+                data["ground_truth_context"] = [rc] if rc else []
+            
+            if "constraints" in data:
+                cons = data["constraints"] or {}
+                if "max_latency" in cons and "latency_constraint" not in data:
+                    data["latency_constraint"] = cons["max_latency"]
+                if "max_tokens" in cons and "token_constraint" not in data:
+                    data["token_constraint"] = cons["max_tokens"]
+                if "max_cost" in cons and "cost_constraint" not in data:
+                    data["cost_constraint"] = cons["max_cost"]
+                data["custom_constraints"] = cons
+            
+            if "metadata" in data:
+                meta = data["metadata"] or {}
+                for f in ["difficulty", "category", "expected_metrics", "expected_judge_scores", "failure_mode"]:
+                    if f in meta and f not in data:
+                        data[f] = meta[f]
+        return data
+
+
 
 
 class DatasetCreateSchema(BaseModel):
@@ -129,22 +181,17 @@ async def list_datasets():
             "name": d.name,
             "version": d.version,
             "cases_count": len(d.test_cases),
+            "test_cases": [c.model_dump() for c in d.test_cases],
         }
         for d in datasets
     ]
 
 
+
 @app.post("/api/datasets")
 async def register_dataset(schema: DatasetCreateSchema):
     test_cases = [
-        GoldenTestCase(
-            case_id=c.case_id,
-            input_query=c.input_query,
-            expected_output=c.expected_output,
-            expected_tool_calls=c.expected_tool_calls,
-            constraints=c.constraints,
-            ground_truth_context=c.ground_truth_context,
-        )
+        GoldenTestCase(**c.model_dump())
         for c in schema.test_cases
     ]
     dataset = GoldenDataset(
