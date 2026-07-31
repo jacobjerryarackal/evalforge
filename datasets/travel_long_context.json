@@ -1,22 +1,663 @@
-{
-  "dataset_id": "travel_long_context",
-  "name": "Travel Long Context Dataset",
-  "version": "1.0.0",
-  "test_cases": [
-    {
-      "case_id": "case-validation-1",
-      "input_query": "Book cheap flight from LHR to HND on 2026-08-10 for user id U101",
-      "expected_output": "Flight BA200",
-      "expected_tool_calls": [
-        "get_profile",
-        "search_flights",
-        "validate_booking"
-      ],
-      "constraints": {
-        "max_price": 5000.0,
-        "token_budget": 10000
+[
+  {
+    "id": "travel_long_001",
+    "difficulty": "Medium",
+    "category": "long-context",
+    "user_query": "Summarize the key details from this long hotel description: ...",
+    "retrieved_context": "The Grand Hotel has 300 rooms, a pool, gym, spa, restaurant, conference facilities. It is located in downtown, 5 min from train station. Price range $200-$500. Included breakfast, Wi-Fi. Check-in 3pm, check-out 11am. Pets allowed for $50. Cancellation policy: free up to 24h.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "get_hotel_details",
+        "parameters": {
+          "hotel_id": "GH123"
+        }
+      }
+    ],
+    "expected_answer": "Grand Hotel: 300 rooms, pool, gym, etc. Price $200-$500, breakfast and Wi-Fi included. Check-in 3pm, check-out 11am, pets $50, free cancellation up to 24h.",
+    "latency_constraint": 3.0,
+    "token_constraint": 400,
+    "cost_constraint": 0.02,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_long_002",
+    "difficulty": "Hard",
+    "category": "long-context",
+    "user_query": "I need to find a flight that matches all these requirements: ...",
+    "retrieved_context": "Long list of flights: AA101 $300, AA102 $320, UA200 $280, DL150 $310, etc. with times, stops, amenities. Also includes baggage fees, seat selection, etc.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": "LAX",
+          "date": "2026-08-20",
+          "max_price": 300,
+          "direct": true
+        }
+      }
+    ],
+    "expected_answer": "UA200 at 10:00, direct, $280.",
+    "latency_constraint": 4.0,
+    "token_constraint": 500,
+    "cost_constraint": 0.03,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_long_003",
+    "difficulty": "Expert",
+    "category": "long-context",
+    "user_query": "Based on this detailed itinerary, what are the highlights?",
+    "retrieved_context": "Day 1: Arrive Paris, visit Eiffel Tower. Day 2: Louvre. Day 3: Versailles. Day 4: Montmartre. Day 5: Depart. Including restaurant recommendations, transport tips, etc.",
+    "expected_tool_calls": [
+      {
+        "service": "AttractionsService",
+        "method": "get_itinerary",
+        "parameters": {
+          "itinerary_id": "PAR123"
+        }
+      }
+    ],
+    "expected_answer": "Highlights: Eiffel Tower, Louvre, Versailles, Montmartre.",
+    "latency_constraint": 3.0,
+    "token_constraint": 300,
+    "cost_constraint": 0.02,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_long_004",
+    "difficulty": "Medium",
+    "category": "long-context",
+    "user_query": "Find a hotel that allows pets and has free parking.",
+    "retrieved_context": "Long list of hotels with amenities: Hotel A (pets allowed, parking $10), Hotel B (pets not allowed, parking free), Hotel C (pets allowed, parking free), ...",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Chicago",
+          "amenities": [
+            "pets allowed",
+            "free parking"
+          ]
+        }
+      }
+    ],
+    "expected_answer": "Hotel C (pets allowed, parking free).",
+    "latency_constraint": 2.0,
+    "token_constraint": 200,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_long_005",
+    "difficulty": "Hard",
+    "category": "long-context",
+    "user_query": "What is the cancellation policy for these three different hotels?",
+    "retrieved_context": "Hotel X: free cancellation up to 48h. Hotel Y: no cancellation. Hotel Z: free up to 7 days before.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "get_hotel_policy",
+        "parameters": {
+          "hotel_id": "X"
+        }
       },
-      "ground_truth_context": []
-    }
-  ]
-}
+      {
+        "service": "HotelService",
+        "method": "get_hotel_policy",
+        "parameters": {
+          "hotel_id": "Y"
+        }
+      },
+      {
+        "service": "HotelService",
+        "method": "get_hotel_policy",
+        "parameters": {
+          "hotel_id": "Z"
+        }
+      }
+    ],
+    "expected_answer": "Hotel X: free up to 48h. Hotel Y: none. Hotel Z: free up to 7 days.",
+    "latency_constraint": 3.0,
+    "token_constraint": 250,
+    "cost_constraint": 0.02,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_long_006",
+    "difficulty": "Easy",
+    "category": "long-context",
+    "user_query": "Is there a pool at the hotel?",
+    "retrieved_context": "Detailed description: The hotel has a heated indoor pool, open 6am-10pm. Also a hot tub.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "get_hotel_amenities",
+        "parameters": {
+          "hotel_id": "H123"
+        }
+      }
+    ],
+    "expected_answer": "Yes, heated indoor pool, 6am-10pm, plus hot tub.",
+    "latency_constraint": 1.5,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_long_007",
+    "difficulty": "Expert",
+    "category": "long-context",
+    "user_query": "Compare the total costs for two different travel packages.",
+    "retrieved_context": "Package A: flight $500, hotel $600, car $100. Package B: flight $450, hotel $700, car $50. Both include breakfast.",
+    "expected_tool_calls": [
+      {
+        "service": "PackageService",
+        "method": "compare_packages",
+        "parameters": {
+          "package_ids": [
+            "A",
+            "B"
+          ]
+        }
+      }
+    ],
+    "expected_answer": "Package A total $1200, Package B total $1200, equal.",
+    "latency_constraint": 2.0,
+    "token_constraint": 200,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_long_008",
+    "difficulty": "Medium",
+    "category": "long-context",
+    "user_query": "What's the check-in time for the hotel?",
+    "retrieved_context": "Check-in: 3 PM. Check-out: 11 AM. Early check-in available for $30.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "get_hotel_details",
+        "parameters": {
+          "hotel_id": "H456"
+        }
+      }
+    ],
+    "expected_answer": "3 PM check-in, 11 AM check-out, early check-in $30.",
+    "latency_constraint": 1.0,
+    "token_constraint": 120,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_long_009",
+    "difficulty": "Hard",
+    "category": "long-context",
+    "user_query": "Extract all the flight times from this long text.",
+    "retrieved_context": "Multiple flights: AA101 dep 06:00 arr 08:30, UA200 dep 09:00 arr 11:30, DL150 dep 12:00 arr 14:30.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "get_flight_times",
+        "parameters": {
+          "flight_ids": [
+            "AA101",
+            "UA200",
+            "DL150"
+          ]
+        }
+      }
+    ],
+    "expected_answer": "AA101: 06:00-08:30, UA200: 09:00-11:30, DL150: 12:00-14:30.",
+    "latency_constraint": 2.0,
+    "token_constraint": 200,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_long_010",
+    "difficulty": "Medium",
+    "category": "long-context",
+    "user_query": "Does the hotel offer shuttle service to the airport?",
+    "retrieved_context": "Shuttle service: complimentary, runs every 30 minutes from 5am to 11pm.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "get_hotel_services",
+        "parameters": {
+          "hotel_id": "H789"
+        }
+      }
+    ],
+    "expected_answer": "Yes, complimentary shuttle every 30 min, 5am-11pm.",
+    "latency_constraint": 1.5,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_long_011",
+    "difficulty": "Expert",
+    "category": "long-context",
+    "user_query": "Plan a detailed day-by-day itinerary for 7 days in Italy using this long context of attractions and transportation.",
+    "retrieved_context": "Extensive info on Rome, Florence, Venice: opening hours, ticket prices, recommended restaurants, train schedules, hotel suggestions.",
+    "expected_tool_calls": [
+      {
+        "service": "AttractionsService",
+        "method": "create_itinerary",
+        "parameters": {
+          "city": "Italy",
+          "days": 7
+        }
+      }
+    ],
+    "expected_answer": "Day 1: Rome (Colosseum, Forum). Day 2: Vatican. Day 3: Florence (Uffizi). Day 4: Florence (Duomo). Day 5: Venice (St. Mark's). Day 6: Venice (Rialto). Day 7: travel back.",
+    "latency_constraint": 6.0,
+    "token_constraint": 800,
+    "cost_constraint": 0.06,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_long_012",
+    "difficulty": "Easy",
+    "category": "long-context",
+    "user_query": "Is breakfast included in the room rate?",
+    "retrieved_context": "Rate includes breakfast buffet from 6:30 to 10:00.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "get_hotel_details",
+        "parameters": {
+          "hotel_id": "H101"
+        }
+      }
+    ],
+    "expected_answer": "Yes, breakfast buffet 6:30-10:00 included.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_long_013",
+    "difficulty": "Medium",
+    "category": "long-context",
+    "user_query": "What are the top-rated attractions in London according to this list?",
+    "retrieved_context": "List: British Museum (4.8), Tower of London (4.7), London Eye (4.6), Buckingham Palace (4.5).",
+    "expected_tool_calls": [
+      {
+        "service": "AttractionsService",
+        "method": "get_top_attractions",
+        "parameters": {
+          "city": "London",
+          "limit": 3
+        }
+      }
+    ],
+    "expected_answer": "British Museum (4.8), Tower of London (4.7), London Eye (4.6).",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_long_014",
+    "difficulty": "Hard",
+    "category": "long-context",
+    "user_query": "Find flights that arrive before 5 PM and cost less than $400.",
+    "retrieved_context": "Flight list with times and prices: UA123 arr 15:30 $350, AA456 arr 18:00 $390, DL789 arr 14:00 $420, ...",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "ORD",
+          "destination": "MIA",
+          "max_price": 400,
+          "max_arrival": "17:00"
+        }
+      }
+    ],
+    "expected_answer": "UA123 arrives 15:30, $350; DL789 arrives 14:00, $420 (over budget).",
+    "latency_constraint": 3.0,
+    "token_constraint": 250,
+    "cost_constraint": 0.02,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 0.5
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 0.8,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_long_015",
+    "difficulty": "Expert",
+    "category": "long-context",
+    "user_query": "Given this massive text about travel insurance, which policy covers medical emergencies?",
+    "retrieved_context": "Policy A: covers trip cancellation, lost luggage. Policy B: covers medical, evacuation. Policy C: covers only flight delays.",
+    "expected_tool_calls": [
+      {
+        "service": "InsuranceService",
+        "method": "compare_policies",
+        "parameters": {
+          "policies": [
+            "A",
+            "B",
+            "C"
+          ]
+        }
+      }
+    ],
+    "expected_answer": "Policy B covers medical emergencies and evacuation.",
+    "latency_constraint": 2.0,
+    "token_constraint": 200,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_long_016",
+    "difficulty": "Medium",
+    "category": "long-context",
+    "user_query": "What's the pet fee at this hotel?",
+    "retrieved_context": "Pet policy: $25 per night, max 2 pets, weight limit 50 lbs.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "get_pet_policy",
+        "parameters": {
+          "hotel_id": "H202"
+        }
+      }
+    ],
+    "expected_answer": "$25 per night, max 2 pets, 50 lbs limit.",
+    "latency_constraint": 1.0,
+    "token_constraint": 120,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_long_017",
+    "difficulty": "Hard",
+    "category": "long-context",
+    "user_query": "From this long article, what are the must-see places in Tokyo for first-timers?",
+    "retrieved_context": "Article: Top 10 Tokyo attractions: Senso-ji, Shibuya, Meiji Shrine, Tokyo Tower, etc.",
+    "expected_tool_calls": [
+      {
+        "service": "AttractionsService",
+        "method": "get_attractions",
+        "parameters": {
+          "city": "Tokyo",
+          "limit": 5
+        }
+      }
+    ],
+    "expected_answer": "Senso-ji, Shibuya, Meiji Shrine, Tokyo Tower.",
+    "latency_constraint": 2.0,
+    "token_constraint": 200,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_long_018",
+    "difficulty": "Easy",
+    "category": "long-context",
+    "user_query": "Is there a gym at the hotel?",
+    "retrieved_context": "Facilities include a 24-hour fitness center, sauna, and indoor pool.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "get_hotel_amenities",
+        "parameters": {
+          "hotel_id": "H303"
+        }
+      }
+    ],
+    "expected_answer": "Yes, 24-hour fitness center, sauna, indoor pool.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_long_019",
+    "difficulty": "Expert",
+    "category": "long-context",
+    "user_query": "Plan a 10-day road trip along the California coast using this detailed guide.",
+    "retrieved_context": "Guide includes route, stops (Santa Barbara, Big Sur, Monterey, San Francisco), hotels, and must-see spots.",
+    "expected_tool_calls": [
+      {
+        "service": "TripPlannerService",
+        "method": "create_road_trip",
+        "parameters": {
+          "route": "California Coast",
+          "days": 10
+        }
+      }
+    ],
+    "expected_answer": "Day 1-2: Santa Barbara, Day 3-4: Big Sur, Day 5-6: Monterey, Day 7-10: San Francisco.",
+    "latency_constraint": 5.0,
+    "token_constraint": 500,
+    "cost_constraint": 0.04,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_long_020",
+    "difficulty": "Medium",
+    "category": "long-context",
+    "user_query": "What's the total cost for 3 nights including taxes and fees?",
+    "retrieved_context": "Room rate $200/night, taxes 15%, resort fee $30/night. 3 nights.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "calculate_total",
+        "parameters": {
+          "hotel_id": "H404",
+          "nights": 3
+        }
+      }
+    ],
+    "expected_answer": "Room $600, taxes $90, resort fee $90, total $780.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  }
+]
