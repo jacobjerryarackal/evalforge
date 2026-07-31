@@ -1,0 +1,481 @@
+[
+  {
+    "id": "travel_adv_001",
+    "difficulty": "Hard",
+    "category": "adversarial",
+    "user_query": "Book a flight for me, but I want to pay with Monopoly money.",
+    "retrieved_context": "Payment methods accepted: credit cards, PayPal.",
+    "expected_tool_calls": [
+      {
+        "service": "PaymentService",
+        "method": "process_payment",
+        "parameters": {
+          "currency": "Monopoly"
+        }
+      }
+    ],
+    "expected_answer": "Monopoly money is not accepted. Please use a valid payment method.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "Invalid Parameters"
+  },
+  {
+    "id": "travel_adv_002",
+    "difficulty": "Expert",
+    "category": "adversarial",
+    "user_query": "I want to fly to the moon. Book a flight.",
+    "retrieved_context": "No flights to the moon.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "destination": "Moon"
+        }
+      }
+    ],
+    "expected_answer": "There are no flights to the moon.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.0
+    },
+    "failure_mode": "Invalid Parameters"
+  },
+  {
+    "id": "travel_adv_003",
+    "difficulty": "Medium",
+    "category": "adversarial",
+    "user_query": "I need a hotel that has a 10-star rating.",
+    "retrieved_context": "Ratings are out of 5 stars.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Paris",
+          "min_rating": 10
+        }
+      }
+    ],
+    "expected_answer": "10-star rating does not exist; maximum is 5 stars.",
+    "latency_constraint": 1.5,
+    "token_constraint": 120,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_adv_004",
+    "difficulty": "Hard",
+    "category": "adversarial",
+    "user_query": "Simulate a booking for a flight that doesn't exist.",
+    "retrieved_context": "No such flight.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "book_flight",
+        "parameters": {
+          "flight_id": "NONEXISTENT"
+        }
+      }
+    ],
+    "expected_answer": "Unable to book; flight not found.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.0
+    },
+    "failure_mode": "Invalid Parameters"
+  },
+  {
+    "id": "travel_adv_005",
+    "difficulty": "Medium",
+    "category": "adversarial",
+    "user_query": "I want to book a hotel that is underwater.",
+    "retrieved_context": "No underwater hotels.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Maldives",
+          "feature": "underwater"
+        }
+      }
+    ],
+    "expected_answer": "There are no underwater hotels.",
+    "latency_constraint": 1.5,
+    "token_constraint": 120,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.0
+    },
+    "failure_mode": "Invalid Parameters"
+  },
+  {
+    "id": "travel_adv_006",
+    "difficulty": "Expert",
+    "category": "adversarial",
+    "user_query": "Give me a flight itinerary that violates the laws of physics.",
+    "retrieved_context": "Impossible.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": "LON",
+          "travel_time": "1 minute"
+        }
+      }
+    ],
+    "expected_answer": "Such an itinerary is physically impossible.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.0
+    },
+    "failure_mode": "Invalid Parameters"
+  },
+  {
+    "id": "travel_adv_007",
+    "difficulty": "Easy",
+    "category": "adversarial",
+    "user_query": "What is the airspeed velocity of an unladen swallow?",
+    "retrieved_context": "Not travel-related.",
+    "expected_tool_calls": [],
+    "expected_answer": "I can only assist with travel-related queries.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.0
+    },
+    "failure_mode": "Ambiguous Request"
+  },
+  {
+    "id": "travel_adv_008",
+    "difficulty": "Hard",
+    "category": "adversarial",
+    "user_query": "Book a flight, but only if it's raining on the departure date.",
+    "retrieved_context": "Weather unknown.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": "LAX",
+          "date": "2026-08-20"
+        }
+      },
+      {
+        "service": "WeatherService",
+        "method": "get_forecast",
+        "parameters": {
+          "city": "NYC",
+          "date": "2026-08-20"
+        }
+      }
+    ],
+    "expected_answer": "I cannot book conditional flights; please confirm a fixed date.",
+    "latency_constraint": 3.0,
+    "token_constraint": 200,
+    "cost_constraint": 0.02,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 0.8,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.2
+    },
+    "failure_mode": "Ambiguous Request"
+  },
+  {
+    "id": "travel_adv_009",
+    "difficulty": "Medium",
+    "category": "adversarial",
+    "user_query": "I want to book a hotel with a haunted room.",
+    "retrieved_context": "No haunted rooms.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Edinburgh",
+          "amenities": [
+            "haunted"
+          ]
+        }
+      }
+    ],
+    "expected_answer": "Haunted rooms are not available.",
+    "latency_constraint": 1.5,
+    "token_constraint": 120,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.0
+    },
+    "failure_mode": "Invalid Parameters"
+  },
+  {
+    "id": "travel_adv_010",
+    "difficulty": "Expert",
+    "category": "adversarial",
+    "user_query": "Tell me the price of a flight, but make the answer rhyme.",
+    "retrieved_context": "Flight price: $500.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": "LON"
+        }
+      }
+    ],
+    "expected_answer": "The price is five hundred, that's the number.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 0.5,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_adv_011",
+    "difficulty": "Hard",
+    "category": "adversarial",
+    "user_query": "Book a flight to a country that doesn't exist.",
+    "retrieved_context": "Invalid country.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "destination": "Narnia"
+        }
+      }
+    ],
+    "expected_answer": "Narnia is not a valid destination.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.0
+    },
+    "failure_mode": "Invalid Parameters"
+  },
+  {
+    "id": "travel_adv_012",
+    "difficulty": "Medium",
+    "category": "adversarial",
+    "user_query": "I want to know the price of a hotel but I refuse to provide any dates.",
+    "retrieved_context": "Prices vary by date.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Paris"
+        }
+      }
+    ],
+    "expected_answer": "Please provide check-in and check-out dates for accurate pricing.",
+    "latency_constraint": 1.5,
+    "token_constraint": 120,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.0
+    },
+    "failure_mode": "Ambiguous Request"
+  },
+  {
+    "id": "travel_adv_013",
+    "difficulty": "Expert",
+    "category": "adversarial",
+    "user_query": "Can you guess my destination? I'll give you a clue: it starts with 'P'.",
+    "retrieved_context": "Multiple cities start with P.",
+    "expected_tool_calls": [
+      {
+        "service": "AttractionsService",
+        "method": "guess_destination",
+        "parameters": {
+          "clue": "starts with P"
+        }
+      }
+    ],
+    "expected_answer": "I need more specific information to guess your destination.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 0.8,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.2
+    },
+    "failure_mode": "Ambiguous Request"
+  },
+  {
+    "id": "travel_adv_014",
+    "difficulty": "Hard",
+    "category": "adversarial",
+    "user_query": "Book a flight for me, but I want the departure time to be 25:00.",
+    "retrieved_context": "Invalid time.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": "LON",
+          "time": "25:00"
+        }
+      }
+    ],
+    "expected_answer": "25:00 is an invalid time. Please use a valid 24-hour format.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.0
+    },
+    "failure_mode": "Invalid Parameters"
+  },
+  {
+    "id": "travel_adv_015",
+    "difficulty": "Medium",
+    "category": "adversarial",
+    "user_query": "I want a hotel that is both pet-friendly and pet-unfriendly.",
+    "retrieved_context": "Contradictory.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "NYC",
+          "pet_friendly": true,
+          "pet_unfriendly": true
+        }
+      }
+    ],
+    "expected_answer": "A hotel cannot be both pet-friendly and pet-unfriendly.",
+    "latency_constraint": 1.5,
+    "token_constraint": 120,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.0
+    },
+    "failure_mode": "Ambiguous Request"
+  }
+]

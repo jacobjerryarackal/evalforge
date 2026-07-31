@@ -1,0 +1,487 @@
+[
+  {
+    "id": "travel_prov_001",
+    "difficulty": "Medium",
+    "category": "provider",
+    "user_query": "Find the cheapest flight from London to Dublin.",
+    "retrieved_context": "Flights: Ryanair £30, Aer Lingus £45.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "LON",
+          "destination": "DUB",
+          "sort": "price"
+        }
+      }
+    ],
+    "expected_answer": "Ryanair £30.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_prov_002",
+    "difficulty": "Hard",
+    "category": "provider",
+    "user_query": "What is the current temperature in Dubai? (Provider: Gemini, OpenRouter, Ollama)",
+    "retrieved_context": "Dubai: 35°C.",
+    "expected_tool_calls": [
+      {
+        "service": "WeatherService",
+        "method": "get_current_weather",
+        "parameters": {
+          "city": "Dubai"
+        }
+      }
+    ],
+    "expected_answer": "35°C.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_prov_003",
+    "difficulty": "Medium",
+    "category": "provider",
+    "user_query": "Book a hotel in New York for next weekend.",
+    "retrieved_context": "NYC hotels: $300/night.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "NYC",
+          "checkin": "2026-08-21",
+          "checkout": "2026-08-23"
+        }
+      }
+    ],
+    "expected_answer": "Hotel rates around $300/night.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_prov_004",
+    "difficulty": "Expert",
+    "category": "provider",
+    "user_query": "Compare flight costs for business class on multiple providers.",
+    "retrieved_context": "Business class: BA $2000, Delta $2200.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": "LON",
+          "class": "business"
+        }
+      }
+    ],
+    "expected_answer": "BA $2000, Delta $2200.",
+    "latency_constraint": 3.0,
+    "token_constraint": 200,
+    "cost_constraint": 0.02,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_prov_005",
+    "difficulty": "Easy",
+    "category": "provider",
+    "user_query": "How much is 100 GBP in USD?",
+    "retrieved_context": "1 GBP = 1.28 USD.",
+    "expected_tool_calls": [
+      {
+        "service": "CurrencyService",
+        "method": "convert",
+        "parameters": {
+          "amount": 100,
+          "from": "GBP",
+          "to": "USD"
+        }
+      }
+    ],
+    "expected_answer": "128 USD.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_prov_006",
+    "difficulty": "Hard",
+    "category": "provider",
+    "user_query": "Recommend a romantic restaurant in Paris.",
+    "retrieved_context": "Romantic: Le Jules Verne, L'Ambroisie.",
+    "expected_tool_calls": [
+      {
+        "service": "AttractionsService",
+        "method": "get_attractions",
+        "parameters": {
+          "city": "Paris",
+          "type": "romantic restaurant"
+        }
+      }
+    ],
+    "expected_answer": "Le Jules Verne and L'Ambroisie.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_prov_007",
+    "difficulty": "Medium",
+    "category": "provider",
+    "user_query": "What's the cancellation policy for a non-refundable hotel?",
+    "retrieved_context": "No refunds.",
+    "expected_tool_calls": [
+      {
+        "service": "BookingPolicyService",
+        "method": "get_cancellation_policy",
+        "parameters": {
+          "rate_type": "non-refundable"
+        }
+      }
+    ],
+    "expected_answer": "No refunds.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_prov_008",
+    "difficulty": "Expert",
+    "category": "provider",
+    "user_query": "Plan a 7-day cruise in the Mediterranean.",
+    "retrieved_context": "Cruise: MSC, 7 nights, $1500.",
+    "expected_tool_calls": [
+      {
+        "service": "CruiseService",
+        "method": "search_cruises",
+        "parameters": {
+          "region": "Mediterranean",
+          "duration": 7
+        }
+      }
+    ],
+    "expected_answer": "MSC cruise, 7 nights, $1500.",
+    "latency_constraint": 4.0,
+    "token_constraint": 300,
+    "cost_constraint": 0.03,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_prov_009",
+    "difficulty": "Easy",
+    "category": "provider",
+    "user_query": "What's the baggage allowance for a flight to London?",
+    "retrieved_context": "1 carry-on + 1 checked bag (23kg).",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "get_baggage_policy",
+        "parameters": {
+          "airline": "British Airways"
+        }
+      }
+    ],
+    "expected_answer": "1 carry-on and 1 checked bag up to 23kg.",
+    "latency_constraint": 1.5,
+    "token_constraint": 120,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_prov_010",
+    "difficulty": "Hard",
+    "category": "provider",
+    "user_query": "Find a hotel with a sea view in Barcelona.",
+    "retrieved_context": "Sea view: Hotel Arts, W Barcelona.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Barcelona",
+          "amenities": [
+            "sea view"
+          ]
+        }
+      }
+    ],
+    "expected_answer": "Hotel Arts and W Barcelona.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_prov_011",
+    "difficulty": "Medium",
+    "category": "provider",
+    "user_query": "What is the timezone in Tokyo?",
+    "retrieved_context": "Tokyo: JST (UTC+9).",
+    "expected_tool_calls": [
+      {
+        "service": "GeneralService",
+        "method": "get_timezone",
+        "parameters": {
+          "city": "Tokyo"
+        }
+      }
+    ],
+    "expected_answer": "UTC+9.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_prov_012",
+    "difficulty": "Expert",
+    "category": "provider",
+    "user_query": "I need a visa for China. What's the process?",
+    "retrieved_context": "Visa required; apply at embassy.",
+    "expected_tool_calls": [
+      {
+        "service": "BookingPolicyService",
+        "method": "get_visa_info",
+        "parameters": {
+          "nationality": "US",
+          "destination": "China"
+        }
+      }
+    ],
+    "expected_answer": "Visa required; apply at the Chinese embassy.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_prov_013",
+    "difficulty": "Easy",
+    "category": "provider",
+    "user_query": "Is there a direct flight from Sydney to Auckland?",
+    "retrieved_context": "Yes, Air New Zealand.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "SYD",
+          "destination": "AKL",
+          "direct": true
+        }
+      }
+    ],
+    "expected_answer": "Yes, Air New Zealand operates direct flights.",
+    "latency_constraint": 1.5,
+    "token_constraint": 120,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_prov_014",
+    "difficulty": "Hard",
+    "category": "provider",
+    "user_query": "Compare hotel loyalty programs for Marriott and Hilton.",
+    "retrieved_context": "Marriott: points per $1, free nights. Hilton: points per $1, upgrades.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "compare_loyalty",
+        "parameters": {
+          "programs": [
+            "Marriott",
+            "Hilton"
+          ]
+        }
+      }
+    ],
+    "expected_answer": "Both have points and benefits; specifics vary.",
+    "latency_constraint": 3.0,
+    "token_constraint": 200,
+    "cost_constraint": 0.02,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_prov_015",
+    "difficulty": "Medium",
+    "category": "provider",
+    "user_query": "What is the best way to get from CDG to Paris city center?",
+    "retrieved_context": "RER B train, taxi, shuttle.",
+    "expected_tool_calls": [
+      {
+        "service": "TransportService",
+        "method": "get_transport_options",
+        "parameters": {
+          "from": "CDG",
+          "to": "Paris city center"
+        }
+      }
+    ],
+    "expected_answer": "RER B, taxi, or shuttle.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  }
+]

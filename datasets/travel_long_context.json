@@ -1,0 +1,22 @@
+{
+  "dataset_id": "travel_long_context",
+  "name": "Travel Long Context Dataset",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "case_id": "case-validation-1",
+      "input_query": "Book cheap flight from LHR to HND on 2026-08-10 for user id U101",
+      "expected_output": "Flight BA200",
+      "expected_tool_calls": [
+        "get_profile",
+        "search_flights",
+        "validate_booking"
+      ],
+      "constraints": {
+        "max_price": 5000.0,
+        "token_budget": 10000
+      },
+      "ground_truth_context": []
+    }
+  ]
+}

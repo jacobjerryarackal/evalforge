@@ -1,0 +1,487 @@
+[
+  {
+    "id": "travel_multi_001",
+    "difficulty": "Medium",
+    "category": "multilingual",
+    "user_query": "Necesito un vuelo de Madrid a París el 15 de agosto.",
+    "retrieved_context": "Vuelos: Iberia IB123, 08:00-10:00, €200.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "MAD",
+          "destination": "CDG",
+          "date": "2026-08-15"
+        }
+      }
+    ],
+    "expected_answer": "Iberia IB123, 08:00-10:00, €200.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_multi_002",
+    "difficulty": "Easy",
+    "category": "multilingual",
+    "user_query": "Je voudrais réserver un hôtel à Nice.",
+    "retrieved_context": "Hôtels à Nice: Le Negresco, 300€/nuit; Hotel Beau Rivage, 200€.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Nice",
+          "checkin": "2026-09-01",
+          "checkout": "2026-09-03"
+        }
+      }
+    ],
+    "expected_answer": "Le Negresco (300€) or Hotel Beau Rivage (200€).",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_multi_003",
+    "difficulty": "Hard",
+    "category": "multilingual",
+    "user_query": "Wie ist das Wetter in Berlin morgen?",
+    "retrieved_context": "Wetter Berlin morgen: sonnig, 25°C.",
+    "expected_tool_calls": [
+      {
+        "service": "WeatherService",
+        "method": "get_forecast",
+        "parameters": {
+          "city": "Berlin",
+          "date": "2026-08-21"
+        }
+      }
+    ],
+    "expected_answer": "Sunny, 25°C.",
+    "latency_constraint": 1.5,
+    "token_constraint": 120,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_multi_004",
+    "difficulty": "Medium",
+    "category": "multilingual",
+    "user_query": "Mi sto chiedendo se ci sono voli diretti da Roma a Tokyo.",
+    "retrieved_context": "Voli diretti: nessuno.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "FCO",
+          "destination": "NRT",
+          "direct": true
+        }
+      }
+    ],
+    "expected_answer": "There are no direct flights.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_multi_005",
+    "difficulty": "Easy",
+    "category": "multilingual",
+    "user_query": "Quanto custa uma noite no hotel em Lisboa?",
+    "retrieved_context": "Preço: €150 por noite.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Lisbon",
+          "checkin": "2026-09-10",
+          "checkout": "2026-09-11"
+        }
+      }
+    ],
+    "expected_answer": "€150 per night.",
+    "latency_constraint": 1.5,
+    "token_constraint": 120,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_multi_006",
+    "difficulty": "Hard",
+    "category": "multilingual",
+    "user_query": "Puedes recomendarme un restaurante cerca del hotel?",
+    "retrieved_context": "Restaurantes: La Bodega (0.2km), El Rincón (0.5km).",
+    "expected_tool_calls": [
+      {
+        "service": "AttractionsService",
+        "method": "get_attractions",
+        "parameters": {
+          "location": "hotel",
+          "type": "restaurants"
+        }
+      }
+    ],
+    "expected_answer": "La Bodega (0.2km) and El Rincón (0.5km).",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_multi_007",
+    "difficulty": "Medium",
+    "category": "multilingual",
+    "user_query": "What is the exchange rate from USD to JPY?",
+    "retrieved_context": "1 USD = 145 JPY.",
+    "expected_tool_calls": [
+      {
+        "service": "CurrencyService",
+        "method": "get_exchange_rate",
+        "parameters": {
+          "from": "USD",
+          "to": "JPY"
+        }
+      }
+    ],
+    "expected_answer": "1 USD = 145 JPY.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_multi_008",
+    "difficulty": "Expert",
+    "category": "multilingual",
+    "user_query": "Wetter in München nächste Woche? (German)",
+    "retrieved_context": "Munich next week: sunny, 20-25°C.",
+    "expected_tool_calls": [
+      {
+        "service": "WeatherService",
+        "method": "get_forecast",
+        "parameters": {
+          "city": "Munich",
+          "date": "2026-08-22"
+        }
+      }
+    ],
+    "expected_answer": "Sunny, 20-25°C.",
+    "latency_constraint": 1.5,
+    "token_constraint": 120,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_multi_009",
+    "difficulty": "Easy",
+    "category": "multilingual",
+    "user_query": "Convertissez 500 USD en EUR.",
+    "retrieved_context": "1 USD = 0.92 EUR.",
+    "expected_tool_calls": [
+      {
+        "service": "CurrencyService",
+        "method": "convert",
+        "parameters": {
+          "amount": 500,
+          "from": "USD",
+          "to": "EUR"
+        }
+      }
+    ],
+    "expected_answer": "460 EUR.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_multi_010",
+    "difficulty": "Hard",
+    "category": "multilingual",
+    "user_query": "I need a hotel in Kyoto with a garden view. (English)",
+    "retrieved_context": "Kyoto garden view hotels: Hotel A, Hotel B.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Kyoto",
+          "amenities": [
+            "garden view"
+          ]
+        }
+      }
+    ],
+    "expected_answer": "Hotel A and Hotel B have garden views.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_multi_011",
+    "difficulty": "Medium",
+    "category": "multilingual",
+    "user_query": "¿Cuál es el mejor momento para visitar Cancún?",
+    "retrieved_context": "Best time: December to April.",
+    "expected_tool_calls": [
+      {
+        "service": "AttractionsService",
+        "method": "get_best_time",
+        "parameters": {
+          "city": "Cancun"
+        }
+      }
+    ],
+    "expected_answer": "December to April.",
+    "latency_constraint": 1.5,
+    "token_constraint": 120,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_multi_012",
+    "difficulty": "Expert",
+    "category": "multilingual",
+    "user_query": "전체 여행 일정을 계획해 주세요. (Korean)",
+    "retrieved_context": "Travel planning information.",
+    "expected_tool_calls": [
+      {
+        "service": "TripPlannerService",
+        "method": "create_itinerary",
+        "parameters": {
+          "destination": "Seoul",
+          "days": 5
+        }
+      }
+    ],
+    "expected_answer": "Day 1: Seoul, Day 2: Gyeongbokgung, etc.",
+    "latency_constraint": 4.0,
+    "token_constraint": 400,
+    "cost_constraint": 0.03,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_multi_013",
+    "difficulty": "Easy",
+    "category": "multilingual",
+    "user_query": "Hoe laat vertrekt de vlucht naar Amsterdam?",
+    "retrieved_context": "Vlucht: KLM KL123, vertrek 14:00.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "get_flight_details",
+        "parameters": {
+          "flight_number": "KL123"
+        }
+      }
+    ],
+    "expected_answer": "Departs at 14:00.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_multi_014",
+    "difficulty": "Hard",
+    "category": "multilingual",
+    "user_query": "Ich möchte ein Hotel in der Nähe des Bahnhofs buchen.",
+    "retrieved_context": "Hotels near station: Hotel A, Hotel B.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Vienna",
+          "landmark": "station"
+        }
+      }
+    ],
+    "expected_answer": "Hotel A and Hotel B are near the station.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_multi_015",
+    "difficulty": "Medium",
+    "category": "multilingual",
+    "user_query": "Translate: 'I need a taxi to the airport' into Spanish.",
+    "retrieved_context": "Translation: 'Necesito un taxi al aeropuerto'.",
+    "expected_tool_calls": [
+      {
+        "service": "TranslationService",
+        "method": "translate",
+        "parameters": {
+          "text": "I need a taxi to the airport",
+          "target": "Spanish"
+        }
+      }
+    ],
+    "expected_answer": "Necesito un taxi al aeropuerto.",
+    "latency_constraint": 1.5,
+    "token_constraint": 120,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  }
+]

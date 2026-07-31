@@ -1,0 +1,653 @@
+[
+  {
+    "id": "travel_edge_001",
+    "difficulty": "Hard",
+    "category": "edge-case",
+    "user_query": "Book a flight for December 31, 2026, from NYC to London.",
+    "retrieved_context": "Flights on Dec 31: BA112 $1200, DL4 $1300, both available.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": "LON",
+          "date": "2026-12-31"
+        }
+      }
+    ],
+    "expected_answer": "BA112 $1200, DL4 $1300.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_edge_002",
+    "difficulty": "Medium",
+    "category": "edge-case",
+    "user_query": "Find a hotel with a room for 5 adults and 3 children.",
+    "retrieved_context": "Rooms: family suite available for 6 people, but no room for 8.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Orlando",
+          "adults": 5,
+          "children": 3
+        }
+      }
+    ],
+    "expected_answer": "No room for 8, only family suite for 6.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_edge_003",
+    "difficulty": "Expert",
+    "category": "edge-case",
+    "user_query": "I need a flight that departs at exactly 00:01 on January 1, 2027.",
+    "retrieved_context": "No flights at that time.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": "SYD",
+          "date": "2027-01-01",
+          "time": "00:01"
+        }
+      }
+    ],
+    "expected_answer": "No flights at 00:01 on Jan 1, 2027.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_edge_004",
+    "difficulty": "Medium",
+    "category": "edge-case",
+    "user_query": "What is the price of a hotel room for 1 night, but I'm checking in on Feb 29, 2028 (leap year).",
+    "retrieved_context": "Rate: $150/night for all dates.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Paris",
+          "checkin": "2028-02-29",
+          "checkout": "2028-03-01"
+        }
+      }
+    ],
+    "expected_answer": "$150.",
+    "latency_constraint": 1.5,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_edge_005",
+    "difficulty": "Hard",
+    "category": "edge-case",
+    "user_query": "Book a flight from a city that doesn't exist.",
+    "retrieved_context": "No data.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "Nowhere",
+          "destination": "Somewhere",
+          "date": "2026-08-20"
+        }
+      }
+    ],
+    "expected_answer": "Invalid origin city.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.0
+    },
+    "failure_mode": "Invalid Parameters"
+  },
+  {
+    "id": "travel_edge_006",
+    "difficulty": "Easy",
+    "category": "edge-case",
+    "user_query": "What's the weather on February 30?",
+    "retrieved_context": "Invalid date.",
+    "expected_tool_calls": [
+      {
+        "service": "WeatherService",
+        "method": "get_forecast",
+        "parameters": {
+          "city": "Paris",
+          "date": "2026-02-30"
+        }
+      }
+    ],
+    "expected_answer": "Invalid date.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.0
+    },
+    "failure_mode": "Invalid Parameters"
+  },
+  {
+    "id": "travel_edge_007",
+    "difficulty": "Medium",
+    "category": "edge-case",
+    "user_query": "I need a hotel with 10 rooms for a group.",
+    "retrieved_context": "Hotel has 5 rooms available.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Las Vegas",
+          "rooms": 10
+        }
+      }
+    ],
+    "expected_answer": "Only 5 rooms available.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_edge_008",
+    "difficulty": "Hard",
+    "category": "edge-case",
+    "user_query": "Book a flight for a passenger with no name.",
+    "retrieved_context": "Passenger name required.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "book_flight",
+        "parameters": {
+          "flight_id": "UA123",
+          "passenger_name": ""
+        }
+      }
+    ],
+    "expected_answer": "Passenger name is required.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.0
+    },
+    "failure_mode": "Invalid Parameters"
+  },
+  {
+    "id": "travel_edge_009",
+    "difficulty": "Easy",
+    "category": "edge-case",
+    "user_query": "Convert -100 USD to EUR.",
+    "retrieved_context": "Negative amount invalid.",
+    "expected_tool_calls": [
+      {
+        "service": "CurrencyService",
+        "method": "convert",
+        "parameters": {
+          "amount": -100,
+          "from": "USD",
+          "to": "EUR"
+        }
+      }
+    ],
+    "expected_answer": "Amount must be positive.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.0
+    },
+    "failure_mode": "Invalid Parameters"
+  },
+  {
+    "id": "travel_edge_010",
+    "difficulty": "Expert",
+    "category": "edge-case",
+    "user_query": "Find flights with no layover but I want to stop in Chicago.",
+    "retrieved_context": "Contradictory: no layover vs stop.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": "LAX",
+          "direct": true,
+          "stopover": "ORD"
+        }
+      }
+    ],
+    "expected_answer": "Cannot have both direct and stopover.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 0.8,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.2
+    },
+    "failure_mode": "Ambiguous Request"
+  },
+  {
+    "id": "travel_edge_011",
+    "difficulty": "Medium",
+    "category": "edge-case",
+    "user_query": "Book a hotel for 100 nights.",
+    "retrieved_context": "Maximum stay: 30 nights.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "NYC",
+          "nights": 100
+        }
+      }
+    ],
+    "expected_answer": "Maximum stay is 30 nights.",
+    "latency_constraint": 1.5,
+    "token_constraint": 120,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_edge_012",
+    "difficulty": "Hard",
+    "category": "edge-case",
+    "user_query": "I need a flight that arrives before it departs.",
+    "retrieved_context": "Impossible.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": "LON",
+          "departure": "10:00",
+          "arrival": "08:00"
+        }
+      }
+    ],
+    "expected_answer": "No such flight.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.0
+    },
+    "failure_mode": "Invalid Parameters"
+  },
+  {
+    "id": "travel_edge_013",
+    "difficulty": "Easy",
+    "category": "edge-case",
+    "user_query": "What's the hotel's phone number?",
+    "retrieved_context": "Phone: +1-800-555-0199.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "get_hotel_contact",
+        "parameters": {
+          "hotel_id": "H222"
+        }
+      }
+    ],
+    "expected_answer": "+1-800-555-0199.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_edge_014",
+    "difficulty": "Expert",
+    "category": "edge-case",
+    "user_query": "I want to book a flight but I don't know my destination.",
+    "retrieved_context": "No destination.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": null
+        }
+      }
+    ],
+    "expected_answer": "Destination is required.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.0
+    },
+    "failure_mode": "Ambiguous Request"
+  },
+  {
+    "id": "travel_edge_015",
+    "difficulty": "Medium",
+    "category": "edge-case",
+    "user_query": "Can I bring a pet on a flight with no pet policy?",
+    "retrieved_context": "No pet policy specified.",
+    "expected_tool_calls": [
+      {
+        "service": "BookingPolicyService",
+        "method": "get_pet_policy",
+        "parameters": {
+          "airline": "Unknown"
+        }
+      }
+    ],
+    "expected_answer": "Pet policy not available.",
+    "latency_constraint": 1.5,
+    "token_constraint": 120,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 0.8,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.2
+    },
+    "failure_mode": "Missing Retrieval"
+  },
+  {
+    "id": "travel_edge_016",
+    "difficulty": "Hard",
+    "category": "edge-case",
+    "user_query": "Book a hotel for a date in the past.",
+    "retrieved_context": "Invalid date (past).",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Rome",
+          "checkin": "2020-01-01",
+          "checkout": "2020-01-02"
+        }
+      }
+    ],
+    "expected_answer": "Cannot book for past dates.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.0
+    },
+    "failure_mode": "Invalid Parameters"
+  },
+  {
+    "id": "travel_edge_017",
+    "difficulty": "Easy",
+    "category": "edge-case",
+    "user_query": "What is the currency of Antarctica?",
+    "retrieved_context": "Antarctica has no official currency.",
+    "expected_tool_calls": [
+      {
+        "service": "CurrencyService",
+        "method": "get_currency",
+        "parameters": {
+          "country": "Antarctica"
+        }
+      }
+    ],
+    "expected_answer": "No official currency.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_edge_018",
+    "difficulty": "Expert",
+    "category": "edge-case",
+    "user_query": "Find a flight from NYC to London on a date that doesn't exist (e.g., 2026-13-01).",
+    "retrieved_context": "Invalid date.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": "LON",
+          "date": "2026-13-01"
+        }
+      }
+    ],
+    "expected_answer": "Invalid date format.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.0
+    },
+    "failure_mode": "Invalid Parameters"
+  },
+  {
+    "id": "travel_edge_019",
+    "difficulty": "Medium",
+    "category": "edge-case",
+    "user_query": "I need a hotel with a pool that is open 24 hours.",
+    "retrieved_context": "Pool hours: 6am-10pm.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Dubai",
+          "amenities": [
+            "24h pool"
+          ]
+        }
+      }
+    ],
+    "expected_answer": "No hotel with 24h pool.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_edge_020",
+    "difficulty": "Hard",
+    "category": "edge-case",
+    "user_query": "Book a flight for a person with no ID.",
+    "retrieved_context": "ID required.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "book_flight",
+        "parameters": {
+          "passenger_id": null
+        }
+      }
+    ],
+    "expected_answer": "Passenger ID required.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 0.5,
+      "correctness": 0.5,
+      "hallucination": 0.0
+    },
+    "failure_mode": "Invalid Parameters"
+  }
+]
