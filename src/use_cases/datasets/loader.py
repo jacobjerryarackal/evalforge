@@ -28,56 +28,13 @@ class DatasetLoader:
             dataset_id = os.path.splitext(os.path.basename(filepath))[0]
             name = dataset_id.replace("_", " ").title() + " Dataset"
             version = "1.0.0"
-            test_cases = []
-
-            for idx, item in enumerate(data):
-                case_id = item.get("id") or f"case-{idx + 1}"
-                input_query = item.get("user_query") or item.get("input_query") or ""
-                expected_output = item.get("expected_answer") or item.get("expected_output")
-
-                retrieved_context = item.get("retrieved_context")
-                ground_truth_context = []
-                if retrieved_context:
-                    if isinstance(retrieved_context, list):
-                        ground_truth_context = [str(c) for c in retrieved_context]
-                    else:
-                        ground_truth_context = [str(retrieved_context)]
-                elif "ground_truth_context" in item:
-                    ground_truth_context = item["ground_truth_context"]
-
-                expected_tool_calls = []
-                raw_tool_calls = item.get("expected_tool_calls") or []
-                for tc in raw_tool_calls:
-                    if isinstance(tc, dict):
-                        method = tc.get("method")
-                        if method:
-                            expected_tool_calls.append(str(method))
-                    elif isinstance(tc, str):
-                        expected_tool_calls.append(tc)
-
-                constraints = item.get("constraints") or {}
-                if "latency_constraint" in item:
-                    constraints["max_latency"] = item["latency_constraint"]
-                if "token_constraint" in item:
-                    constraints["max_tokens"] = item["token_constraint"]
-                if "cost_constraint" in item:
-                    constraints["max_cost"] = item["cost_constraint"]
-
-                metadata = item.get("metadata") or {}
-                for field in ["difficulty", "category", "expected_metrics", "expected_judge_scores", "failure_mode"]:
-                    if field in item:
-                        metadata[field] = item[field]
-
-                test_case = GoldenTestCase(
-                    case_id=case_id,
-                    input_query=input_query,
-                    expected_output=expected_output,
-                    ground_truth_context=ground_truth_context,
-                    expected_tool_calls=expected_tool_calls,
-                    constraints=constraints,
-                    metadata=metadata,
-                )
-                test_cases.append(test_case)
+            try:
+                test_cases = [GoldenTestCase.model_validate(item) for item in data]
+            except ValidationError as e:
+                errors = [f"{'.'.join(str(p) for p in err['loc'])}: {err['msg']}" for err in e.errors()]
+                raise DatasetValidationError(
+                    f"Dataset case schema validation failed in '{filepath}'", errors
+                ) from e
 
             dataset = GoldenDataset(
                 dataset_id=dataset_id,
