@@ -24,6 +24,39 @@ from src.use_cases.metrics.registry import MetricRegistry
 logger = logging.getLogger("evaluation.benchmark_runner")
 
 
+def _get_case_threshold(case: GoldenTestCase, metric_name: str) -> float | None:
+    name_norm = metric_name.lower().replace("_", "").replace("-", "")
+    
+    # Map name to standard expected_metrics or expected_judge_scores keys
+    search_keys = [name_norm]
+    if name_norm == "contextprecision":
+        search_keys.append("context_precision")
+    elif name_norm == "contextrecall":
+        search_keys.append("context_recall")
+    elif name_norm == "answercorrectness":
+        search_keys.extend(["correctness", "answer_correctness"])
+    elif name_norm == "correctness":
+        search_keys.extend(["answercorrectness", "answer_correctness"])
+    
+    # Check expected_metrics
+    for k in search_keys:
+        if k in case.expected_metrics:
+            return case.expected_metrics[k]
+        for em_k, em_v in case.expected_metrics.items():
+            if em_k.lower().replace("_", "").replace("-", "") == k:
+                return em_v
+                
+    # Check expected_judge_scores
+    for k in search_keys:
+        if k in case.expected_judge_scores:
+            return case.expected_judge_scores[k]
+        for js_k, js_v in case.expected_judge_scores.items():
+            if js_k.lower().replace("_", "").replace("-", "") == k:
+                return js_v
+                
+    return None
+
+
 class BenchmarkRunner:
     """Orchestrator for executing evaluation runs on a GoldenDataset using an AgentSUT."""
 
@@ -223,20 +256,15 @@ class BenchmarkRunner:
                     success = False
                     break
                 if isinstance(score, (int, float)):
-                    # Check if there is an expected threshold in the test case (lowercase for key matching)
-                    metric_name_lower = m_res.metric_name.lower()
-                    
-                    # Look up expected thresholds from expected_metrics and expected_judge_scores
-                    threshold = case.expected_metrics.get(metric_name_lower)
-                    if threshold is None:
-                        threshold = case.expected_judge_scores.get(metric_name_lower)
+                    # Look up expected threshold using robust normalizer helper
+                    threshold = _get_case_threshold(case, m_res.metric_name)
                         
                     # Special-case constraint evaluators (which return binary 1.0 or 0.0)
                     if threshold is None and m_res.metric_name in ["Latency", "TokenUsage", "Cost", "ToolCalling"]:
                         threshold = 0.5
                         
                     if threshold is not None:
-                        if metric_name_lower == "hallucination":
+                        if m_res.metric_name.lower() == "hallucination":
                             if score > threshold:
                                 success = False
                                 break
