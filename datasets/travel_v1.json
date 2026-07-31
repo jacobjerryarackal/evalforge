@@ -1,22 +1,1038 @@
-{
-  "dataset_id": "travel_v1",
-  "name": "Travel Baseline Dataset",
-  "version": "1.0.0",
-  "test_cases": [
-    {
-      "case_id": "case-validation-1",
-      "input_query": "Book economy flight from JFK to LAX on 2026-08-01 for user id U101",
-      "expected_output": "Flight UA100",
-      "expected_tool_calls": [
-        "get_profile",
-        "search_flights",
-        "validate_booking"
-      ],
-      "constraints": {
-        "max_price": 5000.0,
-        "token_budget": 10000
+[
+  {
+    "id": "travel_v1_001",
+    "difficulty": "Easy",
+    "category": "flight",
+    "user_query": "I need a flight from New York to London on August 15, 2026.",
+    "retrieved_context": "Flights from JFK to LHR on Aug 15: British Airways BA112 departs 10:30, arrives 22:15, $850. Delta DL4 departs 08:00, arrives 20:30, $920. Both have 1 stop.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": "LON",
+          "date": "2026-08-15"
+        }
+      }
+    ],
+    "expected_answer": "British Airways BA112 at 10:30, arriving 22:15, $850, or Delta DL4 at 08:00, arriving 20:30, $920.",
+    "latency_constraint": 2.0,
+    "token_constraint": 200,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_002",
+    "difficulty": "Easy",
+    "category": "hotel",
+    "user_query": "Find a hotel in Paris near the Eiffel Tower for 3 nights starting August 20.",
+    "retrieved_context": "Hotels near Eiffel Tower: Hotel A (4-star, $250/night), Hotel B (3-star, $180/night), Hotel C (5-star, $450/night). Availability confirmed.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Paris",
+          "checkin": "2026-08-20",
+          "checkout": "2026-08-23",
+          "landmark": "Eiffel Tower"
+        }
+      }
+    ],
+    "expected_answer": "Hotel A ($250/night), Hotel B ($180/night), or Hotel C ($450/night). All near the Eiffel Tower.",
+    "latency_constraint": 2.0,
+    "token_constraint": 200,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_003",
+    "difficulty": "Medium",
+    "category": "itinerary",
+    "user_query": "Plan a 5-day trip to Tokyo including flights, hotel, and must-see attractions.",
+    "retrieved_context": "Flights: JAL JL1 depart 09:00, arrive 15:00, $1200. Hotels: Shinjuku Prince ($300/night), Asakusa View ($200/night). Attractions: Senso-ji, Shibuya Crossing, Tokyo Tower.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": "TYO",
+          "date": "2026-09-01"
+        }
       },
-      "ground_truth_context": []
-    }
-  ]
-}
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Tokyo",
+          "checkin": "2026-09-01",
+          "checkout": "2026-09-06"
+        }
+      },
+      {
+        "service": "AttractionsService",
+        "method": "get_attractions",
+        "parameters": {
+          "city": "Tokyo",
+          "days": 5
+        }
+      }
+    ],
+    "expected_answer": "Fly JAL JL1 arriving 15:00. Stay at Shinjuku Prince or Asakusa View. Visit Senso-ji, Shibuya Crossing, Tokyo Tower.",
+    "latency_constraint": 4.0,
+    "token_constraint": 400,
+    "cost_constraint": 0.03,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_004",
+    "difficulty": "Easy",
+    "category": "weather",
+    "user_query": "What's the weather forecast in Rome for tomorrow?",
+    "retrieved_context": "Rome weather for Aug 10: Sunny, high 32°C, low 22°C, no rain.",
+    "expected_tool_calls": [
+      {
+        "service": "WeatherService",
+        "method": "get_forecast",
+        "parameters": {
+          "city": "Rome",
+          "date": "2026-08-10"
+        }
+      }
+    ],
+    "expected_answer": "Sunny, high 32°C, low 22°C.",
+    "latency_constraint": 1.5,
+    "token_constraint": 150,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_005",
+    "difficulty": "Easy",
+    "category": "currency",
+    "user_query": "Convert 500 USD to EUR.",
+    "retrieved_context": "Current exchange rate: 1 USD = 0.92 EUR.",
+    "expected_tool_calls": [
+      {
+        "service": "CurrencyService",
+        "method": "convert",
+        "parameters": {
+          "amount": 500,
+          "from": "USD",
+          "to": "EUR"
+        }
+      }
+    ],
+    "expected_answer": "500 USD = 460 EUR.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_006",
+    "difficulty": "Medium",
+    "category": "attractions",
+    "user_query": "Recommend top 3 attractions in Barcelona and their opening hours.",
+    "retrieved_context": "Barcelona attractions: Sagrada Família (09:00-18:00), Park Güell (08:00-20:00), Gothic Quarter (24/7).",
+    "expected_tool_calls": [
+      {
+        "service": "AttractionsService",
+        "method": "get_attractions",
+        "parameters": {
+          "city": "Barcelona",
+          "limit": 3
+        }
+      }
+    ],
+    "expected_answer": "Sagrada Família (09:00-18:00), Park Güell (08:00-20:00), Gothic Quarter (open 24/7).",
+    "latency_constraint": 2.0,
+    "token_constraint": 250,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_007",
+    "difficulty": "Medium",
+    "category": "multi-domain",
+    "user_query": "I need a flight to Dubai and a hotel with a sea view for 4 nights. Also, what's the weather like?",
+    "retrieved_context": "Flights: Emirates EK202, 12:00-20:00, $1000. Hotels: Burj Al Arab ($2000/night), Jumeirah Beach ($500/night). Weather: Sunny, 35°C.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": "DXB",
+          "date": "2026-09-10"
+        }
+      },
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Dubai",
+          "checkin": "2026-09-10",
+          "checkout": "2026-09-14",
+          "amenities": [
+            "sea view"
+          ]
+        }
+      },
+      {
+        "service": "WeatherService",
+        "method": "get_forecast",
+        "parameters": {
+          "city": "Dubai",
+          "date": "2026-09-10"
+        }
+      }
+    ],
+    "expected_answer": "Fly Emirates EK202. Stay at Burj Al Arab or Jumeirah Beach. Weather: sunny, 35°C.",
+    "latency_constraint": 4.0,
+    "token_constraint": 350,
+    "cost_constraint": 0.03,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_008",
+    "difficulty": "Hard",
+    "category": "policy",
+    "user_query": "Can I change my flight booking? I have a non-refundable ticket.",
+    "retrieved_context": "Policy: Non-refundable tickets cannot be changed unless flight is cancelled by airline. Change fee: $200 if allowed.",
+    "expected_tool_calls": [
+      {
+        "service": "BookingPolicyService",
+        "method": "get_change_policy",
+        "parameters": {
+          "ticket_type": "non-refundable",
+          "airline": "British Airways"
+        }
+      }
+    ],
+    "expected_answer": "Non-refundable tickets cannot be changed unless the airline cancels. If allowed, a $200 fee applies.",
+    "latency_constraint": 3.0,
+    "token_constraint": 300,
+    "cost_constraint": 0.02,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_009",
+    "difficulty": "Medium",
+    "category": "flight",
+    "user_query": "Find the cheapest flight from Chicago to Miami for next Monday.",
+    "retrieved_context": "Flights ORD-MIA on Aug 17: American AA123 at 06:00, $150; United UA456 at 10:00, $170; Spirit NK789 at 12:00, $90.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "ORD",
+          "destination": "MIA",
+          "date": "2026-08-17",
+          "sort": "price"
+        }
+      }
+    ],
+    "expected_answer": "Spirit NK789 at 12:00 for $90.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_010",
+    "difficulty": "Easy",
+    "category": "hotel",
+    "user_query": "Book a room at the Hilton in Amsterdam for two adults, one night, checking in tomorrow.",
+    "retrieved_context": "Hilton Amsterdam has availability for Aug 11: standard room $200, includes breakfast.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "book_hotel",
+        "parameters": {
+          "hotel": "Hilton",
+          "city": "Amsterdam",
+          "checkin": "2026-08-11",
+          "checkout": "2026-08-12",
+          "guests": 2
+        }
+      }
+    ],
+    "expected_answer": "Hilton Amsterdam, standard room for $200, includes breakfast.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_011",
+    "difficulty": "Hard",
+    "category": "itinerary",
+    "user_query": "I have a 10-day trip to Italy. I want to visit Rome, Florence, and Venice. Suggest flights, hotels, and a daily itinerary.",
+    "retrieved_context": "Flights: JFK-FCO $800, FCO-FLR train $50, FLR-VCE train $60. Hotels: Rome $200/night, Florence $180, Venice $250. Attractions: Colosseum, Uffizi, St. Mark's.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": "FCO",
+          "date": "2026-10-01"
+        }
+      },
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Rome",
+          "checkin": "2026-10-01",
+          "checkout": "2026-10-04"
+        }
+      },
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Florence",
+          "checkin": "2026-10-04",
+          "checkout": "2026-10-07"
+        }
+      },
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Venice",
+          "checkin": "2026-10-07",
+          "checkout": "2026-10-11"
+        }
+      },
+      {
+        "service": "AttractionsService",
+        "method": "get_attractions",
+        "parameters": {
+          "city": "Rome",
+          "days": 3
+        }
+      },
+      {
+        "service": "AttractionsService",
+        "method": "get_attractions",
+        "parameters": {
+          "city": "Florence",
+          "days": 3
+        }
+      },
+      {
+        "service": "AttractionsService",
+        "method": "get_attractions",
+        "parameters": {
+          "city": "Venice",
+          "days": 4
+        }
+      }
+    ],
+    "expected_answer": "Fly to Rome, stay 3 nights, train to Florence for 3 nights, train to Venice for 4 nights. Visit Colosseum, Uffizi, St. Mark's.",
+    "latency_constraint": 6.0,
+    "token_constraint": 600,
+    "cost_constraint": 0.05,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_012",
+    "difficulty": "Medium",
+    "category": "weather",
+    "user_query": "Will it rain in Sydney on August 25?",
+    "retrieved_context": "Sydney forecast Aug 25: Partly cloudy, 20% chance of rain, high 22°C.",
+    "expected_tool_calls": [
+      {
+        "service": "WeatherService",
+        "method": "get_forecast",
+        "parameters": {
+          "city": "Sydney",
+          "date": "2026-08-25"
+        }
+      }
+    ],
+    "expected_answer": "20% chance of rain, partly cloudy, high 22°C.",
+    "latency_constraint": 1.5,
+    "token_constraint": 120,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_013",
+    "difficulty": "Easy",
+    "category": "currency",
+    "user_query": "How much is 1000 Japanese yen in US dollars?",
+    "retrieved_context": "Exchange rate: 1 USD = 145 JPY.",
+    "expected_tool_calls": [
+      {
+        "service": "CurrencyService",
+        "method": "convert",
+        "parameters": {
+          "amount": 1000,
+          "from": "JPY",
+          "to": "USD"
+        }
+      }
+    ],
+    "expected_answer": "1000 JPY = 6.90 USD.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_014",
+    "difficulty": "Medium",
+    "category": "attractions",
+    "user_query": "What are the best museums in London? Open on Sundays?",
+    "retrieved_context": "British Museum (open Sunday 10:00-17:00), National Gallery (open Sunday 10:00-18:00), Tate Modern (open Sunday 10:00-18:00).",
+    "expected_tool_calls": [
+      {
+        "service": "AttractionsService",
+        "method": "get_attractions",
+        "parameters": {
+          "city": "London",
+          "type": "museums"
+        }
+      }
+    ],
+    "expected_answer": "British Museum (10-17), National Gallery (10-18), Tate Modern (10-18) – all open Sundays.",
+    "latency_constraint": 2.0,
+    "token_constraint": 200,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_015",
+    "difficulty": "Hard",
+    "category": "policy",
+    "user_query": "I want to cancel my hotel reservation without penalty. I booked a non-refundable rate.",
+    "retrieved_context": "Non-refundable rates: no cancellation unless within 24h of booking. Penalty = full stay cost.",
+    "expected_tool_calls": [
+      {
+        "service": "BookingPolicyService",
+        "method": "get_cancellation_policy",
+        "parameters": {
+          "rate_type": "non-refundable",
+          "hotel": "Marriott"
+        }
+      }
+    ],
+    "expected_answer": "Non-refundable rate: cancellation is not allowed without penalty. Full stay cost applies.",
+    "latency_constraint": 3.0,
+    "token_constraint": 250,
+    "cost_constraint": 0.02,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_016",
+    "difficulty": "Medium",
+    "category": "flight",
+    "user_query": "Find direct flights from San Francisco to Tokyo on September 1, returning September 10.",
+    "retrieved_context": "Direct flights: United UA875 dep 11:00, arr 15:30+1, $1200. Return: UA876 dep 17:00, arr 10:30+1.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "SFO",
+          "destination": "NRT",
+          "date": "2026-09-01",
+          "return_date": "2026-09-10",
+          "direct": true
+        }
+      }
+    ],
+    "expected_answer": "United UA875 outbound, UA876 return. $1200.",
+    "latency_constraint": 3.0,
+    "token_constraint": 200,
+    "cost_constraint": 0.02,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_017",
+    "difficulty": "Easy",
+    "category": "hotel",
+    "user_query": "I need a hotel in NYC with a gym and pool for this weekend.",
+    "retrieved_context": "NYC hotels: Hilton Midtown (gym, pool, $350/night), Marriott Marquis (gym, no pool, $400/night), W Hotel (gym, pool, $420/night).",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "NYC",
+          "checkin": "2026-08-14",
+          "checkout": "2026-08-16",
+          "amenities": [
+            "gym",
+            "pool"
+          ]
+        }
+      }
+    ],
+    "expected_answer": "Hilton Midtown ($350) or W Hotel ($420) have both gym and pool.",
+    "latency_constraint": 2.0,
+    "token_constraint": 200,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_018",
+    "difficulty": "Medium",
+    "category": "multi-domain",
+    "user_query": "I'm going to Singapore. Book a flight and hotel, and tell me the best local food spots.",
+    "retrieved_context": "Flights: SQ11 dep 08:00, $900. Hotels: Marina Bay Sands ($600/night), Raffles ($750). Food spots: hawker centres (Chinatown, Maxwell).",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": "SIN",
+          "date": "2026-10-05"
+        }
+      },
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Singapore",
+          "checkin": "2026-10-05",
+          "checkout": "2026-10-10"
+        }
+      },
+      {
+        "service": "AttractionsService",
+        "method": "get_attractions",
+        "parameters": {
+          "city": "Singapore",
+          "type": "food"
+        }
+      }
+    ],
+    "expected_answer": "Flight SQ11. Stay at Marina Bay Sands or Raffles. Try hawker centres in Chinatown and Maxwell.",
+    "latency_constraint": 4.0,
+    "token_constraint": 350,
+    "cost_constraint": 0.03,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_019",
+    "difficulty": "Expert",
+    "category": "itinerary",
+    "user_query": "I have 14 days to explore South America. I want to visit Machu Picchu, Rio, and Buenos Aires. Provide a detailed itinerary, flight connections, and recommended hotels.",
+    "retrieved_context": "Flights: NYC-LIM $600, LIM-CUZ $150, CUZ-RIO $300, RIO-EZE $200, EZE-NYC $700. Hotels: Cuzco $120, Rio $250, BA $180. Attractions: Machu Picchu (2 days), Christ the Redeemer, Iguazu Falls (optional).",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": "LIM",
+          "date": "2026-11-01"
+        }
+      },
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "LIM",
+          "destination": "CUZ",
+          "date": "2026-11-02"
+        }
+      },
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "CUZ",
+          "destination": "RIO",
+          "date": "2026-11-05"
+        }
+      },
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "RIO",
+          "destination": "EZE",
+          "date": "2026-11-09"
+        }
+      },
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "EZE",
+          "destination": "NYC",
+          "date": "2026-11-14"
+        }
+      },
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Cuzco",
+          "checkin": "2026-11-02",
+          "checkout": "2026-11-05"
+        }
+      },
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Rio",
+          "checkin": "2026-11-05",
+          "checkout": "2026-11-09"
+        }
+      },
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Buenos Aires",
+          "checkin": "2026-11-09",
+          "checkout": "2026-11-14"
+        }
+      },
+      {
+        "service": "AttractionsService",
+        "method": "get_attractions",
+        "parameters": {
+          "city": "Cuzco",
+          "days": 3
+        }
+      },
+      {
+        "service": "AttractionsService",
+        "method": "get_attractions",
+        "parameters": {
+          "city": "Rio",
+          "days": 4
+        }
+      },
+      {
+        "service": "AttractionsService",
+        "method": "get_attractions",
+        "parameters": {
+          "city": "Buenos Aires",
+          "days": 5
+        }
+      }
+    ],
+    "expected_answer": "Fly NYC-LIM, then LIM-CUZ, spend 3 days in Cuzco/Machu Picchu, fly to Rio for 4 days, then to BA for 5 days, return NYC. Hotels as per budget.",
+    "latency_constraint": 8.0,
+    "token_constraint": 800,
+    "cost_constraint": 0.08,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_020",
+    "difficulty": "Medium",
+    "category": "policy",
+    "user_query": "Can I bring a pet on my flight? I'm flying with Delta.",
+    "retrieved_context": "Delta pet policy: small dogs/cats in cabin for $125, must fit in carrier under seat. Larger pets must go cargo.",
+    "expected_tool_calls": [
+      {
+        "service": "BookingPolicyService",
+        "method": "get_pet_policy",
+        "parameters": {
+          "airline": "Delta"
+        }
+      }
+    ],
+    "expected_answer": "Small pets in cabin for $125 (carrier under seat), larger pets in cargo.",
+    "latency_constraint": 2.0,
+    "token_constraint": 200,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_021",
+    "difficulty": "Hard",
+    "category": "multi-domain",
+    "user_query": "I have a budget of $3000 for a 7-day trip to Bali. Find flights, hotel, and activities that fit the budget.",
+    "retrieved_context": "Flights: NYC-DPS $900 roundtrip. Hotels: $80/night average. Activities: snorkeling $50, temple tours $30, etc. Total for 7 days ~$2500.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": "DPS",
+          "date": "2026-12-01",
+          "budget": 900
+        }
+      },
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Bali",
+          "checkin": "2026-12-01",
+          "checkout": "2026-12-08",
+          "max_price": 80
+        }
+      },
+      {
+        "service": "AttractionsService",
+        "method": "get_attractions",
+        "parameters": {
+          "city": "Bali",
+          "days": 7,
+          "budget": 300
+        }
+      }
+    ],
+    "expected_answer": "Flight $900, hotels ~$560, activities ~$280, total ~$1740, under budget.",
+    "latency_constraint": 5.0,
+    "token_constraint": 400,
+    "cost_constraint": 0.04,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_022",
+    "difficulty": "Easy",
+    "category": "weather",
+    "user_query": "What's the temperature in Tokyo right now?",
+    "retrieved_context": "Current temperature in Tokyo: 28°C, humidity 65%.",
+    "expected_tool_calls": [
+      {
+        "service": "WeatherService",
+        "method": "get_current_weather",
+        "parameters": {
+          "city": "Tokyo"
+        }
+      }
+    ],
+    "expected_answer": "28°C, humidity 65%.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_023",
+    "difficulty": "Medium",
+    "category": "flight",
+    "user_query": "I need a flight from Los Angeles to Paris with a stopover in New York.",
+    "retrieved_context": "Connecting flights: LAX-JFK $200, JFK-CDG $500, total $700. Layover 3h.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "LAX",
+          "destination": "CDG",
+          "date": "2026-09-20",
+          "stopover": "JFK"
+        }
+      }
+    ],
+    "expected_answer": "LAX-JFK $200, JFK-CDG $500, total $700, 3h layover.",
+    "latency_constraint": 3.0,
+    "token_constraint": 200,
+    "cost_constraint": 0.02,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_024",
+    "difficulty": "Hard",
+    "category": "policy",
+    "user_query": "I need to add an extra night to my hotel stay. What's the policy?",
+    "retrieved_context": "Hotel policy: Extension subject to availability; rate may change; early check-out penalty if not requested 24h in advance.",
+    "expected_tool_calls": [
+      {
+        "service": "BookingPolicyService",
+        "method": "get_extension_policy",
+        "parameters": {
+          "hotel": "Hilton",
+          "booking_id": "ABC123"
+        }
+      }
+    ],
+    "expected_answer": "Extension possible if available; rate may change. Notify 24h before check-out to avoid penalty.",
+    "latency_constraint": 3.0,
+    "token_constraint": 250,
+    "cost_constraint": 0.02,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_v1_025",
+    "difficulty": "Medium",
+    "category": "currency",
+    "user_query": "What is the exchange rate from GBP to USD today?",
+    "retrieved_context": "Today's rate: 1 GBP = 1.28 USD.",
+    "expected_tool_calls": [
+      {
+        "service": "CurrencyService",
+        "method": "get_exchange_rate",
+        "parameters": {
+          "from": "GBP",
+          "to": "USD"
+        }
+      }
+    ],
+    "expected_answer": "1 GBP = 1.28 USD.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  }
+]
