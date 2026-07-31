@@ -176,8 +176,15 @@ class ToolCallingEvaluator(BaseEvaluator):
         called_tool_names = [tc.tool_name for tc in tool_calls]
         missing_expected = []
         for expected in test_case.expected_tool_calls:
-            if expected not in called_tool_names:
-                missing_expected.append(expected)
+            expected_name = ""
+            if isinstance(expected, dict):
+                expected_name = expected.get("method") or ""
+            elif isinstance(expected, str):
+                expected_name = expected
+
+            if expected_name and expected_name not in called_tool_names:
+                missing_expected.append(expected_name)
+
 
         # Check 3: Max tool calls threshold
         max_tool_calls = test_case.constraints.get("max_tool_calls", self.default_max_tool_calls)
