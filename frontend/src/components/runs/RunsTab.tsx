@@ -31,9 +31,14 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
     tc => tc.id === activeCaseId || tc.case_id === activeCaseId
   );
 
-  const getMetricColor = (score: number | string) => {
+  const getMetricColor = (name: string, score: number | string) => {
     const val = typeof score === "number" ? score : parseFloat(score);
     if (isNaN(val)) return "#94A3B8";
+    if (name.toLowerCase() === "hallucination") {
+      if (val <= 0.2) return "#10B981"; // green
+      if (val <= 0.5) return "#F59E0B"; // orange
+      return "#EF4444"; // red
+    }
     if (val >= 0.8) return "#10B981"; // green
     if (val >= 0.5) return "#F59E0B"; // orange
     return "#EF4444"; // red
@@ -471,14 +476,14 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
                                   <div key={m.metric_name}>
                                     <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", marginBottom: "0.2rem" }}>
                                       <span style={{ color: "#94A3B8" }}>{m.metric_name}</span>
-                                      <strong style={{ color: getMetricColor(m.score) }}>
+                                      <strong style={{ color: getMetricColor(m.metric_name, m.score) }}>
                                         {typeof m.score === "number" ? `${(m.score * 100).toFixed(0)}%` : String(m.score)}
                                       </strong>
                                     </div>
                                     <div style={{ height: "4px", width: "100%", background: "#1F2937", borderRadius: "2px" }}>
                                       <div style={{ 
                                         height: "100%", 
-                                        background: getMetricColor(m.score), 
+                                        background: getMetricColor(m.metric_name, m.score), 
                                         width: typeof m.score === "number" ? `${m.score * 100}%` : "100%",
                                         borderRadius: "2px"
                                       }} />
@@ -500,15 +505,17 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
                                   <div key={m.metric_name}>
                                     <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", marginBottom: "0.2rem" }}>
                                       <span style={{ color: "#94A3B8" }}>{m.metric_name}</span>
-                                      <strong style={{ color: getMetricColor(m.score) }}>
+                                      <strong style={{ color: getMetricColor(m.metric_name, m.score) }}>
                                         {typeof m.score === "number" ? `${(m.score * 100).toFixed(0)}%` : String(m.score)}
                                       </strong>
                                     </div>
                                     <div style={{ height: "4px", width: "100%", background: "#1F2937", borderRadius: "2px" }}>
                                       <div style={{ 
                                         height: "100%", 
-                                        background: getMetricColor(m.score), 
-                                        width: typeof m.score === "number" ? `${m.score * 100}%` : "100%",
+                                        background: getMetricColor(m.metric_name, m.score), 
+                                        width: typeof m.score === "number" 
+                                          ? `${m.metric_name.toLowerCase() === "hallucination" ? (1 - m.score) * 100 : m.score * 100}%` 
+                                          : "100%",
                                         borderRadius: "2px"
                                       }} />
                                     </div>
