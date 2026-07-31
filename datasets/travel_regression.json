@@ -1,22 +1,503 @@
-{
-  "dataset_id": "travel_regression",
-  "name": "Travel Performance Regression Dataset",
-  "version": "1.0.0",
-  "test_cases": [
-    {
-      "case_id": "case-validation-1",
-      "input_query": "Book business flight from JFK to LAX on 2026-08-01 for user id U101",
-      "expected_output": "violates travel policy guidelines",
-      "expected_tool_calls": [
-        "get_profile",
-        "search_flights",
-        "validate_booking"
-      ],
-      "constraints": {
-        "max_price": 5000.0,
-        "token_budget": 10000
+[
+  {
+    "id": "travel_reg_001",
+    "difficulty": "Medium",
+    "category": "regression",
+    "user_query": "Book a flight from NYC to London on August 15.",
+    "retrieved_context": "Flights: BA112 $850, DL4 $920.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": "LON",
+          "date": "2026-08-15"
+        }
+      }
+    ],
+    "expected_answer": "BA112 $850 or DL4 $920.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_reg_002",
+    "difficulty": "Medium",
+    "category": "regression",
+    "user_query": "I need a hotel with a pool in Miami.",
+    "retrieved_context": "Hotels with pool: Hilton, Marriott, W.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Miami",
+          "amenities": [
+            "pool"
+          ]
+        }
+      }
+    ],
+    "expected_answer": "Hilton, Marriott, W all have pools.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_reg_003",
+    "difficulty": "Hard",
+    "category": "regression",
+    "user_query": "What is the cancellation policy for non-refundable rooms?",
+    "retrieved_context": "Non-refundable rooms: no cancellation, full charge.",
+    "expected_tool_calls": [
+      {
+        "service": "BookingPolicyService",
+        "method": "get_cancellation_policy",
+        "parameters": {
+          "rate_type": "non-refundable"
+        }
+      }
+    ],
+    "expected_answer": "No cancellation, full charge.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_reg_004",
+    "difficulty": "Easy",
+    "category": "regression",
+    "user_query": "Convert 100 EUR to USD.",
+    "retrieved_context": "1 EUR = 1.10 USD.",
+    "expected_tool_calls": [
+      {
+        "service": "CurrencyService",
+        "method": "convert",
+        "parameters": {
+          "amount": 100,
+          "from": "EUR",
+          "to": "USD"
+        }
+      }
+    ],
+    "expected_answer": "110 USD.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_reg_005",
+    "difficulty": "Medium",
+    "category": "regression",
+    "user_query": "Show me attractions in Paris.",
+    "retrieved_context": "Attractions: Eiffel Tower, Louvre, Notre-Dame.",
+    "expected_tool_calls": [
+      {
+        "service": "AttractionsService",
+        "method": "get_attractions",
+        "parameters": {
+          "city": "Paris"
+        }
+      }
+    ],
+    "expected_answer": "Eiffel Tower, Louvre, Notre-Dame.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_reg_006",
+    "difficulty": "Hard",
+    "category": "regression",
+    "user_query": "I want to change my flight to a later date. What are the fees?",
+    "retrieved_context": "Change fee: $200, plus fare difference. Allowed up to 4 hours before departure.",
+    "expected_tool_calls": [
+      {
+        "service": "BookingPolicyService",
+        "method": "get_change_policy",
+        "parameters": {
+          "booking_id": "FL123"
+        }
+      }
+    ],
+    "expected_answer": "$200 change fee + fare difference, allowed up to 4h before departure.",
+    "latency_constraint": 2.0,
+    "token_constraint": 200,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_reg_007",
+    "difficulty": "Medium",
+    "category": "regression",
+    "user_query": "Does the hotel have free Wi-Fi?",
+    "retrieved_context": "Wi-Fi: free for all guests.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "get_hotel_amenities",
+        "parameters": {
+          "hotel_id": "H555"
+        }
+      }
+    ],
+    "expected_answer": "Yes, free Wi-Fi.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_reg_008",
+    "difficulty": "Expert",
+    "category": "regression",
+    "user_query": "Plan a 3-day trip to Barcelona with flights, hotel, and attractions.",
+    "retrieved_context": "Flights: $500. Hotels: $200/night. Attractions: Sagrada Família, Park Güell.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "NYC",
+          "destination": "BCN",
+          "date": "2026-09-05"
+        }
       },
-      "ground_truth_context": []
-    }
-  ]
-}
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Barcelona",
+          "checkin": "2026-09-05",
+          "checkout": "2026-09-08"
+        }
+      },
+      {
+        "service": "AttractionsService",
+        "method": "get_attractions",
+        "parameters": {
+          "city": "Barcelona",
+          "days": 3
+        }
+      }
+    ],
+    "expected_answer": "Flight $500, hotel $600 total, visit Sagrada Família and Park Güell.",
+    "latency_constraint": 4.0,
+    "token_constraint": 300,
+    "cost_constraint": 0.03,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_reg_009",
+    "difficulty": "Easy",
+    "category": "regression",
+    "user_query": "What's the weather in London?",
+    "retrieved_context": "London: 18°C, partly cloudy.",
+    "expected_tool_calls": [
+      {
+        "service": "WeatherService",
+        "method": "get_current_weather",
+        "parameters": {
+          "city": "London"
+        }
+      }
+    ],
+    "expected_answer": "18°C, partly cloudy.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_reg_010",
+    "difficulty": "Medium",
+    "category": "regression",
+    "user_query": "Find a hotel with a view of the ocean in Cancun.",
+    "retrieved_context": "Cancun ocean view hotels: Hotel A, Hotel B, Hotel C.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Cancun",
+          "amenities": [
+            "ocean view"
+          ]
+        }
+      }
+    ],
+    "expected_answer": "Hotel A, Hotel B, Hotel C.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_reg_011",
+    "difficulty": "Hard",
+    "category": "regression",
+    "user_query": "I need to add a passenger to my flight booking.",
+    "retrieved_context": "Add passenger: allowed for $100, must be done 24h before departure.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "add_passenger",
+        "parameters": {
+          "booking_id": "FL456",
+          "passenger_name": "John Doe"
+        }
+      }
+    ],
+    "expected_answer": "$100 fee, must be done 24h before.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_reg_012",
+    "difficulty": "Easy",
+    "category": "regression",
+    "user_query": "Is there a restaurant at the hotel?",
+    "retrieved_context": "On-site restaurant: open 6am-10pm, serving international cuisine.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "get_hotel_services",
+        "parameters": {
+          "hotel_id": "H666"
+        }
+      }
+    ],
+    "expected_answer": "Yes, open 6am-10pm, international cuisine.",
+    "latency_constraint": 1.0,
+    "token_constraint": 100,
+    "cost_constraint": 0.005,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_reg_013",
+    "difficulty": "Medium",
+    "category": "regression",
+    "user_query": "Compare flight prices for a round trip from JFK to LAX.",
+    "retrieved_context": "Round trip: AA $400, UA $420, DL $390.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "search_flights",
+        "parameters": {
+          "origin": "JFK",
+          "destination": "LAX",
+          "round_trip": true
+        }
+      }
+    ],
+    "expected_answer": "AA $400, UA $420, DL $390.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_reg_014",
+    "difficulty": "Hard",
+    "category": "regression",
+    "user_query": "What are the baggage allowances for my flight?",
+    "retrieved_context": "Baggage: 1 carry-on, 1 checked bag up to 50 lbs. Extra bag $50.",
+    "expected_tool_calls": [
+      {
+        "service": "FlightService",
+        "method": "get_baggage_policy",
+        "parameters": {
+          "airline": "United",
+          "booking_id": "UA789"
+        }
+      }
+    ],
+    "expected_answer": "1 carry-on, 1 checked bag (50 lbs), extra $50.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  },
+  {
+    "id": "travel_reg_015",
+    "difficulty": "Medium",
+    "category": "regression",
+    "user_query": "Find a hotel with a spa in Vienna.",
+    "retrieved_context": "Vienna spas: Hotel Sacher, Grand Hotel Wien, Park Hyatt.",
+    "expected_tool_calls": [
+      {
+        "service": "HotelService",
+        "method": "search_hotels",
+        "parameters": {
+          "city": "Vienna",
+          "amenities": [
+            "spa"
+          ]
+        }
+      }
+    ],
+    "expected_answer": "Hotel Sacher, Grand Hotel Wien, Park Hyatt.",
+    "latency_constraint": 2.0,
+    "token_constraint": 150,
+    "cost_constraint": 0.01,
+    "expected_metrics": {
+      "context_precision": 1.0,
+      "context_recall": 1.0
+    },
+    "expected_judge_scores": {
+      "faithfulness": 1.0,
+      "groundedness": 1.0,
+      "correctness": 1.0,
+      "hallucination": 0.0
+    },
+    "failure_mode": "None"
+  }
+]
