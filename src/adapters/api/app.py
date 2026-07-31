@@ -52,6 +52,34 @@ metric_registry = create_default_registry(default_provider)
 runner = BenchmarkRunner(repository=repo, registry=metric_registry)
 
 
+import os
+from src.use_cases.datasets.loader import DatasetLoader
+
+@app.on_event("startup")
+async def load_local_datasets():
+    datasets_dir = "datasets"
+    if not os.path.exists(datasets_dir):
+        os.makedirs(datasets_dir)
+        logger.info(f"Created datasets directory: {datasets_dir}")
+        return
+
+    loader = DatasetLoader()
+    for filename in os.listdir(datasets_dir):
+        if filename.endswith(".json") or filename.endswith(".jsonl"):
+            filepath = os.path.join(datasets_dir, filename)
+            try:
+                if filename.endswith(".json"):
+                    dataset = loader.load_json(filepath)
+                else:
+                    dataset = loader.load_jsonl(filepath)
+                
+                await repo.save_dataset(dataset)
+                logger.info(f"Automatically loaded and registered dataset: {dataset.dataset_id} (v{dataset.version}) from {filename}")
+            except Exception as e:
+                logger.error(f"Failed to load dataset from {filename}: {e}")
+
+
+
 class TestCaseSchema(BaseModel):
     case_id: str
     input_query: str
