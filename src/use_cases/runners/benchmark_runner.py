@@ -215,17 +215,41 @@ class BenchmarkRunner:
         metrics = {res.metric_name: res for res in metric_results_list}
 
         # 3. Determine overall success based on metric thresholds and SUT execution status
-        # Rule: A case succeeds if SUT execution was successful and all
-        # metric results are boolean True or (if numeric) >= 0.5.
         success = not sut_failed
         if success:
             for m_res in metrics.values():
-                if m_res.score is False:
+                score = m_res.score
+                if score is False:
                     success = False
                     break
-                if isinstance(m_res.score, (int, float)) and m_res.score < 0.5:
-                    success = False
-                    break
+                if isinstance(score, (int, float)):
+                    # Check if there is an expected threshold in the test case (lowercase for key matching)
+                    metric_name_lower = m_res.metric_name.lower()
+                    
+                    # Look up expected thresholds from expected_metrics and expected_judge_scores
+                    threshold = case.expected_metrics.get(metric_name_lower)
+                    if threshold is None:
+                        threshold = case.expected_judge_scores.get(metric_name_lower)
+                        
+                    # Special-case constraint evaluators (which return binary 1.0 or 0.0)
+                    if threshold is None and m_res.metric_name in ["Latency", "TokenUsage", "Cost", "ToolCalling"]:
+                        threshold = 0.5
+                        
+                    if threshold is not None:
+                        if metric_name_lower == "hallucination":
+                            if score > threshold:
+                                success = False
+                                break
+                        else:
+                            if score < threshold:
+                                success = False
+                                break
+                    else:
+                        # Fallback threshold of 0.5 for unspecified continuous metrics
+                        if score < 0.5:
+                            success = False
+                            break
+
 
         return TestCaseEvaluation(
             case_id=case.case_id,
