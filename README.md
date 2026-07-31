@@ -109,6 +109,48 @@ graph TD
 
 ---
 
+## Why AI Evaluation Matters
+
+Autonomous AI agents operate in complex environments where they make dynamic tool decisions, manage multi-turn conversational states, and handle untrusted user inputs. Unlike traditional software, agents exhibit non-deterministic behaviors that can manifest as:
+1. **Instruction Leakage & Jailbreaks**: Agents revealing system prompts or bypassing safety guardrails.
+2. **Execution Loops**: Getting stuck calling the same APIs repeatedly, resulting in astronomical API costs.
+3. **Hallucinated Actions**: Inventing parameter values for tool calls that are invalid or destructive.
+
+Evaluating agents under rigorous, repeatable, and automated pipelines is the only way to ensure safety, correctness, and cost containment before production releases.
+
+---
+
+## Dataset Philosophy
+
+EvalForge treats test datasets as **static, version-controlled software assets** rather than dynamic database records. 
+1. **SemVer Enforcement**: Every Golden Dataset must declare a semantic version (e.g., `1.0.0`). Any modification of test queries, expected outputs, or constraints requires a version bump to prevent evaluation drift.
+2. **Fixed Ground Truth**: Test cases contain explicit `expected_output`, `expected_tool_calls`, and `ground_truth_context` profiles to enable deterministic comparisons.
+3. **Heterogeneous Scenarios**: Datasets are categorized into baseline operations, adversarial tests, tool-chaining sweeps, and safety evaluations to cover the full spectrum of agent behaviors.
+
+---
+
+## Evaluation Lifecycle
+
+The lifecycle of an evaluation sweep inside EvalForge follows a structured workflow:
+1. **Triggering**: A benchmark run is triggered via the REST API or Next.js dashboard, specifying the `dataset_id`, `version`, `sut_name`, and concurrency parameters.
+2. **Async Delegation**: FastAPI immediately returns a unique `run_id` and delegates execution to a `BackgroundTasks` thread pool.
+3. **Execution & Tracing**: The `BenchmarkRunner` runs cases concurrently. For each test case, the SUT's execution trajectory is recorded, capturing input/output pairs, tool calls, and latency.
+4. **Grading & Aggregation**: Deterministic metric evaluators grade the trajectory, followed by LLM-as-a-judge nodes. Once all test cases finish, the `AggregationEngine` computes average success rates, costs, and latencies.
+5. **Persistence**: The run summary and trace logs are saved to SQLite. If the run is associated with an experiment, comparison deltas are calculated.
+6. **Reporting**: Detailed markdown files are generated, and the Next.js UI polls for updates to render step-by-step trace tables.
+
+---
+
+## LLM Judge Flow
+
+Qualitative metrics (such as Faithfulness and Answer Correctness) require cognitive grading, which is orchestrated by the `LLMJudgeEngine`:
+1. **Prompt Compilation**: Prompt templates compile the query, agent response, and ground-truth contexts.
+2. **Deterministic LLM Calls**: LLM providers are invoked with `temperature=0.0` to enforce maximum grading consistency.
+3. **Structured Parser Guard**: The raw text output is run through a JSON block extractor. It parses the payload into a typed Pydantic schema containing `score` (0.0 to 1.0) and `reasoning`.
+4. **Retry & Backoff Loop**: If the LLM returns invalid JSON or fails rate-limits (HTTP 429), the engine applies exponential backoff delays and retries the request up to the maximum retry count.
+
+---
+
 ## Project Structure
 
 ```
@@ -122,13 +164,24 @@ graph TD
 │   └── travel_agent/           # Reference SUT implementation and database simulation
 │       ├── services.py         # Mock travel databases and search operations
 │       └── travel_agent_sut.py # Concrete SUT that implements AgentSUT interface
-├── frontend/                   # Next.js TypeScript Web Application
+├── frontend/                   # Next.js TypeScript Web Application Workspace
 │   ├── Dockerfile              # Docker build file for frontend app
 │   ├── package.json            # Node project configuration and package dependencies
 │   ├── tsconfig.json           # TypeScript configuration
-│   └── src/app/
-│       ├── layout.tsx          # Root web document and font injection
-│       └── page.tsx            # Main platform UI dashboard and trace inspector
+│   └── src/
+│       ├── app/
+│       │   ├── layout.tsx      # Root web document, global styling, and font injection
+│       │   └── page.tsx        # Thin orchestration layer composing dashboard views
+│       ├── components/         # Modular Presentational React Components
+│       │   ├── common/         # Reusable presentation utilities (Card.tsx, etc.)
+│       │   ├── layout/         # Workspace structural components (Header.tsx, Sidebar.tsx)
+│       │   ├── dashboard/      # Metrics cards and execution triggers (OverviewTab.tsx)
+│       │   ├── datasets/       # Registration forms and catalogs (DatasetsTab.tsx)
+│       │   ├── experiments/    # Experiment sweeps and comparisons (ExperimentsTab.tsx)
+│       │   └── runs/           # History lists and trajectory inspectors (RunsTab.tsx)
+│       ├── hooks/              # Custom stateful hooks (useBenchmark, useDatasets, etc.)
+│       ├── services/           # Type-safe API client wrappers (api.ts)
+│       └── types/              # Common TypeScript Interfaces & Models (index.ts)
 ├── src/                        # Core Python Platform Code
 │   ├── domain/                 # Domain Layer: Pure models and interface definitions
 │   │   ├── entities/           # EvaluationRun, Trajectory, Step, GoldenTestCase
@@ -153,6 +206,19 @@ graph TD
 ├── requirements.txt            # Python dependencies
 └── pyproject.toml              # Python tool definitions (pytest, black, ruff, mypy)
 ```
+
+### Folder Purpose Directory
+
+- **`frontend/src/app`**: Hosts the root page routing. `page.tsx` serves as a thin visual coordinator that reads active navigation tabs and delegates rendering to nested dashboard views.
+- **`frontend/src/components`**: Houses isolated React widgets divided by workspace categories. Reusable visual shells like `Card` reside in `common/`, structure elements in `layout/`, and distinct dashboard panels in their respective functional subdirectories.
+- **`frontend/src/hooks`**: Custom state machines (e.g. `useBenchmark.ts`, `useRuns.ts`, `useDashboardData.ts`) that encapsulate component state, form validation, and reactive logic, cleanly decoupling behavior from layout markup.
+- **`frontend/src/services`**: A type-safe API service client layer wrapping raw `fetch` calls, standardizing payloads, endpoints, and error bounds.
+- **`frontend/src/types`**: Translates backend domain entities into strict TypeScript schemas, guaranteeing model safety across API boundaries.
+- **`src/domain`**: Pure, decoupled business layer. Houses immutable value models and abstract contract interfaces. No third-party packages or network frameworks are imported here.
+- **`src/use_cases`**: Core execution rules. Orchestrates benchmarks, calculates metrics, compiles quantitative statistics, and handles qualitative LLM judgments.
+- **`src/adapters`**: Implements interfaces defined in the domain layer. This is where network clients, SQLite databases, and REST api gateways reside.
+- **`src/infrastructure`**: Third-party framework tools, configuration loaders, and structured JSON logs formatting.
+- **`examples/travel_agent`**: Concrete reference execution sandbox. Implements a multi-turn agent interacting with search APIs and policy enforcement checks.
 
 ---
 
