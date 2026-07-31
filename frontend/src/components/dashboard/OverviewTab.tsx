@@ -274,6 +274,61 @@ export function OverviewTab({ runs, datasets, experiments, onBenchmarkSuccess }:
             </select>
           </div>
 
+          {runDatasetId && (
+            (() => {
+              const selectedDataset = datasets.find(d => d.dataset_id === runDatasetId);
+              const totalCases = selectedDataset ? (selectedDataset.test_cases?.length || selectedDataset.cases_count || 0) : 0;
+              const categories = selectedDataset 
+                ? Array.from(new Set((selectedDataset.test_cases || []).map((c: any) => c.category || "general"))).join(", ") 
+                : "";
+              const estRuntime = selectedDataset 
+                ? Math.ceil((totalCases * 1.5) / runConcurrency) 
+                : 0;
+              const estCost = selectedDataset 
+                ? (totalCases * 0.0025).toFixed(4) 
+                : "0.0000";
+              
+              return (
+                <div style={{ 
+                  gridColumn: "span 3",
+                  background: "#1E293B", 
+                  border: "1px solid #334155", 
+                  padding: "1.25rem", 
+                  borderRadius: "0.5rem",
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gap: "1.25rem",
+                  marginTop: "0.5rem"
+                }}>
+                  <div>
+                    <p style={{ margin: 0, fontSize: "0.75rem", color: "#94A3B8", fontWeight: 500 }}>Benchmark Count</p>
+                    <p style={{ margin: "0.2rem 0 0 0", fontSize: "1.1rem", color: "#FFF", fontWeight: 600 }}>{totalCases} cases</p>
+                  </div>
+                  <div>
+                    <p style={{ margin: 0, fontSize: "0.75rem", color: "#94A3B8", fontWeight: 500 }}>Categories</p>
+                    <p style={{ margin: "0.2rem 0 0 0", fontSize: "0.9rem", color: "#38BDF8", fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{categories || "general"}</p>
+                  </div>
+                  <div>
+                    <p style={{ margin: 0, fontSize: "0.75rem", color: "#94A3B8", fontWeight: 500 }}>Version</p>
+                    <p style={{ margin: "0.2rem 0 0 0", fontSize: "1.1rem", color: "#60A5FA", fontWeight: 600 }}>v{selectedDataset?.version || "1.0.0"}</p>
+                  </div>
+                  <div>
+                    <p style={{ margin: 0, fontSize: "0.75rem", color: "#94A3B8", fontWeight: 500 }}>Estimated Runtime</p>
+                    <p style={{ margin: "0.2rem 0 0 0", fontSize: "1.1rem", color: "#FBBF24", fontWeight: 600 }}>~{estRuntime}s</p>
+                  </div>
+                  <div>
+                    <p style={{ margin: 0, fontSize: "0.75rem", color: "#94A3B8", fontWeight: 500 }}>Estimated Cost</p>
+                    <p style={{ margin: "0.2rem 0 0 0", fontSize: "1.1rem", color: "#10B981", fontWeight: 600 }}>~${estCost}</p>
+                  </div>
+                  <div>
+                    <p style={{ margin: 0, fontSize: "0.75rem", color: "#94A3B8", fontWeight: 500 }}>Supported Providers</p>
+                    <p style={{ margin: "0.2rem 0 0 0", fontSize: "0.9rem", color: "#A78BFA", fontWeight: 500 }}>Gemini, OpenRouter, Ollama</p>
+                  </div>
+                </div>
+              );
+            })()
+          )}
+
           <div style={{ gridColumn: "span 3" }}>
             <button
               type="submit"

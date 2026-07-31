@@ -3,6 +3,7 @@ export interface Dataset {
   name: string;
   version: string;
   cases_count: number;
+  test_cases?: any[];
 }
 
 export interface RunSummary {
@@ -41,6 +42,13 @@ export interface TestCaseTrace {
   expected_output: string | null;
   success: boolean;
   metrics?: TestCaseMetric[];
+  trajectory?: {
+    steps: any[];
+    total_token_usage: any;
+    total_cost: any;
+    total_latency: any;
+  };
+  ground_truth_context?: string[];
 }
 
 export interface RunDetail extends Run {

@@ -48,7 +48,7 @@ export default function Dashboard() {
           <ExperimentsTab experiments={experiments} onExperimentCreated={refresh} />
         )}
 
-        {activeTab === "runs" && <RunsTab runs={runs} />}
+        {activeTab === "runs" && <RunsTab runs={runs} datasets={datasets} />}
       </div>
     </div>
   );
