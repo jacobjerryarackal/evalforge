@@ -139,7 +139,8 @@ class GeminiProvider(LLMProvider):
             if response_schema.__name__ == "LLMJudgeOutputSchema":
                 score = 1.0
                 reasoning = "Mock reasoning: criteria fully satisfied."
-                if "hallucination" in p_lower or "hallucinates" in p_lower:
+                sys_inst_lower = (system_instruction or "").lower()
+                if "expert ai safety auditor" in sys_inst_lower:
                     score = 0.0
                     reasoning = "Mock reasoning: no hallucinations found."
                 return response_schema(score=score, reasoning=reasoning, confidence=1.0)
