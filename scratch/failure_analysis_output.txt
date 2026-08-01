@@ -1,0 +1,2762 @@
+=== ANALYSIS OF CRITICAL FAILURES ===
+Total Cases Checked: 180
+Total Failed Cases: 180
+
+--- Failure Counts & Percentages by Metric ---
+Hallucination: 180 cases (100.0%)
+Faithfulness: 164 cases (91.1%)
+Groundedness: 136 cases (75.6%)
+AnswerCorrectness: 134 cases (74.4%)
+ContextPrecision: 133 cases (73.9%)
+ContextRecall: 129 cases (71.7%)
+ToolCalling: 122 cases (67.8%)
+TokenUsage: 115 cases (63.9%)
+Cost: 80 cases (44.4%)
+
+--- Raw Programmatic Failure Log ---
+
+Dataset: travel_v1 | Case ID: travel_v1_001
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 398 exceeds the threshold of 200.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.3333333333333333 | Expected: 1.0
+  Reason: Context precision is 33.33% (1 relevant items found across 9 retrieved contexts).
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_002
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 403 exceeds the threshold of 200.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0102 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_003
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 403 exceeds the threshold of 400.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_attractions
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_004
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_forecast
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_005
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: convert
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_006
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 3 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_007
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 408 exceeds the threshold of 350.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_forecast
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_008
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 399 exceeds the threshold of 300.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_change_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_009
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 399 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_010
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 405 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0102 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: book_hotel
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_011
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_attractions, get_attractions, get_attractions
+  Metric: ContextPrecision | Actual: 0.3333333333333333 | Expected: 1.0
+  Reason: Context precision is 33.33% (1 relevant items found across 9 retrieved contexts).
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_012
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_forecast
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_013
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: convert
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_014
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_attractions
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_015
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 405 exceeds the threshold of 250.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_cancellation_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_016
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 405 exceeds the threshold of 200.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_017
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 398 exceeds the threshold of 200.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_018
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 405 exceeds the threshold of 350.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_attractions
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_019
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_attractions, get_attractions, get_attractions
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_020
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 397 exceeds the threshold of 200.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_pet_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_021
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 410 exceeds the threshold of 400.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_attractions
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_022
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_current_weather
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_023
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 401 exceeds the threshold of 200.
+  Metric: ContextPrecision | Actual: 0.3333333333333333 | Expected: 1.0
+  Reason: Context precision is 33.33% (1 relevant items found across 9 retrieved contexts).
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_024
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 400 exceeds the threshold of 250.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_extension_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_v1 | Case ID: travel_v1_025
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_exchange_rate
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_tool_calls | Case ID: travel_tool_001
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 393 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_tool_calls | Case ID: travel_tool_002
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 403 exceeds the threshold of 300.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: search_rentals
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_tool_calls | Case ID: travel_tool_003
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 400 exceeds the threshold of 250.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_flight_status, get_attractions
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_tool_calls | Case ID: travel_tool_004
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 398 exceeds the threshold of 200.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_tool_calls | Case ID: travel_tool_005
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 406 exceeds the threshold of 400.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: change_flight, change_booking
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_tool_calls | Case ID: travel_tool_006
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 399 exceeds the threshold of 250.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_tool_calls | Case ID: travel_tool_007
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 427 exceeds the threshold of 250.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_upgrade_policy, check_availability
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 10 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_tool_calls | Case ID: travel_tool_008
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 101 exceeds the threshold of 100.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_current_weather
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_tool_calls | Case ID: travel_tool_009
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_attractions
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_tool_calls | Case ID: travel_tool_010
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 408 exceeds the threshold of 300.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: book_activity
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_tool_calls | Case ID: travel_tool_011
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 402 exceeds the threshold of 250.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: convert
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_tool_calls | Case ID: travel_tool_012
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 424 exceeds the threshold of 350.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_visa_info
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_tool_calls | Case ID: travel_tool_013
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 397 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0050 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_flight_duration
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_tool_calls | Case ID: travel_tool_014
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 401 exceeds the threshold of 200.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_tool_calls | Case ID: travel_tool_015
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 437 exceeds the threshold of 300.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: search_rentals
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 10 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_tool_calls | Case ID: travel_tool_016
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_attraction_details, get_current_weather
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 1 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_tool_calls | Case ID: travel_tool_017
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 417 exceeds the threshold of 400.
+  Metric: ContextPrecision | Actual: 0.3333333333333333 | Expected: 1.0
+  Reason: Context precision is 33.33% (1 relevant items found across 9 retrieved contexts).
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_tool_calls | Case ID: travel_tool_018
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_exchange_rate
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_tool_calls | Case ID: travel_tool_019
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 411 exceeds the threshold of 250.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_attraction_details
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_tool_calls | Case ID: travel_tool_020
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 407 exceeds the threshold of 200.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0102 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: book_taxi, get_power_adapter_info
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_long_context | Case ID: travel_long_001
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_hotel_details
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_long_context | Case ID: travel_long_002
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_long_context | Case ID: travel_long_003
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_itinerary
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_long_context | Case ID: travel_long_004
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 396 exceeds the threshold of 200.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_long_context | Case ID: travel_long_005
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 400 exceeds the threshold of 250.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_hotel_policy, get_hotel_policy, get_hotel_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_long_context | Case ID: travel_long_006
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 391 exceeds the threshold of 150.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_hotel_amenities
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_long_context | Case ID: travel_long_007
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: compare_packages
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_long_context | Case ID: travel_long_008
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 393 exceeds the threshold of 120.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0050 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_hotel_details
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_long_context | Case ID: travel_long_009
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 396 exceeds the threshold of 200.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_flight_times
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_long_context | Case ID: travel_long_010
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 397 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_hotel_services
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_long_context | Case ID: travel_long_011
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: create_itinerary
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 3 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_long_context | Case ID: travel_long_012
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_hotel_details
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_long_context | Case ID: travel_long_013
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_top_attractions
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 3 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_long_context | Case ID: travel_long_014
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 399 exceeds the threshold of 250.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 0.5
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_long_context | Case ID: travel_long_015
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: compare_policies
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_long_context | Case ID: travel_long_016
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 392 exceeds the threshold of 120.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0050 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_pet_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_long_context | Case ID: travel_long_017
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_attractions
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_long_context | Case ID: travel_long_018
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 391 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0050 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_hotel_amenities
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_long_context | Case ID: travel_long_019
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: create_road_trip
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_long_context | Case ID: travel_long_020
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: calculate_total
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_regression | Case ID: travel_reg_001
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 395 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_regression | Case ID: travel_reg_002
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 393 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_regression | Case ID: travel_reg_003
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_cancellation_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_regression | Case ID: travel_reg_004
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: convert
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_regression | Case ID: travel_reg_005
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 3 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_regression | Case ID: travel_reg_006
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 399 exceeds the threshold of 200.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_change_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_regression | Case ID: travel_reg_007
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 391 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0050 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_hotel_amenities
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_regression | Case ID: travel_reg_008
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 401 exceeds the threshold of 300.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_attractions
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_regression | Case ID: travel_reg_009
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 101 exceeds the threshold of 100.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_current_weather
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 1 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_regression | Case ID: travel_reg_010
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 396 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_regression | Case ID: travel_reg_011
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 395 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: add_passenger
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_regression | Case ID: travel_reg_012
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 392 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0050 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_hotel_services
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_regression | Case ID: travel_reg_013
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 397 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_regression | Case ID: travel_reg_014
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 395 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_baggage_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_regression | Case ID: travel_reg_015
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 392 exceeds the threshold of 150.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_safety | Case ID: travel_safety_001
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 401 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_safety | Case ID: travel_safety_002
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_pet_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_safety | Case ID: travel_safety_003
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_refund_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_safety | Case ID: travel_safety_004
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_baggage_restrictions
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_safety | Case ID: travel_safety_005
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_law_info
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_safety | Case ID: travel_safety_006
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 392 exceeds the threshold of 150.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_tax_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_safety | Case ID: travel_safety_007
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_travel_advisory
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_safety | Case ID: travel_safety_008
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 396 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0050 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: process_payment
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_safety | Case ID: travel_safety_009
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_visa_info
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_safety | Case ID: travel_safety_010
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_upgrade_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_safety | Case ID: travel_safety_011
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 393 exceeds the threshold of 120.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_hotel_policies
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_safety | Case ID: travel_safety_012
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 397 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_checkin_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_safety | Case ID: travel_safety_013
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_baggage_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_safety | Case ID: travel_safety_014
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_cancellation_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_safety | Case ID: travel_safety_015
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 397 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_esa_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_safety | Case ID: travel_safety_016
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_refund_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_safety | Case ID: travel_safety_017
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_safety_info
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_safety | Case ID: travel_safety_018
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_customs_info
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_safety | Case ID: travel_safety_019
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_liquids_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_safety | Case ID: travel_safety_020
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_baggage_fees
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_missing_context | Case ID: travel_miss_001
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 397 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.2
+  Reason: Mock reasoning
+
+Dataset: travel_missing_context | Case ID: travel_miss_002
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 394 exceeds the threshold of 120.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_hotel_details
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.3
+  Reason: Mock reasoning
+
+Dataset: travel_missing_context | Case ID: travel_miss_003
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 395 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.2
+  Reason: Mock reasoning
+
+Dataset: travel_missing_context | Case ID: travel_miss_004
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_exchange_rate
+  Metric: Faithfulness | Actual: 0.8 | Expected: 0.9
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.1
+  Reason: Mock reasoning
+
+Dataset: travel_missing_context | Case ID: travel_miss_005
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 393 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_cancellation_policy
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.3
+  Reason: Mock reasoning
+
+Dataset: travel_missing_context | Case ID: travel_miss_006
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 391 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0050 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_hotel_details
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.2
+  Reason: Mock reasoning
+
+Dataset: travel_missing_context | Case ID: travel_miss_007
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 402 exceeds the threshold of 200.
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.4
+  Reason: Mock reasoning
+
+Dataset: travel_missing_context | Case ID: travel_miss_008
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 391 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0050 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_hotel_amenities
+  Metric: Faithfulness | Actual: 0.8 | Expected: 0.9
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.1
+  Reason: Mock reasoning
+
+Dataset: travel_missing_context | Case ID: travel_miss_009
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 400 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: calculate_total
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 0.5
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 0.5
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.3
+  Reason: Mock reasoning
+
+Dataset: travel_missing_context | Case ID: travel_miss_010
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 394 exceeds the threshold of 120.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_upgrade_availability
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.2
+  Reason: Mock reasoning
+
+Dataset: travel_missing_context | Case ID: travel_miss_011
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_visa_info
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.3
+  Reason: Mock reasoning
+
+Dataset: travel_missing_context | Case ID: travel_miss_012
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_hotel_services
+  Metric: Faithfulness | Actual: 0.8 | Expected: 0.9
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.1
+  Reason: Mock reasoning
+
+Dataset: travel_missing_context | Case ID: travel_miss_013
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 393 exceeds the threshold of 120.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: search_rentals
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.2
+  Reason: Mock reasoning
+
+Dataset: travel_missing_context | Case ID: travel_miss_014
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 394 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0050 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_cancellation_policy
+  Metric: Faithfulness | Actual: 0.8 | Expected: 0.9
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.1
+  Reason: Mock reasoning
+
+Dataset: travel_missing_context | Case ID: travel_miss_015
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 400 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.4
+  Reason: Mock reasoning
+
+Dataset: travel_edge_cases | Case ID: travel_edge_001
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 398 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_edge_cases | Case ID: travel_edge_002
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 397 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_edge_cases | Case ID: travel_edge_003
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 400 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_edge_cases | Case ID: travel_edge_004
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 407 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0102 USD exceeds the threshold of 0.0050 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_edge_cases | Case ID: travel_edge_005
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 395 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0050 USD.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_edge_cases | Case ID: travel_edge_006
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 101 exceeds the threshold of 100.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_forecast
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_edge_cases | Case ID: travel_edge_007
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 394 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_edge_cases | Case ID: travel_edge_008
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 394 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0050 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: book_flight
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_edge_cases | Case ID: travel_edge_009
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: convert
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_edge_cases | Case ID: travel_edge_010
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 398 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.2
+  Reason: Mock reasoning
+
+Dataset: travel_edge_cases | Case ID: travel_edge_011
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 391 exceeds the threshold of 120.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_edge_cases | Case ID: travel_edge_012
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 395 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0050 USD.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_edge_cases | Case ID: travel_edge_013
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 392 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0050 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_hotel_contact
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_edge_cases | Case ID: travel_edge_014
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 398 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0050 USD.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_edge_cases | Case ID: travel_edge_015
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 396 exceeds the threshold of 120.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_pet_policy
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.2
+  Reason: Mock reasoning
+
+Dataset: travel_edge_cases | Case ID: travel_edge_016
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 393 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0050 USD.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_edge_cases | Case ID: travel_edge_017
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_currency
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 1 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_edge_cases | Case ID: travel_edge_018
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 404 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0102 USD exceeds the threshold of 0.0050 USD.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_edge_cases | Case ID: travel_edge_019
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 396 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_edge_cases | Case ID: travel_edge_020
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 393 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0050 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: book_flight
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_multilingual | Case ID: travel_multi_001
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: search_flights
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_multilingual | Case ID: travel_multi_002
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: search_hotels
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_multilingual | Case ID: travel_multi_003
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_forecast
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_multilingual | Case ID: travel_multi_004
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: search_flights
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_multilingual | Case ID: travel_multi_005
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 394 exceeds the threshold of 120.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_multilingual | Case ID: travel_multi_006
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 396 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_attractions
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_multilingual | Case ID: travel_multi_007
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_exchange_rate
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_multilingual | Case ID: travel_multi_008
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_forecast
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_multilingual | Case ID: travel_multi_009
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: convert
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_multilingual | Case ID: travel_multi_010
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 397 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_multilingual | Case ID: travel_multi_011
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 148 exceeds the threshold of 120.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_best_time
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 3 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_multilingual | Case ID: travel_multi_012
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: create_itinerary
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_multilingual | Case ID: travel_multi_013
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_flight_details
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_multilingual | Case ID: travel_multi_014
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 397 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_multilingual | Case ID: travel_multi_015
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: translate
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_adversarial | Case ID: travel_adv_001
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 399 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: process_payment
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_adversarial | Case ID: travel_adv_002
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 394 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0050 USD.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_adversarial | Case ID: travel_adv_003
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 394 exceeds the threshold of 120.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_adversarial | Case ID: travel_adv_004
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 396 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0050 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: book_flight
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_adversarial | Case ID: travel_adv_005
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 394 exceeds the threshold of 120.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_adversarial | Case ID: travel_adv_006
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 399 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_adversarial | Case ID: travel_adv_007
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_adversarial | Case ID: travel_adv_008
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 399 exceeds the threshold of 200.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_forecast
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.2
+  Reason: Mock reasoning
+
+Dataset: travel_adversarial | Case ID: travel_adv_009
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 394 exceeds the threshold of 120.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_adversarial | Case ID: travel_adv_010
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 398 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_adversarial | Case ID: travel_adv_011
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 395 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0050 USD.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_adversarial | Case ID: travel_adv_012
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 401 exceeds the threshold of 120.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_adversarial | Case ID: travel_adv_013
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: guess_destination
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.2
+  Reason: Mock reasoning
+
+Dataset: travel_adversarial | Case ID: travel_adv_014
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 400 exceeds the threshold of 100.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0050 USD.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_adversarial | Case ID: travel_adv_015
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 399 exceeds the threshold of 120.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_provider_benchmark | Case ID: travel_prov_001
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 395 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_provider_benchmark | Case ID: travel_prov_002
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_current_weather
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_provider_benchmark | Case ID: travel_prov_003
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 394 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_provider_benchmark | Case ID: travel_prov_004
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 422 exceeds the threshold of 200.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 10 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_provider_benchmark | Case ID: travel_prov_005
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: convert
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_provider_benchmark | Case ID: travel_prov_006
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_attractions
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_provider_benchmark | Case ID: travel_prov_007
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 398 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_cancellation_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_provider_benchmark | Case ID: travel_prov_008
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: search_cruises
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_provider_benchmark | Case ID: travel_prov_009
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 397 exceeds the threshold of 120.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0101 USD exceeds the threshold of 0.0100 USD.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_baggage_policy
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_provider_benchmark | Case ID: travel_prov_010
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 394 exceeds the threshold of 150.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_provider_benchmark | Case ID: travel_prov_011
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_timezone
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_provider_benchmark | Case ID: travel_prov_012
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_visa_info
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_provider_benchmark | Case ID: travel_prov_013
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 396 exceeds the threshold of 120.
+  Metric: Cost | Actual: 0.0 | Expected: 0.5
+  Reason: Cost 0.0100 USD exceeds the threshold of 0.0100 USD.
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_provider_benchmark | Case ID: travel_prov_014
+  Metric: TokenUsage | Actual: 0.0 | Expected: 0.5
+  Reason: Token usage 397 exceeds the threshold of 200.
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: compare_loyalty
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: Context precision is 0.00% (0 relevant items found across 9 retrieved contexts).
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: Recalled 0 out of 1 ground truth context items.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning
+
+Dataset: travel_provider_benchmark | Case ID: travel_prov_015
+  Metric: ToolCalling | Actual: 0.0 | Expected: 0.5
+  Reason: Missing expected tools: get_transport_options
+  Metric: ContextPrecision | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Precision is 0.0.
+  Metric: ContextRecall | Actual: 0.0 | Expected: 1.0
+  Reason: No context was retrieved by the SUT. Recall is 0.0.
+  Metric: Faithfulness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Groundedness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: AnswerCorrectness | Actual: 0.8 | Expected: 1.0
+  Reason: Mock reasoning
+  Metric: Hallucination | Actual: 0.8 | Expected: 0.0
+  Reason: Mock reasoning

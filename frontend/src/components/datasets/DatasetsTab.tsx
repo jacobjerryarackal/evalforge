@@ -75,7 +75,7 @@ export function DatasetsTab({ datasets, onDatasetCreated }: DatasetsTabProps) {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "2rem", color: "#E5E7EB" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "2rem", color: "#E5E7EB", paddingBottom: "3rem" }}>
       
       {/* Top statistics section */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1rem" }}>
