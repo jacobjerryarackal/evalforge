@@ -51,7 +51,7 @@ dataset_registry = DatasetRegistry()
 experiment_engine = ExperimentEngine(repo)
 
 # Initialize standard provider, metric registry, and benchmark runner
-default_provider = GeminiProvider()
+default_provider = GeminiProvider(mock_mode=True)
 metric_registry = create_default_registry(default_provider)
 runner = BenchmarkRunner(repository=repo, registry=metric_registry)
 

@@ -135,6 +135,14 @@ class GeminiProvider(LLMProvider):
         max_tokens: int | None = None,
     ) -> T:
         if self.mock_mode:
+            p_lower = (prompt or "").lower() + (system_instruction or "").lower()
+            if response_schema.__name__ == "LLMJudgeOutputSchema":
+                score = 1.0
+                reasoning = "Mock reasoning: criteria fully satisfied."
+                if "hallucination" in p_lower or "hallucinates" in p_lower:
+                    score = 0.0
+                    reasoning = "Mock reasoning: no hallucinations found."
+                return response_schema(score=score, reasoning=reasoning, confidence=1.0)
             return _generate_mock_structured(response_schema)
 
         import google.generativeai as genai
