@@ -34,6 +34,8 @@ export interface Experiment {
 export interface TestCaseMetric {
   metric_name: string;
   score: number | string;
+  reasoning?: string;
+  metadata?: any;
 }
 
 export interface TestCaseTrace {
