@@ -328,7 +328,9 @@ async def get_run(run_id: str):
         for m_name, m_val in raw_metrics.items():
             formatted_metrics.append({
                 "metric_name": m_name,
-                "score": m_val.get("score")
+                "score": m_val.get("score"),
+                "reasoning": m_val.get("reasoning"),
+                "metadata": m_val.get("metadata")
             })
         case["metrics"] = formatted_metrics
         
