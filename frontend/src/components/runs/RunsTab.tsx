@@ -72,6 +72,49 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
     return steps[steps.length - 1]?.response || "No final response text generated.";
   };
 
+  const extractRetrievedContexts = (c: any) => {
+    const contexts: string[] = [];
+    if (!c || !c.trajectory) return contexts;
+    const trajectory = c.trajectory;
+    if (trajectory.metadata?.retrieved_contexts && Array.isArray(trajectory.metadata.retrieved_contexts)) {
+      contexts.push(...trajectory.metadata.retrieved_contexts);
+    }
+    if (trajectory.metadata?.contexts && Array.isArray(trajectory.metadata.contexts)) {
+      contexts.push(...trajectory.metadata.contexts);
+    }
+    trajectory.steps?.forEach((step: any) => {
+      if (step.metadata?.retrieved_contexts && Array.isArray(step.metadata.retrieved_contexts)) {
+        contexts.push(...step.metadata.retrieved_contexts);
+      }
+      if (step.metadata?.contexts && Array.isArray(step.metadata.contexts)) {
+        contexts.push(...step.metadata.contexts);
+      }
+      const obs = step.observation;
+      if (obs) {
+        if (typeof obs === "object") {
+          Object.values(obs).forEach((v: any) => {
+            if (Array.isArray(v)) {
+              v.forEach((item: any) => {
+                if (typeof item === "string") contexts.push(item);
+                else if (item && typeof item === "object") contexts.push(JSON.stringify(item));
+              });
+            } else if (typeof v === "string") {
+              contexts.push(v);
+            }
+          });
+        } else if (typeof obs === "string") {
+          contexts.push(obs);
+        }
+      }
+    });
+    return Array.from(new Set(contexts.map(s => s.trim()).filter(Boolean)));
+  };
+
+  const getActualToolCalls = (c: any) => {
+    return c?.trajectory?.steps?.flatMap((step: any) => step.tool_calls || []) || [];
+  };
+
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "2rem", color: "#E5E7EB" }}>
       {/* Runs Table Card */}
@@ -460,75 +503,217 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
                     {/* Node 6: Metrics & Judge Scores */}
                     <div style={{ position: "relative" }}>
                       <span style={{ position: "absolute", left: "-2rem", top: "0.25rem", width: "12px", height: "12px", borderRadius: "50%", background: "#EC4899", border: "3px solid #0F172A" }} />
-                      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                        <span style={{ fontSize: "0.7rem", color: "#EC4899", fontWeight: 700 }}>EVALUATION SCORES DETAILED VIEW</span>
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
-                          
-                          {/* Deterministic / Constrains Metrics */}
-                          <Card style={{ padding: "1rem", background: "#111827", border: "1px solid #1F2937" }}>
-                            <h5 style={{ margin: "0 0 0.75rem 0", color: "#FFF", fontSize: "0.8rem", fontWeight: 600 }}>
-                              Deterministic Metrics
-                            </h5>
-                            <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
-                              {activeCaseEvaluation.metrics
-                                ?.filter((m: any) => ["Latency", "TokenUsage", "Cost", "ToolCalling"].includes(m.metric_name))
-                                .map((m: any) => (
-                                  <div key={m.metric_name}>
-                                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", marginBottom: "0.2rem" }}>
-                                      <span style={{ color: "#94A3B8" }}>{m.metric_name}</span>
-                                      <strong style={{ color: getMetricColor(m.metric_name, m.score) }}>
-                                        {typeof m.score === "number" ? `${(m.score * 100).toFixed(0)}%` : String(m.score)}
-                                      </strong>
-                                    </div>
-                                    <div style={{ height: "4px", width: "100%", background: "#1F2937", borderRadius: "2px" }}>
-                                      <div style={{ 
-                                        height: "100%", 
-                                        background: getMetricColor(m.metric_name, m.score), 
-                                        width: typeof m.score === "number" ? `${m.score * 100}%` : "100%",
-                                        borderRadius: "2px"
-                                      }} />
-                                    </div>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                        <span style={{ fontSize: "0.75rem", color: "#EC4899", fontWeight: 700, letterSpacing: "0.05em" }}>EVALUATION SCORES DETAILED VIEW</span>
+                        
+                        {/* Deterministic / Constraints Metrics */}
+                        <Card style={{ padding: "1.25rem", background: "#111827", border: "1px solid #1F2937" }}>
+                          <h5 style={{ margin: "0 0 1rem 0", color: "#FFF", fontSize: "0.9rem", fontWeight: 600 }}>
+                            Deterministic Constraints
+                          </h5>
+                          <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                            {activeCaseEvaluation.metrics
+                              ?.filter((m: any) => ["Latency", "TokenUsage", "Cost", "ToolCalling"].includes(m.metric_name))
+                              .map((m: any) => (
+                                <div key={m.metric_name} style={{ background: "#1E293B", padding: "0.75rem", borderRadius: "0.375rem" }}>
+                                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.8rem", marginBottom: "0.35rem", alignItems: "center" }}>
+                                    <span style={{ color: "#E2E8F0", fontWeight: 600 }}>{m.metric_name}</span>
+                                    <span style={{ 
+                                      color: getMetricColor(m.metric_name, m.score), 
+                                      fontWeight: 700,
+                                      background: `${getMetricColor(m.metric_name, m.score)}15`,
+                                      padding: "0.15rem 0.4rem",
+                                      borderRadius: "0.25rem"
+                                    }}>
+                                      {typeof m.score === "number" ? `${(m.score * 100).toFixed(0)}%` : String(m.score)}
+                                    </span>
                                   </div>
-                                ))}
-                            </div>
-                          </Card>
-
-                          {/* Judge LLM Evaluators */}
-                          <Card style={{ padding: "1rem", background: "#111827", border: "1px solid #1F2937" }}>
-                            <h5 style={{ margin: "0 0 0.75rem 0", color: "#FFF", fontSize: "0.8rem", fontWeight: 600 }}>
-                              LLM-as-a-Judge Scores
-                            </h5>
-                            <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
-                              {activeCaseEvaluation.metrics
-                                ?.filter((m: any) => !["Latency", "TokenUsage", "Cost", "ToolCalling"].includes(m.metric_name))
-                                .map((m: any) => (
-                                  <div key={m.metric_name}>
-                                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", marginBottom: "0.2rem" }}>
-                                      <span style={{ color: "#94A3B8" }}>{m.metric_name}</span>
-                                      <strong style={{ color: getMetricColor(m.metric_name, m.score) }}>
-                                        {typeof m.score === "number" ? `${(m.score * 100).toFixed(0)}%` : String(m.score)}
-                                      </strong>
-                                    </div>
-                                    <div style={{ height: "4px", width: "100%", background: "#1F2937", borderRadius: "2px" }}>
-                                      <div style={{ 
-                                        height: "100%", 
-                                        background: getMetricColor(m.metric_name, m.score), 
-                                        width: typeof m.score === "number" 
-                                          ? `${m.metric_name.toLowerCase() === "hallucination" ? (1 - m.score) * 100 : m.score * 100}%` 
-                                          : "100%",
-                                        borderRadius: "2px"
-                                      }} />
-                                    </div>
-                                  </div>
-                                ))}
-                              {(!activeCaseEvaluation.metrics || activeCaseEvaluation.metrics.filter((m: any) => !["Latency", "TokenUsage", "Cost", "ToolCalling"].includes(m.metric_name)).length === 0) && (
-                                <div style={{ fontSize: "0.75rem", color: "#64748B", textAlign: "center", padding: "1rem 0" }}>
-                                  No LLM judge scores computed.
+                                  <p style={{ margin: 0, fontSize: "0.75rem", color: "#94A3B8", lineHeight: "1.4" }}>
+                                    <strong>Explanation:</strong> {m.reasoning || "No reasoning explanation provided."}
+                                  </p>
                                 </div>
+                              ))}
+                          </div>
+                        </Card>
+
+                        {/* Tool Calling Verification */}
+                        <Card style={{ padding: "1.25rem", background: "#111827", border: "1px solid #1F2937" }}>
+                          <h5 style={{ margin: "0 0 1rem 0", color: "#FFF", fontSize: "0.9rem", fontWeight: 600 }}>
+                            Tool Calling Verification
+                          </h5>
+                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                            <div style={{ background: "#1E293B", padding: "0.75rem", borderRadius: "0.375rem" }}>
+                              <span style={{ fontSize: "0.7rem", color: "#EC4899", fontWeight: 700, display: "block", marginBottom: "0.5rem" }}>EXPECTED TOOL CALLS</span>
+                              {canonicalTestCase?.expected_tool_calls && canonicalTestCase.expected_tool_calls.length > 0 ? (
+                                <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
+                                  {canonicalTestCase.expected_tool_calls.map((tc: any, idx: number) => (
+                                    <div key={idx} style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "#94A3B8", background: "#0F172A", padding: "0.35rem", borderRadius: "0.25rem" }}>
+                                      {typeof tc === "string" ? tc : `${tc.method || tc.tool_name || "unknown"}(${JSON.stringify(tc.parameters || tc.arguments || {})})`}
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <span style={{ fontSize: "0.75rem", color: "#64748B" }}>No expected tool calls.</span>
                               )}
                             </div>
-                          </Card>
-                        </div>
+                            <div style={{ background: "#1E293B", padding: "0.75rem", borderRadius: "0.375rem" }}>
+                              <span style={{ fontSize: "0.7rem", color: "#10B981", fontWeight: 700, display: "block", marginBottom: "0.5rem" }}>ACTUAL TOOL CALLS</span>
+                              {getActualToolCalls(activeCaseEvaluation).length > 0 ? (
+                                <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
+                                  {getActualToolCalls(activeCaseEvaluation).map((tc: any, idx: number) => (
+                                    <div key={idx} style={{ fontFamily: "monospace", fontSize: "0.75rem", color: tc.success ? "#34D399" : "#F87171", background: "#0F172A", padding: "0.35rem", borderRadius: "0.25rem" }}>
+                                      {tc.tool_name}({JSON.stringify(tc.arguments || {})})
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <span style={{ fontSize: "0.75rem", color: "#64748B" }}>No actual tool calls executed.</span>
+                              )}
+                            </div>
+                          </div>
+                          {(() => {
+                            const tcMetric = activeCaseEvaluation.metrics?.find((m: any) => m.metric_name === "ToolCalling");
+                            if (tcMetric && tcMetric.reasoning) {
+                              return (
+                                <div style={{ marginTop: "1rem", background: tcMetric.score === 1 ? "rgba(16, 185, 129, 0.1)" : "rgba(239, 68, 68, 0.1)", border: `1px solid ${tcMetric.score === 1 ? "rgba(16, 185, 129, 0.2)" : "rgba(239, 68, 68, 0.2)"}`, padding: "0.75rem", borderRadius: "0.375rem" }}>
+                                  <span style={{ fontSize: "0.7rem", color: tcMetric.score === 1 ? "#34D399" : "#F87171", fontWeight: 700, display: "block", marginBottom: "0.25rem" }}>
+                                    TOOL CALLS AUDIT REPORT & MISMATCH EXPLANATION
+                                  </span>
+                                  <p style={{ margin: 0, fontSize: "0.75rem", color: "#E2E8F0" }}>{tcMetric.reasoning}</p>
+                                </div>
+                              );
+                            }
+                            return null;
+                          })()}
+                        </Card>
+
+                        {/* Retrieval Verification */}
+                        <Card style={{ padding: "1.25rem", background: "#111827", border: "1px solid #1F2937" }}>
+                          <h5 style={{ margin: "0 0 1rem 0", color: "#FFF", fontSize: "0.9rem", fontWeight: 600 }}>
+                            Retrieval Verification
+                          </h5>
+                          <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                            <div style={{ background: "#1E293B", padding: "0.75rem", borderRadius: "0.375rem" }}>
+                              <span style={{ fontSize: "0.7rem", color: "#A78BFA", fontWeight: 700, display: "block", marginBottom: "0.5rem" }}>EXPECTED / GROUND TRUTH CONTEXT</span>
+                              {canonicalTestCase?.ground_truth_context && canonicalTestCase.ground_truth_context.length > 0 ? (
+                                <ul style={{ margin: 0, paddingLeft: "1.25rem", fontSize: "0.75rem", color: "#94A3B8" }}>
+                                  {canonicalTestCase.ground_truth_context.map((c: string, idx: number) => (
+                                    <li key={idx} style={{ marginBottom: "0.25rem" }}>{c}</li>
+                                  ))}
+                                </ul>
+                              ) : (
+                                <span style={{ fontSize: "0.75rem", color: "#64748B" }}>No expected ground truth context.</span>
+                              )}
+                            </div>
+
+                            <div style={{ background: "#1E293B", padding: "0.75rem", borderRadius: "0.375rem" }}>
+                              <span style={{ fontSize: "0.7rem", color: "#60A5FA", fontWeight: 700, display: "block", marginBottom: "0.5rem" }}>RETRIEVED CONTEXT snippets</span>
+                              {extractRetrievedContexts(activeCaseEvaluation).length > 0 ? (
+                                <ul style={{ margin: 0, paddingLeft: "1.25rem", fontSize: "0.75rem", color: "#94A3B8" }}>
+                                  {extractRetrievedContexts(activeCaseEvaluation).map((c: string, idx: number) => (
+                                    <li key={idx} style={{ marginBottom: "0.25rem" }}>{c}</li>
+                                  ))}
+                                </ul>
+                              ) : (
+                                <span style={{ fontSize: "0.75rem", color: "#64748B" }}>No retrieved context.</span>
+                              )}
+                            </div>
+
+                            {/* Missing / Extra Analysis */}
+                            {(() => {
+                              const gt = canonicalTestCase?.ground_truth_context || [];
+                              const ret = extractRetrievedContexts(activeCaseEvaluation);
+                              const missing = gt.filter((g: string) => !ret.some((r: string) => r.toLowerCase().includes(g.toLowerCase()) || g.toLowerCase().includes(r.toLowerCase())));
+                              const extra = ret.filter((r: string) => !gt.some((g: string) => g.toLowerCase().includes(r.toLowerCase()) || r.toLowerCase().includes(g.toLowerCase())));
+
+                              return (
+                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                                  <div style={{ background: "#1E293B", padding: "0.75rem", borderRadius: "0.375rem", borderLeft: `3px solid ${missing.length > 0 ? "#EF4444" : "#10B981"}` }}>
+                                    <span style={{ fontSize: "0.7rem", color: missing.length > 0 ? "#F87171" : "#34D399", fontWeight: 700, display: "block", marginBottom: "0.25rem" }}>MISSING CONTEXT</span>
+                                    {missing.length > 0 ? (
+                                      <ul style={{ margin: 0, paddingLeft: "1rem", fontSize: "0.7rem", color: "#FCA5A5" }}>
+                                        {missing.map((c: string, idx: number) => <li key={idx}>{c}</li>)}
+                                      </ul>
+                                    ) : (
+                                      <span style={{ fontSize: "0.7rem", color: "#34D399" }}>Perfect recall - 0 items missing.</span>
+                                    )}
+                                  </div>
+                                  <div style={{ background: "#1E293B", padding: "0.75rem", borderRadius: "0.375rem", borderLeft: "3px solid #3B82F6" }}>
+                                    <span style={{ fontSize: "0.7rem", color: "#60A5FA", fontWeight: 700, display: "block", marginBottom: "0.25rem" }}>EXTRA CONTEXT</span>
+                                    {extra.length > 0 ? (
+                                      <ul style={{ margin: 0, paddingLeft: "1rem", fontSize: "0.7rem", color: "#93C5FD" }}>
+                                        {extra.map((c: string, idx: number) => <li key={idx}>{c}</li>)}
+                                      </ul>
+                                    ) : (
+                                      <span style={{ fontSize: "0.7rem", color: "#94A3B8" }}>0 extra items retrieved.</span>
+                                    )}
+                                  </div>
+                                </div>
+                              );
+                            })()}
+
+                            {/* Precision & Recall metrics */}
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                              {activeCaseEvaluation.metrics
+                                ?.filter((m: any) => ["ContextPrecision", "ContextRecall"].includes(m.metric_name))
+                                .map((m: any) => (
+                                  <div key={m.metric_name} style={{ background: "#1E293B", padding: "0.75rem", borderRadius: "0.375rem" }}>
+                                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", marginBottom: "0.2rem", alignItems: "center" }}>
+                                      <span style={{ color: "#E2E8F0", fontWeight: 600 }}>{m.metric_name}</span>
+                                      <strong style={{ color: getMetricColor(m.metric_name, m.score) }}>
+                                        {typeof m.score === "number" ? `${(m.score * 100).toFixed(0)}%` : String(m.score)}
+                                      </strong>
+                                    </div>
+                                    <p style={{ margin: 0, fontSize: "0.7rem", color: "#94A3B8", lineHeight: "1.4" }}>
+                                      {m.reasoning}
+                                    </p>
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
+                        </Card>
+
+                        {/* LLM-as-a-Judge Scores */}
+                        <Card style={{ padding: "1.25rem", background: "#111827", border: "1px solid #1F2937" }}>
+                          <h5 style={{ margin: "0 0 1rem 0", color: "#FFF", fontSize: "0.9rem", fontWeight: 600 }}>
+                            LLM-as-a-Judge Scores
+                          </h5>
+                          <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                            {activeCaseEvaluation.metrics
+                              ?.filter((m: any) => ["Faithfulness", "Groundedness", "AnswerCorrectness", "Hallucination"].includes(m.metric_name))
+                              .map((m: any) => (
+                                <div key={m.metric_name} style={{ background: "#1E293B", padding: "0.75rem", borderRadius: "0.375rem" }}>
+                                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.8rem", marginBottom: "0.35rem", alignItems: "center" }}>
+                                    <span style={{ color: "#E2E8F0", fontWeight: 600 }}>{m.metric_name}</span>
+                                    <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                                      {m.metadata?.confidence !== undefined && (
+                                        <span style={{ fontSize: "0.7rem", color: "#64748B" }}>
+                                          Confidence: {typeof m.metadata.confidence === "number" ? `${(m.metadata.confidence * 100).toFixed(0)}%` : String(m.metadata.confidence)}
+                                        </span>
+                                      )}
+                                      <span style={{ 
+                                        color: getMetricColor(m.metric_name, m.score), 
+                                        fontWeight: 700,
+                                        background: `${getMetricColor(m.metric_name, m.score)}15`,
+                                        padding: "0.15rem 0.4rem",
+                                        borderRadius: "0.25rem"
+                                      }}>
+                                        {typeof m.score === "number" ? `${(m.score * 100).toFixed(0)}%` : String(m.score)}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <p style={{ margin: 0, fontSize: "0.75rem", color: "#94A3B8", lineHeight: "1.4" }}>
+                                    <strong>Judge Reasoning:</strong> {m.reasoning}
+                                  </p>
+                                </div>
+                              ))}
+                            {(!activeCaseEvaluation.metrics || activeCaseEvaluation.metrics.filter((m: any) => ["Faithfulness", "Groundedness", "AnswerCorrectness", "Hallucination"].includes(m.metric_name)).length === 0) && (
+                              <div style={{ fontSize: "0.75rem", color: "#64748B", textAlign: "center", padding: "1rem 0" }}>
+                                No LLM judge scores computed.
+                              </div>
+                            )}
+                          </div>
+                        </Card>
                       </div>
                     </div>
 
