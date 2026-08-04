@@ -35,9 +35,25 @@ export function useDashboardData() {
     return () => clearInterval(interval);
   }, [fetchData]);
 
+  const latestRuns = Object.values(
+    runs.reduce<Record<string, Run>>((acc, run) => {
+      const key = run.dataset_id;
+
+      if (
+        !acc[key] ||
+        new Date(run.timestamp).getTime() > new Date(acc[key].timestamp).getTime()
+      ) {
+        acc[key] = run;
+      }
+
+      return acc;
+    }, {})
+  );
+
   return {
     datasets,
     runs,
+    latestRuns,
     experiments,
     backendConnected,
     isRefreshing,
