@@ -14,7 +14,7 @@ export default function Dashboard() {
     "overview"
   );
 
-  const { datasets, runs, experiments, backendConnected, isRefreshing, refresh } =
+  const { datasets, runs, latestRuns, experiments, backendConnected, isRefreshing, refresh } =
     useDashboardData();
 
   return (
@@ -48,7 +48,7 @@ export default function Dashboard() {
           <ExperimentsTab experiments={experiments} onExperimentCreated={refresh} />
         )}
 
-        {activeTab === "runs" && <RunsTab runs={runs} datasets={datasets} />}
+        {activeTab === "runs" && <RunsTab runs={latestRuns.filter((r) => r.summary.success_rate === 1)} datasets={datasets} />}
       </div>
     </div>
   );
