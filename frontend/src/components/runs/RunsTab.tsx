@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { 
-  Activity, CheckCircle, AlertCircle, Clock, DollarSign, Cpu, FileText, ChevronRight, Play, Terminal, HelpCircle, ShieldAlert 
+import {
+  Activity, CheckCircle, AlertCircle, Clock, DollarSign, Cpu, FileText, ChevronRight, Play, Terminal, HelpCircle, ShieldAlert
 } from "lucide-react";
 import { Card } from "../common/Card";
 import { Run, Dataset } from "../../types";
@@ -161,7 +161,7 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
                       {r.dataset_id} (v{r.dataset_version})
                     </td>
                     <td style={{ padding: "0.75rem" }}>
-                      <span style={{ 
+                      <span style={{
                         color: (r.summary?.success_rate || 0) >= 0.8 ? "#10B981" : (r.summary?.success_rate || 0) >= 0.5 ? "#F59E0B" : "#EF4444",
                         fontWeight: 600
                       }}>
@@ -207,7 +207,7 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
       {/* Redesigned Run Trajectory Inspector Panel */}
       {selectedRun && (
         <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-          
+
           {/* Header metadata summary */}
           <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr", gap: "1rem" }}>
             <Card style={{ padding: "1.25rem", background: "#1E293B", border: "1px solid #334155" }}>
@@ -291,7 +291,7 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
 
           {activeSubTab === "timeline" ? (
             <div style={{ display: "grid", gridTemplateColumns: "250px 1fr", gap: "1.5rem", alignItems: "start" }}>
-              
+
               {/* Left sidebar: Case Navigator */}
               <Card style={{ padding: "1rem", background: "#1E293B", border: "1px solid #334155", maxHeight: "650px", overflowY: "auto" }}>
                 <h4 style={{ margin: "0 0 0.75rem 0", color: "#FFF", fontSize: "0.9rem", fontWeight: 600, borderBottom: "1px solid #334155", paddingBottom: "0.5rem" }}>
@@ -318,19 +318,19 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
                         transition: "all 0.15s"
                       }}
                     >
-                      <span style={{ 
-                        fontFamily: "monospace", 
-                        overflow: "hidden", 
-                        textOverflow: "ellipsis", 
+                      <span style={{
+                        fontFamily: "monospace",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
                         maxWidth: "130px",
                         color: activeCaseId === c.case_id ? "#60A5FA" : "#94A3B8"
                       }}>
                         {c.case_id}
                       </span>
-                      <span style={{ 
-                        fontSize: "0.7rem", 
-                        padding: "0.1rem 0.3rem", 
+                      <span style={{
+                        fontSize: "0.7rem",
+                        padding: "0.1rem 0.3rem",
                         borderRadius: "0.2rem",
                         background: c.success ? "rgba(16, 185, 129, 0.15)" : "rgba(239, 68, 68, 0.15)",
                         color: c.success ? "#10B981" : "#EF4444",
@@ -346,7 +346,7 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
               {/* Right side: Detailed Visual Timeline */}
               {activeCaseEvaluation && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-                  
+
                   {/* Case Header Details Card */}
                   <Card style={{ padding: "1.25rem", background: "#1E293B", border: "1px solid #334155" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #334155", paddingBottom: "0.75rem", marginBottom: "0.75rem" }}>
@@ -354,9 +354,9 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
                         <span style={{ fontSize: "0.75rem", color: "#64748B", fontWeight: 600 }}>ACTIVE TEST CASE</span>
                         <h4 style={{ margin: 0, color: "#60A5FA", fontFamily: "monospace", fontSize: "1.1rem" }}>{activeCaseId}</h4>
                       </div>
-                      <span style={{ 
-                        padding: "0.25rem 0.75rem", 
-                        borderRadius: "0.375rem", 
+                      <span style={{
+                        padding: "0.25rem 0.75rem",
+                        borderRadius: "0.375rem",
                         background: activeCaseEvaluation.success ? "rgba(16, 185, 129, 0.2)" : "rgba(239, 68, 68, 0.2)",
                         color: activeCaseEvaluation.success ? "#34D399" : "#F87171",
                         fontWeight: 700,
@@ -388,7 +388,7 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
 
                   {/* Vertical Chronological Timeline */}
                   <div style={{ position: "relative", paddingLeft: "1.5rem", borderLeft: "2px solid #334155", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-                    
+
                     {/* Node 1: User Query / Input */}
                     <div style={{ position: "relative" }}>
                       <span style={{ position: "absolute", left: "-2rem", top: "0.25rem", width: "12px", height: "12px", borderRadius: "50%", background: "#3B82F6", border: "3px solid #0F172A" }} />
@@ -425,7 +425,7 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
                           <span style={{ fontSize: "0.7rem", color: "#F59E0B", fontWeight: 700 }}>
                             STEP {step.step_number} {step.thought ? `— "${step.thought}"` : ""}
                           </span>
-                          
+
                           {/* Tool Calls block */}
                           {step.tool_calls && step.tool_calls.length > 0 && (
                             <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
@@ -440,7 +440,7 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
                                       {tc.success ? "Success" : "Failed"}
                                     </span>
                                   </div>
-                                  
+
                                   {tc.arguments && Object.keys(tc.arguments).length > 0 && (
                                     <div style={{ marginTop: "0.25rem", background: "rgba(0,0,0,0.3)", padding: "0.4rem", borderRadius: "0.25rem" }}>
                                       <pre style={{ margin: 0, fontSize: "0.75rem", color: "#E2E8F0", whiteSpace: "pre-wrap" }}>
@@ -448,7 +448,7 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
                                       </pre>
                                     </div>
                                   )}
-                                  
+
                                   {tc.error && (
                                     <div style={{ color: "#EF4444", fontSize: "0.75rem", marginTop: "0.25rem", background: "rgba(239, 68, 68, 0.1)", padding: "0.35rem", borderRadius: "0.25rem" }}>
                                       Error: {tc.error}
@@ -463,7 +463,7 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
                           {step.observation && (
                             <div style={{ background: "#1E293B", padding: "0.5rem 0.75rem", borderRadius: "0.25rem", fontSize: "0.8rem", borderLeft: "3px solid #64748B" }}>
                               <span style={{ fontSize: "0.65rem", color: "#64748B", fontWeight: 600, display: "block" }}>OBSERVATION</span>
-                              <span style={{ color: "#94A3B8" }}>
+                              <span style={{ color: "#94A3B8", whiteSpace: "pre-wrap", overflowWrap: "anywhere", wordBreak: "break-word" }}>
                                 {typeof step.observation === "object" ? JSON.stringify(step.observation) : String(step.observation)}
                               </span>
                             </div>
@@ -505,7 +505,7 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
                       <span style={{ position: "absolute", left: "-2rem", top: "0.25rem", width: "12px", height: "12px", borderRadius: "50%", background: "#EC4899", border: "3px solid #0F172A" }} />
                       <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                         <span style={{ fontSize: "0.75rem", color: "#EC4899", fontWeight: 700, letterSpacing: "0.05em" }}>EVALUATION SCORES DETAILED VIEW</span>
-                        
+
                         {/* Deterministic / Constraints Metrics */}
                         <Card style={{ padding: "1.25rem", background: "#111827", border: "1px solid #1F2937" }}>
                           <h5 style={{ margin: "0 0 1rem 0", color: "#FFF", fontSize: "0.9rem", fontWeight: 600 }}>
@@ -518,8 +518,8 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
                                 <div key={m.metric_name} style={{ background: "#1E293B", padding: "0.75rem", borderRadius: "0.375rem" }}>
                                   <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.8rem", marginBottom: "0.35rem", alignItems: "center" }}>
                                     <span style={{ color: "#E2E8F0", fontWeight: 600 }}>{m.metric_name}</span>
-                                    <span style={{ 
-                                      color: getMetricColor(m.metric_name, m.score), 
+                                    <span style={{
+                                      color: getMetricColor(m.metric_name, m.score),
                                       fontWeight: 700,
                                       background: `${getMetricColor(m.metric_name, m.score)}15`,
                                       padding: "0.15rem 0.4rem",
@@ -541,7 +541,7 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
                           <h5 style={{ margin: "0 0 1rem 0", color: "#FFF", fontSize: "0.9rem", fontWeight: 600 }}>
                             Tool Calling Verification
                           </h5>
-                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0,1fr))", gap: "1rem" }}>
                             <div style={{ background: "#1E293B", padding: "0.75rem", borderRadius: "0.375rem" }}>
                               <span style={{ fontSize: "0.7rem", color: "#EC4899", fontWeight: 700, display: "block", marginBottom: "0.5rem" }}>EXPECTED TOOL CALLS</span>
                               {canonicalTestCase?.expected_tool_calls && canonicalTestCase.expected_tool_calls.length > 0 ? (
@@ -561,7 +561,17 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
                               {getActualToolCalls(activeCaseEvaluation).length > 0 ? (
                                 <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
                                   {getActualToolCalls(activeCaseEvaluation).map((tc: any, idx: number) => (
-                                    <div key={idx} style={{ fontFamily: "monospace", fontSize: "0.75rem", color: tc.success ? "#34D399" : "#F87171", background: "#0F172A", padding: "0.35rem", borderRadius: "0.25rem" }}>
+                                    <div key={idx} style={{
+                                      fontFamily: "monospace",
+                                      fontSize: "0.75rem",
+                                      color: tc.success ? "#34D399" : "#F87171",
+                                      background: "#0F172A",
+                                      padding: "0.35rem",
+                                      borderRadius: "0.25rem",
+                                      whiteSpace: "pre-wrap",
+                                      overflowWrap: "anywhere",
+                                      wordBreak: "break-word",
+                                    }}>
                                       {tc.tool_name}({JSON.stringify(tc.arguments || {})})
                                     </div>
                                   ))}
@@ -627,7 +637,7 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
                               const extra = ret.filter((r: string) => !gt.some((g: string) => g.toLowerCase().includes(r.toLowerCase()) || r.toLowerCase().includes(g.toLowerCase())));
 
                               return (
-                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                                <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0,1fr))", gap: "1rem" }}>
                                   <div style={{ background: "#1E293B", padding: "0.75rem", borderRadius: "0.375rem", borderLeft: `3px solid ${missing.length > 0 ? "#EF4444" : "#10B981"}` }}>
                                     <span style={{ fontSize: "0.7rem", color: missing.length > 0 ? "#F87171" : "#34D399", fontWeight: 700, display: "block", marginBottom: "0.25rem" }}>MISSING CONTEXT</span>
                                     {missing.length > 0 ? (
@@ -653,7 +663,7 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
                             })()}
 
                             {/* Precision & Recall metrics */}
-                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0,1fr))", gap: "1rem" }}>
                               {activeCaseEvaluation.metrics
                                 ?.filter((m: any) => ["ContextPrecision", "ContextRecall"].includes(m.metric_name))
                                 .map((m: any) => (
@@ -691,8 +701,8 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
                                           Confidence: {typeof m.metadata.confidence === "number" ? `${(m.metadata.confidence * 100).toFixed(0)}%` : String(m.metadata.confidence)}
                                         </span>
                                       )}
-                                      <span style={{ 
-                                        color: getMetricColor(m.metric_name, m.score), 
+                                      <span style={{
+                                        color: getMetricColor(m.metric_name, m.score),
                                         fontWeight: 700,
                                         background: `${getMetricColor(m.metric_name, m.score)}15`,
                                         padding: "0.15rem 0.4rem",
@@ -730,12 +740,12 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
                   Generated Run Report (Markdown)
                 </h4>
               </div>
-              
-              <div 
-                style={{ 
-                  background: "#0F172A", 
-                  padding: "1.5rem", 
-                  borderRadius: "0.5rem", 
+
+              <div
+                style={{
+                  background: "#0F172A",
+                  padding: "1.5rem",
+                  borderRadius: "0.5rem",
                   color: "#E2E8F0",
                   fontFamily: "monospace",
                   fontSize: "0.85rem",
