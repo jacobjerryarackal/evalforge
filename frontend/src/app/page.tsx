@@ -23,7 +23,7 @@ export default function Dashboard() {
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {/* Main Content Area */}
-      <div style={{ flex: 1, padding: "2rem 3rem", overflowY: "auto", maxHeight: "100vh" }}>
+      <div style={{ flex: 1, padding: "2rem 3rem" }}>
         {/* Top Header */}
         <Header
           activeTab={activeTab}
