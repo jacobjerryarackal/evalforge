@@ -17,9 +17,17 @@ export function useDashboardData() {
         apiService.getRuns(),
         apiService.getExperiments(),
       ]);
-      setDatasets(dsData);
+      const filteredDatasets = dsData.filter(
+        (d) => !d.dataset_id.startsWith("api-")
+      );
+
+      const filteredExperiments = expsData.filter(
+        (e) => !e.experiment_id.startsWith("api-")
+      );
+
+      setDatasets(filteredDatasets);
       setRuns(runsData);
-      setExperiments(expsData);
+      setExperiments(filteredExperiments);
       setBackendConnected(true);
     } catch (e) {
       console.error("Dashboard synchronization failed", e);
@@ -37,11 +45,16 @@ export function useDashboardData() {
 
   const latestRuns = Object.values(
     runs.reduce<Record<string, Run>>((acc, run) => {
+      if (run.dataset_id.startsWith("api-")) {
+        return acc;
+      }
+
       const key = run.dataset_id;
 
       if (
         !acc[key] ||
-        new Date(run.timestamp).getTime() > new Date(acc[key].timestamp).getTime()
+        new Date(run.timestamp).getTime() >
+        new Date(acc[key].timestamp).getTime()
       ) {
         acc[key] = run;
       }
