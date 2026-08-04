@@ -547,7 +547,7 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
                               {canonicalTestCase?.expected_tool_calls && canonicalTestCase.expected_tool_calls.length > 0 ? (
                                 <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
                                   {canonicalTestCase.expected_tool_calls.map((tc: any, idx: number) => (
-                                    <div key={idx} style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "#94A3B8", background: "#0F172A", padding: "0.35rem", borderRadius: "0.25rem" }}>
+                                    <div key={idx} style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "#94A3B8", background: "#0F172A", padding: "0.35rem", borderRadius: "0.25rem", whiteSpace: "pre-wrap", overflowWrap: "anywhere", wordBreak: "break-word", maxWidth: "100%", overflow: "hidden" }}>
                                       {typeof tc === "string" ? tc : `${tc.method || tc.tool_name || "unknown"}(${JSON.stringify(tc.parameters || tc.arguments || {})})`}
                                     </div>
                                   ))}
@@ -571,6 +571,7 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
                                       whiteSpace: "pre-wrap",
                                       overflowWrap: "anywhere",
                                       wordBreak: "break-word",
+                                      maxWidth: "100%", overflow: "hidden"
                                     }}>
                                       {tc.tool_name}({JSON.stringify(tc.arguments || {})})
                                     </div>
