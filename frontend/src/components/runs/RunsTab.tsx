@@ -6,6 +6,7 @@ import { Card } from "../common/Card";
 import { Run, Dataset } from "../../types";
 import { useRuns } from "../../hooks/useRuns";
 import ReactMarkdown from "react-markdown";
+import jsPDF from "jspdf";
 
 interface RunsTabProps {
   runs: Run[];
@@ -95,6 +96,34 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
     URL.revokeObjectURL(url);
 
   };
+
+  const exportPDF = () => {
+
+    const pdf = new jsPDF();
+
+    pdf.setFontSize(24);
+
+    pdf.text("EvalForge Evaluation Report", 20, 20);
+
+    pdf.setFontSize(12);
+
+    pdf.text(`Run ID : ${selectedRun?.run_id}`, 20, 40);
+
+    pdf.text(`Dataset : ${selectedRun?.dataset_id}`, 20, 50);
+
+    pdf.text(`Version : ${selectedRun?.dataset_version}`, 20, 60);
+
+    pdf.text(`Success Rate : ${((selectedRun?.summary?.success_rate ?? 0) * 100).toFixed(2)}%`, 20, 70);
+
+    pdf.text(`Latency : ${selectedRun?.summary?.avg_latency}s`, 20, 80);
+
+    pdf.text(`Tokens : ${selectedRun?.summary?.total_tokens}`, 20, 90);
+
+    pdf.text(`Cost : ${formatCost(selectedRun?.summary?.total_cost)}`, 20, 100);
+
+    pdf.save(`${selectedRun?.run_id}.pdf`);
+
+  }
 
   const extractRetrievedContexts = (c: any) => {
     const contexts: string[] = [];
@@ -761,22 +790,15 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
             <Card style={{ padding: "2rem", background: "#1E293B", border: "1px solid #334155" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #334155", paddingBottom: "1rem", marginBottom: "1rem" }}>
                 <h4 style={{ margin: 0, fontSize: "1.1rem", color: "#FFF", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                  <button
-                    onClick={downloadMarkdown}
-                    style={{
-                      background: "#2563EB",
-                      border: "none",
-                      padding: "8px 16px",
-                      borderRadius: "8px",
-                      cursor: "pointer",
-                      color: "white",
-                      fontWeight: 600
-                    }}
-                  >
+                  <div style={{ display: "flex", gap: "10px" }}>
+                    <button onClick={downloadMarkdown} style={{ background: "#2563EB", border: "none", padding: "8px 16px", borderRadius: "8px", cursor: "pointer", color: "white", fontWeight: 600 }}>
+                      Download Markdown
+                    </button>
+                    <button onClick={exportPDF} style={{ background: "#25e5ebff", border: "none", padding: "8px 16px", borderRadius: "8px", cursor: "pointer", color: "white", fontWeight: 600 }}>
+                      Export PDF
+                    </button>
+                  </div>
 
-                    Download Markdown
-
-                  </button>
                   <FileText size={18} color="#A78BFA" />
                   Generated Run Report (Markdown)
                 </h4>
