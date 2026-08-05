@@ -1,0 +1,74 @@
+.markdown-report {
+    color: #E5E7EB;
+    line-height: 1.8;
+}
+
+.markdown-report h1 {
+
+    font-size: 36px;
+
+    margin-bottom: 20px;
+
+    border-bottom: 1px solid #334155;
+
+}
+
+.markdown-report h2 {
+
+    font-size: 28px;
+
+    margin-top: 40px;
+
+    color: #60A5FA;
+
+}
+
+.markdown-report table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin: 20px 0;
+
+}
+
+.markdown-report th {
+
+    background: #1E293B;
+
+    padding: 12px;
+
+}
+
+.markdown-report td {
+
+    padding: 12px;
+
+    border: 1px solid #334155;
+
+}
+
+.markdown-report code {
+
+    background: #111827;
+
+    padding: 2px 6px;
+
+    border-radius: 5px;
+
+    font-size: 13px;
+
+    color: #38BDF8;
+
+}
+
+.markdown-report pre {
+
+    background: #111827;
+
+    padding: 16px;
+
+    overflow: auto;
+
+}
