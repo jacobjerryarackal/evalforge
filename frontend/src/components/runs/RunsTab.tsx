@@ -5,6 +5,7 @@ import {
 import { Card } from "../common/Card";
 import { Run, Dataset } from "../../types";
 import { useRuns } from "../../hooks/useRuns";
+import ReactMarkdown from "react-markdown";
 
 interface RunsTabProps {
   runs: Run[];
@@ -745,18 +746,110 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
               <div
                 style={{
                   background: "#0F172A",
-                  padding: "1.5rem",
-                  borderRadius: "0.5rem",
-                  color: "#E2E8F0",
-                  fontFamily: "monospace",
-                  fontSize: "0.85rem",
+                  padding: "2rem",
+                  borderRadius: "12px",
                   maxHeight: "650px",
-                  overflowY: "auto",
-                  lineHeight: "1.5",
-                  whiteSpace: "pre-wrap"
+                  overflowY: "auto"
                 }}
               >
-                {selectedRun.report || "No markdown summary report was compiled for this execution."}
+                <ReactMarkdown
+                  components={{
+                    h1: ({ children }) => (
+                      <h1 style={{
+                        color: "#ffffff",
+                        fontSize: "2rem",
+                        marginBottom: "1rem",
+                        borderBottom: "1px solid #334155",
+                        paddingBottom: "0.5rem"
+                      }}>
+                        {children}
+                      </h1>
+                    ),
+
+                    h2: ({ children }) => (
+                      <h2 style={{
+                        color: "#60A5FA",
+                        marginTop: "2rem",
+                        marginBottom: "1rem"
+                      }}>
+                        {children}
+                      </h2>
+                    ),
+
+                    h3: ({ children }) => (
+                      <h3 style={{
+                        color: "#A78BFA",
+                        marginTop: "1.5rem"
+                      }}>
+                        {children}
+                      </h3>
+                    ),
+
+                    p: ({ children }) => (
+                      <p style={{
+                        color: "#E5E7EB",
+                        lineHeight: 1.8
+                      }}>
+                        {children}
+                      </p>
+                    ),
+
+                    code: ({ children }) => (
+                      <code style={{
+                        background: "#111827",
+                        padding: "2px 6px",
+                        borderRadius: "4px",
+                        color: "#38BDF8"
+                      }}>
+                        {children}
+                      </code>
+                    ),
+
+                    pre: ({ children }) => (
+                      <pre style={{
+                        background: "#111827",
+                        padding: "1rem",
+                        borderRadius: "8px",
+                        overflowX: "auto"
+                      }}>
+                        {children}
+                      </pre>
+                    ),
+
+                    table: ({ children }) => (
+                      <table style={{
+                        width: "100%",
+                        borderCollapse: "collapse",
+                        marginTop: "1rem"
+                      }}>
+                        {children}
+                      </table>
+                    ),
+
+                    th: ({ children }) => (
+                      <th style={{
+                        border: "1px solid #334155",
+                        padding: "10px",
+                        background: "#1E293B",
+                        color: "#fff"
+                      }}>
+                        {children}
+                      </th>
+                    ),
+
+                    td: ({ children }) => (
+                      <td style={{
+                        border: "1px solid #334155",
+                        padding: "10px",
+                        color: "#E5E7EB"
+                      }}>
+                        {children}
+                      </td>
+                    )
+                  }}
+                >
+                  {selectedRun.report || "No report generated."}
+                </ReactMarkdown>
               </div>
             </Card>
           )}
