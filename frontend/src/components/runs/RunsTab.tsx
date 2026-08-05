@@ -73,6 +73,29 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
     return steps[steps.length - 1]?.response || "No final response text generated.";
   };
 
+  const downloadMarkdown = () => {
+
+    if (!selectedRun?.report) return;
+
+    const blob = new Blob(
+      [selectedRun.report],
+      { type: "text/markdown;charset=utf-8" }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+
+    a.href = url;
+
+    a.download = `${selectedRun.run_id}.md`;
+
+    a.click();
+
+    URL.revokeObjectURL(url);
+
+  };
+
   const extractRetrievedContexts = (c: any) => {
     const contexts: string[] = [];
     if (!c || !c.trajectory) return contexts;
@@ -738,6 +761,22 @@ export function RunsTab({ runs, datasets }: RunsTabProps) {
             <Card style={{ padding: "2rem", background: "#1E293B", border: "1px solid #334155" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #334155", paddingBottom: "1rem", marginBottom: "1rem" }}>
                 <h4 style={{ margin: 0, fontSize: "1.1rem", color: "#FFF", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <button
+                    onClick={downloadMarkdown}
+                    style={{
+                      background: "#2563EB",
+                      border: "none",
+                      padding: "8px 16px",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      color: "white",
+                      fontWeight: 600
+                    }}
+                  >
+
+                    Download Markdown
+
+                  </button>
                   <FileText size={18} color="#A78BFA" />
                   Generated Run Report (Markdown)
                 </h4>
