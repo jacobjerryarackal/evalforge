@@ -45,8 +45,17 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Setup database path and repository
-db_path = "evalforge_platform.db"
-repo = SqliteEvaluationRepository(db_path=db_path)
+import os
+database_url = os.getenv("DATABASE_URL")
+if database_url and (database_url.startswith("postgresql://") or database_url.startswith("postgres://")):
+    from src.adapters.repositories.postgres_repository import PostgresEvaluationRepository
+    repo = PostgresEvaluationRepository(database_url=database_url)
+    logger.info("Initialized PostgreSQL Evaluation Repository.")
+else:
+    db_path = "evalforge_platform.db"
+    repo = SqliteEvaluationRepository(db_path=db_path)
+    logger.info(f"Initialized SQLite Evaluation Repository at {db_path}.")
+
 dataset_registry = DatasetRegistry()
 experiment_engine = ExperimentEngine(repo)
 
@@ -168,8 +177,38 @@ SUTS = {"travel_agent": TravelAgentSUT()}
 
 
 @app.get("/health")
-def health_check():
-    return {"status": "healthy", "timestamp": datetime.now(timezone.utc).isoformat()}
+async def health_check():
+    db_ok = False
+    db_type = "unknown"
+    try:
+        if hasattr(repo, "pool"):
+            db_type = "postgresql"
+            with repo._get_connection() as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute("SELECT 1")
+                    cursor.fetchone()
+            db_ok = True
+        elif hasattr(repo, "db_path"):
+            db_type = "sqlite"
+            import sqlite3
+            with sqlite3.connect(repo.db_path) as conn:
+                conn.execute("SELECT 1")
+            db_ok = True
+        else:
+            db_ok = True  # fallback if other repository types are used
+    except Exception as e:
+        logger.error(f"Database health check failed: {e}")
+        db_ok = False
+
+    if not db_ok:
+        raise HTTPException(status_code=500, detail="Database connection unhealthy")
+
+    return {
+        "status": "healthy",
+        "database": db_type,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
 
 
 @app.get("/api/datasets")

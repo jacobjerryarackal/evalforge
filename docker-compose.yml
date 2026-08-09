@@ -1,12 +1,27 @@
 version: '3.8'
 
 services:
+  db:
+    image: postgres:15-alpine
+    container_name: evalforge-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: evalforge
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
   backend:
     build: .
     ports:
       - "8000:8000"
     environment:
       - PYTHONUNBUFFERED=1
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/evalforge
+    depends_on:
+      - db
 
   frontend:
     build: ./frontend
@@ -16,3 +31,7 @@ services:
       - NEXT_PUBLIC_API_URL=http://localhost:8000
     depends_on:
       - backend
+
+volumes:
+  pgdata:
+

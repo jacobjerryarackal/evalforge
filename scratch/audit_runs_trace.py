@@ -5,15 +5,32 @@ import urllib.request
 def main():
     print("=== Cross-Layer Audit: SQLite vs API ===")
     
-    # 1. Load from SQLite
-    conn = sqlite3.connect("evalforge_platform.db")
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
-    cursor.execute("SELECT cases, summary FROM evaluation_runs WHERE run_id = 'run-platform-travel-v1'")
-    db_row = cursor.fetchone()
-    if not db_row:
-        print("ERROR: Run 'run-platform-travel-v1' not found in SQLite.")
-        return
+    # 1. Load from Database (Postgres or SQLite fallback)
+    import os
+    database_url = os.getenv("DATABASE_URL")
+    if database_url and (database_url.startswith("postgresql://") or database_url.startswith("postgres://")):
+        print("Connecting to PostgreSQL database for audit...")
+        import psycopg2
+        from psycopg2.extras import RealDictCursor
+        conn = psycopg2.connect(database_url)
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        cursor.execute("SELECT cases, summary FROM evaluation_runs WHERE run_id = 'run-platform-travel-v1'")
+        db_row = cursor.fetchone()
+        if not db_row:
+            print("ERROR: Run 'run-platform-travel-v1' not found in PostgreSQL.")
+            conn.close()
+            return
+    else:
+        print("Connecting to SQLite database for audit...")
+        conn = sqlite3.connect("evalforge_platform.db")
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        cursor.execute("SELECT cases, summary FROM evaluation_runs WHERE run_id = 'run-platform-travel-v1'")
+        db_row = cursor.fetchone()
+        if not db_row:
+            print("ERROR: Run 'run-platform-travel-v1' not found in SQLite.")
+            conn.close()
+            return
         
     db_cases = json.loads(db_row["cases"])
     db_summary = json.loads(db_row["summary"])

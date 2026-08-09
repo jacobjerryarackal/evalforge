@@ -21,7 +21,14 @@ async def main():
     sut = TravelAgentSUT()
     provider = GeminiProvider(mock_mode=True)
     registry = create_default_registry(provider)
-    repo = SqliteEvaluationRepository("evalforge_platform.db")
+    database_url = os.getenv("DATABASE_URL")
+    if database_url and (database_url.startswith("postgresql://") or database_url.startswith("postgres://")):
+        from src.adapters.repositories.postgres_repository import PostgresEvaluationRepository
+        repo = PostgresEvaluationRepository(database_url=database_url)
+        print("Using Postgres database for execution.")
+    else:
+        repo = SqliteEvaluationRepository("evalforge_platform.db")
+        print("Using SQLite database for execution.")
     runner = BenchmarkRunner(repository=repo, registry=registry)
     evaluators = list(registry.list_evaluators())
     
