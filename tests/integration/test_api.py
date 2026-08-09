@@ -107,6 +107,38 @@ async def test_benchmark_execution_and_run_history(client: TestClient) -> None:
     assert res.json()["status"] == "running"
     assert res.json()["run_id"] == "run-api-exec-1"
 
-    # Fetch run list to assert API handles it
     res_runs = client.get("/api/runs")
     assert res_runs.status_code == 200
+
+
+@pytest.mark.anyio
+async def test_cors_origins(monkeypatch) -> None:
+    import importlib
+    import src.adapters.api.app
+
+    # Test case 1: Local development / wildcard fallback (no env set)
+    monkeypatch.delenv("ALLOWED_ORIGINS", raising=False)
+    importlib.reload(src.adapters.api.app)
+    from fastapi.testclient import TestClient as Client
+    client_wildcard = Client(src.adapters.api.app.app)
+    
+    res = client_wildcard.get("/health", headers={"Origin": "https://random-origin.com"})
+    assert res.headers.get("access-control-allow-origin") == "https://random-origin.com"
+
+    # Test case 2: Configured origins accepted, others rejected
+    monkeypatch.setenv("ALLOWED_ORIGINS", "https://evalforge.vercel.app, https://another-allowed.com")
+    importlib.reload(src.adapters.api.app)
+    client_configured = Client(src.adapters.api.app.app)
+
+    # Configured origin accepted
+    res_accepted = client_configured.get("/health", headers={"Origin": "https://evalforge.vercel.app"})
+    assert res_accepted.headers.get("access-control-allow-origin") == "https://evalforge.vercel.app"
+
+    # Unconfigured origin rejected (CORS headers not returned)
+    res_rejected = client_configured.get("/health", headers={"Origin": "https://unconfigured-site.com"})
+    assert "access-control-allow-origin" not in res_rejected.headers
+
+    # Clean up env
+    monkeypatch.delenv("ALLOWED_ORIGINS", raising=False)
+    importlib.reload(src.adapters.api.app)
+

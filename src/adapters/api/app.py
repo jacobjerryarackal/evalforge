@@ -31,18 +31,25 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# Load environment variables from .env
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 # Enable CORS for Next.js frontend
+allowed_origins_env = os.getenv("ALLOWED_ORIGINS")
+if allowed_origins_env:
+    allowed_origins = [origin.strip() for origin in allowed_origins_env.split(",") if origin.strip()]
+else:
+    allowed_origins = ["*"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Load environment variables from .env
-from dotenv import load_dotenv
-load_dotenv()
 
 # Setup database path and repository
 import os
