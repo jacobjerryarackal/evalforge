@@ -1,409 +1,632 @@
-# EvalForge — Benchmark-Driven Evaluation & Observability Platform for Agentic AI Systems
+# EvalForge
 
-EvalForge is a model-agnostic, production-grade AI Agent Evaluation and Observability Platform designed to benchmark, audit, and observe autonomous agents running in complex, multi-turn, constraint-bound environments.
-
----
-
-## 1. Value Proposition
-**Verify agent reasoning, safety, and constraints before deploying to production.**  
-EvalForge captures multi-turn agent execution trajectories, executes deterministic performance and retrieval metrics alongside Pydantic-validated cognitive LLM judges, tracks regression deltas across experimental runs, and persists structured results to PostgreSQL or SQLite.
+**A benchmark-driven evaluation and observability platform for agentic AI systems.**
 
 ---
 
-## 2. Strong Opening Explanation
-Building AI agents is easy, but ensuring their reliability in production is exceptionally difficult. Unlike traditional software systems which behave deterministically, AI agents operate non-deterministically, interact with dynamic third-party tools, maintain state across multi-turn sessions, and are vulnerable to specific failure modes such as infinite execution loops, instruction leakage, hallucinated actions, and budget/token overrun.
+## Live Demo
 
-### Why Ordinary Pass/Fail Testing is Insufficient
-Traditional testing frameworks verify assertions on a final state or a single output value. However, an agentic AI system can produce a seemingly correct final answer while failing along multiple unobserved dimensions:
-1. **Calling the wrong tool** (e.g., executing a booking service instead of a query service).
-2. **Utilizing incorrect context** (e.g., grounding reasoning on stale flight records).
-3. **Violating operational constraints** (e.g., exceeding budget limits or latency constraints).
-4. **Exhibiting specific safety failures** (e.g., leaking instructions or bypassing corporate policy).
+Explore the deployed EvalForge application:
 
-EvalForge goes beyond simple final-answer pass/fail grading. It records and audits the **execution trajectory** (reasoning thoughts, tool calls, arguments, observations, and system costs) of the agent, providing a complete observability audit trail.
+* **Frontend Dashboard**: [EvalForge UI](https://evalforge.vercel.app)
+* **Backend API**: [EvalForge REST Server](https://evalforge-backend.onrender.com) *(Placeholder - replace with actual Render service URL if modified)*
+* **Service Status**: [Backend Health Status](https://evalforge-backend.onrender.com/health) *(Placeholder - replace with actual Render health URL)*
 
----
-
-## 3. Key Capabilities
-* **Pluggable Evaluation Engine**: Completely decoupled from both the System Under Test (SUT) and the LLM API provider.
-* **Execution Trajectory Tracing**: Records each turn of agent reasoning, including thoughts, tool inputs, execution outcomes, costs, token usage, and latency.
-* **Deterministic Performance Metrics**: Programmatic evaluators for Latency, Token Usage, Cost budgets, and Tool Call schemas.
-* **Retrieval Metric Suite**: Evaluates RAG quality via context precision ranking and context recall heuristics against ground truth databases.
-* **Pydantic-Validated LLM Judges**: Implements robust, rate-limited cognitive evaluation rubrics for Faithfulness, Groundedness, Answer Correctness, and Hallucination.
-* **Experimentation & Delta Regression Tracking**: Group runs into experiments to calculate changes in latency, cost, and success rate, detecting regressions over time.
-* **Production Persistence Adapter**: Integrates with PostgreSQL (featuring thread-safe connection pooling and automatic url scheme sanitization) and falls back to SQLite.
-* **Dual-Service Workspace**: Serves REST APIs over FastAPI backend and displays comparisons, triggers, and trace breakdowns in a Next.js TypeScript UI.
-* **Structured JSON Observability**: Outputs structured, machine-parseable JSON lines logging for direct ingestion into logging pipelines.
+> [!NOTE]
+> Deployed live URLs can be updated in backend `.env` variables (`ALLOWED_ORIGINS`) and frontend `.env.local` variables (`NEXT_PUBLIC_API_URL`) to support live production environments.
 
 ---
 
-## 4. "Why EvalForge?"
-The table below contrasts the paradigms of development-grade unit testing and production-grade agentic evaluation:
+## Overview
 
-| Feature / Dimension | Traditional Pass/Fail Testing | Agent Evaluation (EvalForge) |
-| :--- | :--- | :--- |
-| **Execution Path** | Single input maps to a predictable, mocked code path. | Multi-turn, non-deterministic agent loop with dynamic tool selection. |
-| **Verification Scope** | Checks final state or return value correctness. | Observes and grades the entire trajectory, including thoughts, tool calls, and grounding. |
-| **Performance Constraints** | Simple timeout checks. | Tracks tokens, costs, tool execution success, and multi-turn budgets. |
-| **Cognitive Quality** | Brittle text similarity assertions (e.g., BLEU, ROUGE). | Semantic LLM-as-a-judge rubrics validating reasoning accuracy. |
-| **Regression Analysis** | Code changes break tests directly. | Code, prompt, or model changes shift success rates, latencies, and costs dynamically. |
+EvalForge is a model-agnostic, production-grade AI Agent Evaluation and Observability Platform designed to benchmark, audit, and inspect autonomous agents running in multi-turn, tool-using, and constraint-bound environments. 
+
+Rather than treating evaluation as a simple assertion check, EvalForge treats it as a multi-dimensional observability pipeline. The platform allows machine learning and software engineers to define golden datasets containing expected tool calls, latency boundaries, cost budgets, and context guidelines, and then execute agents against these cases while compiling step-by-step reasoning trajectories. It evaluates outcomes via programmatic heuristics alongside cognitive LLM-as-a-judge rubrics, persists runs in a PostgreSQL instance, and displays comparative regression deltas in an interactive Next.js dashboard.
 
 ---
 
-## 5. Concrete Evaluation Example
-The following is a realistic benchmark test case defined in [datasets/travel_v1.json](file:///d:/AI/evalforge/datasets/travel_v1.json):
+## Why EvalForge?
 
-```json
-{
-  "id": "travel_v1_001",
-  "difficulty": "Easy",
-  "category": "flight",
-  "user_query": "I need a flight from New York to London on August 15, 2026.",
-  "retrieved_context": "Flights from JFK to LHR on Aug 15: British Airways BA112 departs 10:30, arrives 22:15, $850. Delta DL4 departs 08:00, arrives 20:30, $920. Both have 1 stop.",
-  "expected_tool_calls": [
-    {
-      "service": "FlightService",
-      "method": "search_flights",
-      "parameters": {
-        "origin": "NYC",
-        "destination": "LON",
-        "date": "2026-08-15"
-      }
-    }
-  ],
-  "expected_answer": "British Airways BA112 at 10:30, arriving 22:15, $850, or Delta DL4 at 08:00, arriving 20:30, $920.",
-  "latency_constraint": 2.0,
-  "token_constraint": 200,
-  "cost_constraint": 0.01,
-  "expected_metrics": {
-    "context_precision": 1.0,
-    "context_recall": 1.0
-  },
-  "expected_judge_scores": {
-    "faithfulness": 1.0,
-    "groundedness": 1.0,
-    "correctness": 1.0,
-    "hallucination": 0.0
-  },
-  "failure_mode": "None"
-}
-```
+Traditional software testing follows a predictable path: a fixed inputs maps to a single codepath yielding a deterministic return value. Autonomous AI agents do not follow this pattern:
+* **Statefulness**: An agent's action at step $N$ is dependent on observations returned by tools at steps $1$ to $N-1$.
+* **Non-Determinism**: Even with `temperature=0.0`, prompts, models, and retrieval pipelines shift reasoning paths dynamically.
+* **Tool Interactivity**: Agents autonomously determine which APIs to execute and format arguments dynamically, introducing execution error risks.
+* **API Cost and Latency**: Complex multi-turn reasoning loops can trigger infinite loops or consume astronomical numbers of tokens, leading to budget overrun.
 
-In this case, an agent fails if it:
-* Fails to execute `search_flights` with origin `NYC` and destination `LON`.
-* Exceeds `2.0` seconds in latency, `200` total tokens, or `$0.01` in cost.
-* Hallucinates flights not listed in the retrieved context (scored by the Hallucination LLM judge).
-* Answers with details contradicting the retrieved context (scored by the Faithfulness LLM judge).
+EvalForge provides a structured testing framework to isolate, debug, and prevent regressions in these agentic behaviors.
 
 ---
 
-## 6. Architecture Flow
-The ASCII diagram below illustrates the flow of dataset inputs, SUT execution, metric calculation, and visualization inside EvalForge:
+## Problem
+
+Traditional software testing reduces verification to:
 
 ```
-                             +--------------------+
-                             |   Golden Dataset   |
-                             +---------+----------+
-                                       |
-                                       | (JSON/JSONL Cases)
-                                       v
-                             +--------------------+
-                             |  Benchmark Runner  |
-                             +----+----------+----+
-                                  |          ^
-                 (input_query)    |          | (Trajectory)
-                                  v          |
-                             +---------------+----+
-                             | System Under Test  |
-                             |    (Agent SUT)     |
-                             +--------------------+
-                                       |
-                                       | (Steps & Traces)
-                                       v
-                             +--------------------+
-                             | Evaluation Engine  |
-                             +----+----------+----+
-                                  |          |
-              +-------------------+          +-------------------+
-              |                                                  |
-              v                                                  v
- +--------------------------+                      +--------------------------+
- |  Deterministic Metrics   |                      |     LLM Judge Engine     |
- |  - Latency, Token, Cost  |                      |  - Faithfulness, Grounded|
- |  - ToolCalling, Recall   |                      |  - Correctness, Hallucin.|
- |  - Context Precision     |                      |  - Structured JSON Parser|
- +------------+-------------+                      +------------+-------------+
-              |                                                  |
-              +-------------------+          +-------------------+
-                                  |          |
-                                  v          v
-                             +--------------------+
-                             | Aggregation Engine |
-                             +---------+----------+
-                                       |
-                                       v
-                             +--------------------+
-                             | Persistence Layer  |
-                             | (Postgres/SQLite)  |
-                             +---------+----------+
-                                       |
-                                       v
-                             +--------------------+
-                             | EvalForge UI / API |
-                             +--------------------+
+INPUT  ──>  SYSTEM  ──>  EXPECTED OUTPUT  ──>  PASS/FAIL
+```
+
+In agentic architectures, this simplified pass/fail signal is insufficient. An agent can return a response that matches the expected answer text, yet still fail along hidden dimensions:
+* **Calling the wrong tool**: Fetching flight status via an SMS notification tool instead of a flight database search.
+* **Incorrect arguments**: Passing unformatted dates or wrong city codes to search tools.
+* **Ungrounded context**: Fabricating flight numbers or hotel rates not present in retrieved context records.
+* **Violating constraints**: Satisfying the query but exceeding latency limits or token quotas.
+* **Intermediate errors**: Encountering tool exceptions, retrying blindly, and wasting API costs before finding an answer.
+
+Therefore, the critical engineering question is not only: *"Did the final answer pass?"*  
+It is: ***"Did the agent follow the correct trajectory steps to resolve the query, and can we explain why it passed or failed?"***
+
+EvalForge captures the complete intermediate execution trace, giving engineers the tools to diagnose structural failures inside agentic systems.
+
+---
+
+## Inspiration — Booking.com
+
+EvalForge was inspired by the growing focus on AI-agent evaluation at Booking.com and the broader 2026 engineering problem of making GenAI systems measurable, testable, and reliable in production. Booking.com's public engineering and data-science work highlights the necessity of treating LLM evaluation as a quantitative engineering discipline rather than a simple validation check. 
+
+Conceptual inspirations drawn from this space include:
+1. Moving away from manual prompt verification to automated, run-based golden benchmarks.
+2. Segmenting evaluation into multiple dimensions, isolating retrieval quality (context recall/precision) from reasoning validity (faithfulness).
+3. The necessity of regression delta testing to guarantee that upgrading underlying models or prompt instructions does not degrade task reliability.
+
+*Disclaimer: EvalForge is an independently implemented open-source project. It is not built, endorsed, or affiliated with Booking.com, and does not use any proprietary Booking.com data, systems, or source code.*
+
+---
+
+## What EvalForge Does
+
+EvalForge manages the complete lifecycle of agent execution, from benchmark definition to visualization and regression analysis:
+
+```
+                    Benchmark Definition
+                           |
+                           v
+                  Dataset / Test Cases
+                           |
+                           v
+                 Benchmark Runner
+                           |
+                           v
+                    Agent / SUT
+                           |
+              +------------+------------+
+              |            |            |
+              v            v            v
+          Tool Calls   Retrieval     Response
+              |         /Context        |
+              +------------+------------+
+                           |
+                           v
+                  Execution Trace
+                           |
+             +-------------+-------------+
+             |                           |
+             v                           v
+     Deterministic Metrics         LLM Judges
+             |                           |
+             +-------------+-------------+
+                           |
+                           v
+                  Evaluation Result
+                           |
+                           v
+                      PostgreSQL
+                           |
+                           v
+                   EvalForge UI/API
+                           |
+                           v
+              Debug / Compare / Regress
 ```
 
 ---
 
-## 7. Evaluation Lifecycle
-The lifecycle of an evaluation run contains the following phases:
-1. **Triggering**: A run is initiated via REST API (`POST /api/benchmarks/run`) or Next.js, specifying `dataset_id`, `version`, SUT identifier, and optional experiment metadata.
-2. **Background Execution**: FastAPI validates the request and offloads execution to an asynchronous background task pool, returning a unique `run_id` immediately.
-3. **SUT Run & Tracing**: The `BenchmarkRunner` maps test cases concurrently (bounded by a concurrency semaphore). SUT exceptions trigger configurable exponential backoff retries.
-4. **Trajectory Compilation**: All thoughts, tool parameters, observations, latency, and costs are compiled into a `Trajectory` domain entity.
-5. **Metrics & Judging Evaluation**:
-   * Deterministic metrics analyze constraints, tool execution success, and context overlap.
-   * LLM judges evaluate semantic rubrics, running prompt-compiled queries with `temperature=0.0` for consistency.
-6. **Case Success Assertion**: A test case is declared `successful` ONLY if it didn't crash, did not violate token/latency/cost limits, and achieved score thresholds defined in the test case.
-7. **Aggregation & Persistence**: The `AggregationEngine` compiles stats (average latency, total costs, success rate). The results are saved to the persistent database, and markdown reports are generated.
+## Key Capabilities
+
+* **Pluggable System Under Test (SUT)**: Decoupled through an abstract `AgentSUT` interface. The framework logic contains no business details of reference applications.
+* **Trajectory Traveral Tracing**: Records intermediate thoughts, tool calls, arguments, observations, costs, token usage, and latency per turn.
+* **Multi-Dimensional Metrics**: Segregates deterministic heuristics (latency, cost, tokens, tool schemas) from qualitative cognitive evaluators.
+* **Structured Output Judges**: Utilizes a rate-limit resilient parser that extracts JSON blocks from raw LLM responses, validates them using Pydantic, and retries on failure.
+* **Dynamic persistence**: Automatically swaps between PostgreSQL (with pooling and URL sanitization) and SQLite.
+* **Experiment Delta Analysis**: Tracks and compares metrics across multiple runs of an experiment to detect performance drifts.
 
 ---
 
-## 8. Benchmark Suite
-The repository includes 10 static, version-controlled JSON datasets under the [datasets/](file:///d:/AI/evalforge/datasets) folder representing different test profiles:
+## How It Works
 
-| Dataset Name | Filename | Purpose / Focus |
-| :--- | :--- | :--- |
-| **Travel V1 Baseline** | [travel_v1.json](file:///d:/AI/evalforge/datasets/travel_v1.json) | Baseline flight, hotel, and attraction search scenarios (25 cases). |
-| **Tool Calling Suite** | [travel_tool_calls.json](file:///d:/AI/evalforge/datasets/travel_tool_calls.json) | Focuses on multi-turn tool chaining and parameter validation constraints. |
-| **Edge Cases** | [travel_edge_cases.json](file:///d:/AI/evalforge/datasets/travel_edge_cases.json) | Boundaries, invalid inputs, calendar overlaps, and format errors. |
-| **Safety Suite** | [travel_safety.json](file:///d:/AI/evalforge/datasets/travel_safety.json) | Prompts for injection, system instruction leaks, and policy violations. |
-| **Long Context** | [travel_long_context.json](file:///d:/AI/evalforge/datasets/travel_long_context.json) | Large, dense context lookup sweeps testing retrieval reasoning. |
-| **Missing Context** | [travel_missing_context.json](file:///d:/AI/evalforge/datasets/travel_missing_context.json) | Empty or incomplete details testing hallucination suppression. |
-| **Adversarial Queries** | [travel_adversarial.json](file:///d:/AI/evalforge/datasets/travel_adversarial.json) | Conflicting customer instructions and budget limitations. |
-| **Multilingual Support** | [travel_multilingual.json](file:///d:/AI/evalforge/datasets/travel_multilingual.json) | Evaluates query handling in non-English contexts (French, Spanish, etc.). |
-| **Regression Suite** | [travel_regression.json](file:///d:/AI/evalforge/datasets/travel_regression.json) | Repeatability baselines for delta comparison. |
-| **Provider Benchmark** | [travel_provider_benchmark.json](file:///d:/AI/evalforge/datasets/travel_provider_benchmark.json) | Broad model capacity benchmarks across provider nodes. |
+1. **API Entry**: A client posts a run request to `/api/benchmarks/run`.
+2. **Dataset Resolution**: The backend loads the registered `GoldenDataset` from database tables.
+3. **Execution Delegation**: The FastAPI server offloads the benchmark to a background task runner thread to prevent blocking HTTP connections.
+4. **Agent Execution**: The SUT is run against each test case concurrently (bounded by a semaphore). All intermediate thoughts, tool calls, and observations are appended to a `Trajectory` model.
+5. **Metric Calculation**: Deterministic metrics check constraint thresholds (budget limits, tool names). Context Precision/Recall are calculated against ground-truth texts.
+6. **Cognitive Grading**: If qualitative judges are configured, the trajectory is sent to `LLMJudgeEngine` nodes to grade groundedness and faithfulness.
+7. **Persisting Outcomes**: Run records and trajectories are saved to PostgreSQL (or SQLite).
+8. **Observability UI**: Next.js fetches data from the API and displays dashboard statistics, runs lists, and interactive step traces.
 
 ---
 
-## 9. Evaluation Methodology
+## Architecture
 
-### Deterministic & Retrieval Metrics
-Implemented in [evaluators.py](file:///d:/AI/evalforge/src/use_cases/metrics/evaluators.py):
-* **`Latency`**: Asserts that execution duration is below the configured `latency_constraint` limit.
-* **`TokenUsage`**: Asserts that total tokens consumed are within `token_constraint` boundaries.
-* **`Cost`**: Calculates actual USD cost and verifies it is below the case's `cost_constraint` limit.
-* **`ToolCalling`**: Audits tool status flags, checks if expected methods were called, and halts on execution loop triggers.
-* **`ContextRecall`**: Computes text-overlap recall of retrieved context snippets against ground truth contexts.
-* **`ContextPrecision`**: Evaluates context ranking using Average Precision (AP) against reference items.
+EvalForge is structured following **Clean Architecture** guidelines to isolate business logic from database, API, and LLM frameworks:
 
-### Qualitative LLM Judges
-Orchestrated by the [LLMJudgeEngine](file:///d:/AI/evalforge/src/use_cases/judges/engine.py):
-* **`Faithfulness`**: Rubric checking if the SUT response relies *only* on context and contains no unsupported assertions.
-* **`Groundedness`**: Rubric checking if the response addresses the user query and conforms to user profile rules.
-* **`AnswerCorrectness`**: Compares the SUT response semantically against the `expected_answer` reference output.
-* **`Hallucination`**: Scans response strictly for factual fabrications or contexts contradictions.
+```
++-------------------------------------------------------------+
+|                     Infrastructure Layer                    |
+|       (FastAPI framework, database pools, logging, dotenv)  |
++------------------------------+------------------------------+
+                               | (implements)
+                               v
++-------------------------------------------------------------+
+|                        Adapters Layer                       |
+|   (PostgresRepository, SQLiteRepository, GeminiProvider,    |
+|    OllamaProvider, OpenRouterProvider, API controllers)     |
++------------------------------+------------------------------+
+                               | (implements / uses)
+                               v
++-------------------------------------------------------------+
+|                       Use Cases Layer                       |
+|   (BenchmarkRunner, MetricRegistry, FaithfulnessEvaluator,  |
+|    ExperimentEngine, AggregationEngine, LLMJudgeEngine)     |
++------------------------------+------------------------------+
+                               | (uses)
+                               v
++-------------------------------------------------------------+
+|                         Domain Layer                        |
+|   (EvaluationRun, GoldenDataset, GoldenTestCase, Trajectory,|
+|    Step, ToolCall, LLMProvider / Repository contracts)      |
++-------------------------------------------------------------+
+```
 
-> [!TIP]
-> The `LLMJudgeEngine` enforces structured output parsing. It attempts JSON generation first. If validation fails, it applies a regex JSON block extractor to parse text fallbacks and retries on errors up to a retry limit.
+* **Domain Layer (`src/domain/`)**: Pure Pydantic models (no framework dependencies) defining core evaluation structures and interfaces.
+* **Use Cases Layer (`src/use_cases/`)**: Rules orchestrating evaluations, running metrics, invoking judges, and calculating experiment deltas.
+* **Adapters Layer (`src/adapters/`)**: Concrete integrations with databases (SQLite, Postgres), API routers, and LLM providers.
+* **Infrastructure Layer (`src/infrastructure/`)**: Low-level logging configs and environment load scripts.
 
 ---
 
-## 10. Execution Traces
-EvalForge tracks a complete, turn-by-turn trace history. Within the Next.js visual workspace, engineers can inspect:
-* **Thought process**: The internal reasoning steps generated by the agent.
-* **Tool inputs & outputs**: The exact argument dictionary passed to external APIs and the returned JSON observations.
-* **Turn-by-turn latency & cost**: Micro-metrics for each individual step to isolate bottleneck queries.
-* **Judge reasoning text**: Detailed step-by-step justifications compiled by the LLM judges explaining *why* a specific score was awarded.
+## Internal Execution Flow
+
+The sequence diagram below details how the `BenchmarkRunner` coordinates evaluation sweeps asynchronously:
+
+```
+Client         FastAPI App      BenchmarkRunner      AgentSUT       Evaluators      Repository
+  |                 |                  |                |               |               |
+  |-- POST Run ---->|                  |                |               |               |
+  |                 |-- Start Task --->|                |               |               |
+  |<- run_id (202)-|                  |                |               |               |
+  |                 |                  |-- run() ------>|               |               |
+  |                 |                  |                |-- Call Tool ->|               |
+  |                 |                  |                |<- Obs --------|               |
+  |                 |                  |<-- Trajectory -|               |               |
+  |                 |                  |                                |               |
+  |                 |                  |-- Evaluate Trajectory -------->|               |
+  |                 |                  |<-- Metric Scores --------------|               |
+  |                 |                  |                                                |
+  |                 |                  |-- Save Evaluation Run ------------------------>|
+  |                 |                  |                                                |
+```
 
 ---
 
-## 11. Experiments and Run History
+## Evaluation Methodology
+
+### Deterministic Metrics
+
+Programmatic checks implemented in [evaluators.py](file:///d:/AI/evalforge/src/use_cases/metrics/evaluators.py) to assess structural constraints:
+* **`Latency`**: Asserts SUT duration is below `latency_constraint` thresholds. Detects API delays or slow agent thought loops.
+* **`TokenUsage`**: Audits prompt, completion, and total tokens against `token_constraint`. Prevents deployment budget overruns.
+* **`Cost`**: Calculates financial cost in USD using model pricing indices, ensuring it stays under the `cost_constraint`.
+* **`ToolCalling`**: Compares actual tool names and call order with `expected_tool_calls`. Detects tool-selection errors, formatting anomalies, and tool execution loop failures.
+* **`ContextRecall`**: Computes string-overlap recall of retrieved context snippets against `ground_truth_context` lists. Measures retrieval system performance.
+* **`ContextPrecision`**: Uses Average Precision (AP) formulas to score the relevance ranking of retrieved context snippets. Asserts that the most relevant information resides at the top.
+
+### LLM-as-a-Judge
+
+Cognitive evaluations orchestrated by the [LLMJudgeEngine](file:///d:/AI/evalforge/src/use_cases/judges/engine.py):
+* **`Faithfulness`**: Rubric scoring whether every statement in the SUT response is supported *only* by retrieved context snippets. Detects context hallucination.
+* **`Groundedness`**: Rubric scoring whether the response directly addresses the query and satisfies user tags. Detects task failures.
+* **`AnswerCorrectness`**: Compares SUT outputs semantically against the ground-truth `expected_answer`. Detects logical deviations.
+* **`Hallucination`**: Safety checker looking specifically for fabricated facts or context contradictions.
+
+#### Why Heuristics and LLM Judges Complement Each Other
+Programmatic checks capture **constraints and structure** (was a tool called, did we blow past token limits), whereas LLM Judges capture **meaning and alignment** (was the response accurate, did we invent facts). A fast agent with perfect tool calls can still hallucinate a bad answer; a slow agent with a perfect answer can still break operational latency rules. EvalForge unites both under a single evaluation schema.
+
+---
+
+## Benchmark Suite
+
+EvalForge registers 10 static, version-controlled JSON datasets under the [datasets/](file:///d:/AI/evalforge/datasets) folder to test different classes of agent behaviors:
+
+1. **`travel_v1`**: Baseline dataset (25 cases) covering flight queries, hotel reservations, and attraction searches.
+2. **`travel_tool_calls`**: Stresses multi-turn tool chaining and complex JSON argument generation.
+3. **`travel_regression`**: Repeatability baseline dataset used for delta comparison.
+4. **`travel_safety`**: Checks response safety against instruction leaks, jailbreaks, and policy violations.
+5. **`travel_adversarial`**: Contains customer requests with conflicting parameters or unrealistic budget constraints.
+6. **`travel_edge_cases`**: Boundaries checking calendar overlaps, missing parameters, and format conversions.
+7. **`travel_long_context`**: Stresses retrieval capacity using dense, multi-page context lookup inputs.
+8. **`travel_missing_context`**: Focuses on hallucination suppression when search returns empty context blocks.
+9. **`travel_multilingual`**: Validates agent query processing in Spanish, French, and other target locales.
+10. **`travel_provider_benchmark`**: Standardized comparisons to grade underlying model capacities.
+
+---
+
+## Execution Traces
+
+Checking final accuracy scores is insufficient for debugging. EvalForge exposes intermediate steps.
+
+### Conceptual Trace Structure
+```
+ [User Request]
+       │
+       ▼
+ [Step 1] thought: "Searching flights to Paris" ──> search_flights(origin="NYC", dest="PAR")
+       │
+       ▼
+ [Observation] [Flight records JSON returned by tool]
+       │
+       ▼
+ [Step 2] thought: "Checking policy boundaries" ──> check_policy(budget=250)
+       │
+       ▼
+ [Observation] "Policy confirmed: Approved"
+       │
+       ▼
+ [Step 3] thought: "Formatting response" ──> final_response: "Flight UA10 booked..."
+       │
+       ▼
+ [Evaluation] Metric checks (latency, tokens, tool names) & LLM Judge scores.
+```
+
+Through the **Trajectory Trace Inspector** panel in the UI, developers can isolate exactly where an execution failed, verifying if the issue was a tool failure, context retrieval error, or reasoning hallucination.
+
+---
+
+## Experiments and Run History
+
 EvalForge organizes runs into experiments to allow historical comparison and delta analysis.
-The [ExperimentEngine](file:///d:/AI/evalforge/src/use_cases/experiments/engine.py):
-* Stores groups of runs associated with a specific experiment configuration.
-* Correlates performance and computes deltas (accrued variations in success rates, latencies, tokens, and budgets) against the first run of the experiment (the baseline).
-* Compiles comparative markdown reports highlighting accuracy drifts or latency shifts.
+
+### Case Study Scenario: Upgrading Retrieval Strategies
+
+```
+      Baseline (Version A)                      Current (Version B)
+      Dataset: travel_v1                        Dataset: travel_v1
+      Retrieval: Vector search only             Retrieval: Hybrid + Re-ranking
+      
+   +---------------------------+             +---------------------------+
+   |  Success Rate:  92.0%     |             |  Success Rate:  84.0%     |
+   |  Avg Latency:   1.8s      |   ─────>    |  Avg Latency:   2.4s      |
+   |  Avg Cost:      $0.005    |  (Delta)    |  Avg Cost:      $0.008    |
+   |  ContextRecall: 0.95      |             |  ContextRecall: 0.82      |
+   +---------------------------+             +---------------------------+
+```
+
+Although Hybrid search was expected to perform better, Version B caused a success rate regression (92% down to 84%) and increased average latency (1.8s up to 2.4s). The `ExperimentEngine` highlights these changes, pointing the engineer to the exact test cases where retrieval precision dropped.
 
 ---
 
-## 12. Technical Architecture
-EvalForge is organized according to **Clean Architecture** boundaries where dependencies point strictly inwards:
+## Technology Stack
 
-```
-[Domain Layer] (Pure entities, value objects, interfaces)
-     ^
-     | (imported by)
-[Use Cases Layer] (BenchmarkRunner, evaluators, judges, engines)
-     ^
-     | (imported by)
-[Adapters Layer] (PostgreSQL/SQLite repos, LLM providers, FastAPI app)
-     ^
-     | (configured by)
-[Infrastructure Layer] (Logging formatter, configuration loaders)
-```
-
-* **Frontend**: TypeScript, Next.js, and Recharts visualization.
-* **Backend**: FastAPI, AsyncIO task delegation, Pydantic v2 data models.
+* **Core Language**: Python 3.11+
+* **Backend Framework**: FastAPI (Uvicorn server)
+* **Frontend Framework**: Next.js React (TypeScript)
+* **Primary Database**: PostgreSQL (Render Cloud / Local Docker)
+* **Development Database**: SQLite (Fallback)
+* **HTTP & Database Client**: Psycopg2-binary, HTTPX
+* **Data Validation**: Pydantic v2
+* **Visualization Utilities**: Recharts, Rich logging
+* **LLM Providers**: Gemini, Ollama, OpenRouter
 
 ---
 
-## 13. Database and Persistence
-EvalForge supports a dual-persistence strategy:
-1. **PostgreSQL (`PostgresEvaluationRepository`)**:
-   * Uses thread-safe connection pooling via `ThreadedConnectionPool` (supporting 1 to 20 concurrent connections).
-   * Automatically sanitizes connection string prefixes (`postgres://` is translated to `postgresql://` to prevent driver errors on platforms like Render or Heroku).
-   * Executes blocking database operations within `asyncio.to_thread` to preserve FastAPI event loop non-blocking performance.
-2. **SQLite (`SqliteEvaluationRepository`)**:
-   * Fallback engine if `DATABASE_URL` is empty or unset.
-   * Persists database records in a single local database file (`evalforge_platform.db`).
+## Why This Tech Stack?
 
-### Database Migration CLI Utility
-To transfer data from the local SQLite database to PostgreSQL, execute the ETL script:
+* **Python**: The standard language for AI systems development, parsing, and LLM SDK integration.
+* **FastAPI**: Selected for its asynchronous capabilities, auto-generated Swagger documentation, and background task integration.
+* **PostgreSQL**: Selected as the durable persistent store to maintain large JSON execution trajectories and allow concurrent queries.
+* **Psycopg2**: Used for high-speed connection management.
+* **Next.js & React**: Provides server-side layout pre-rendering and clean state-management for dashboard comparisons.
+* **TypeScript**: Enforces strict payload formatting contracts between the backend JSON payloads and frontend display nodes.
+* **LLM Providers (Gemini / Ollama / OpenRouter)**: Enables model-agnostic evaluations. Ollama supports local, cost-free developer testing, Gemini provides fast cloud performance, and OpenRouter supports model testing sweeps.
+
+---
+
+## Database Architecture
+
+EvalForge uses identical column structures in SQLite and PostgreSQL to prevent serialization mismatches:
+
+### `golden_datasets`
+* `dataset_id` (TEXT)
+* `version` (TEXT)
+* `name` (TEXT)
+* `description` (TEXT)
+* `test_cases` (TEXT): JSON-serialized array of `GoldenTestCase` objects.
+* `metadata` (TEXT): JSON-serialized dictionary of metadata.
+* **Primary Key**: `(dataset_id, version)`
+* **Index**: `idx_datasets_id` on `(dataset_id)`
+
+### `evaluation_runs`
+* `run_id` (TEXT) - Primary Key
+* `dataset_id` (TEXT)
+* `dataset_version` (TEXT)
+* `sut_version` (TEXT)
+* `timestamp` (TEXT): ISO-8601 string representation.
+* `cases` (TEXT): JSON-serialized array of `TestCaseEvaluation` objects (which stores steps, tool calls, and metric results).
+* `parameters` (TEXT): JSON-serialized execution parameters.
+* `summary` (TEXT): JSON-serialized run summaries.
+* `metadata` (TEXT): JSON-serialized metadata.
+* **Index**: `idx_runs_dataset` on `(dataset_id)`
+
+### `experiments`
+* `experiment_id` (TEXT) - Primary Key
+* `name` (TEXT)
+* `description` (TEXT)
+* `run_ids` (TEXT): JSON-serialized array of run ID strings.
+* `metadata` (TEXT): JSON-serialized metadata.
+* `created_at` (TEXT): ISO-8601 string representation.
+
+---
+
+## SQLite → PostgreSQL Migration
+
+To scale EvalForge from local developer testing to shared staging deployments, the persistence layer was upgraded from a single-file SQLite database to PostgreSQL.
+
+### Connection Management and Transaction Safety
+The `PostgresEvaluationRepository` uses a thread-safe connection pool `psycopg2.pool.ThreadedConnectionPool` (configured to support 1 to 20 connections) to prevent resource contention. Database transactions are isolated using a context manager helper:
+
+```python
+from contextlib import contextmanager
+
+@contextmanager
+def _get_connection(self):
+    """Context manager to acquire a connection from the pool and yield it."""
+    conn = self.pool.getconn()
+    try:
+        yield conn
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        self.pool.putconn(conn)
+```
+
+* **Scheme Sanitization**: Connection strings are checked at startup. If a cloud provider supplies a `postgres://` prefix, it is sanitized to `postgresql://` to prevent driver errors.
+* **Graceful Fallback**: If the `DATABASE_URL` environment variable is missing or invalid, EvalForge falls back to SQLite (`evalforge_platform.db`), keeping local setups friction-free.
+
+### Data Migration CLI Utility
+The ETL script [migrate_sqlite_to_postgres.py](file:///d:/AI/evalforge/scratch/migrate_sqlite_to_postgres.py) copies SQLite records into PostgreSQL:
+1. **Safety Backup**: Backs up the SQLite database file (`evalforge_platform.db.backup`).
+2. **Schema Verification**: Runs SQL table creations in the Postgres target database before running inserts.
+3. **Conflict Resolution**: Inserts dataset, run, and experiment records using `ON CONFLICT DO UPDATE` (upsert) statements to avoid duplicate PK errors.
+4. **Integrity Check**: Verifies table row counts, raising an exception if mismatching checksums are detected.
+
+---
+
+## API
+
+### Swagger UI Docs
+* **Interactive OpenAPI docs**: `/docs`
+* **Static API reference**: `/redoc`
+
+### Primary API Routes
+
+| Method | Path | Purpose | Query / Body Parameters | Response |
+| :--- | :--- | :--- | :--- | :--- |
+| **`GET`** | `/health` | Verifies database connectivity and returns database type. | None | `{ "status": "healthy", "database": "postgresql" }` |
+| **`GET`** | `/api/datasets` | Lists all registered datasets. | None | Array of dataset descriptions and case counts. |
+| **`POST`** | `/api/datasets` | Registers a new Golden Dataset. | JSON Dataset schema | `{ "status": "registered", "dataset_id": "..." }` |
+| **`POST`** | `/api/benchmarks/run` | Triggers a benchmark run asynchronously. | `{ "dataset_id": "...", "version": "...", "concurrency": 3 }` | `{ "status": "running", "run_id": "run-..." }` |
+| **`GET`** | `/api/runs` | Lists historical benchmark runs. | None | Array of run IDs, timestamps, and summary stats. |
+| **`GET`** | `/api/runs/{run_id}` | Retrieves execution trajectories and metrics. | `run_id` (Path) | Full evaluation run JSON including case step trace lists. |
+| **`GET`** | `/api/experiments` | Lists registered experiments. | None | Array of experiments and run counts. |
+| **`GET`** | `/api/experiments/{experiment_id}` | Retrieves experiment deltas and reports. | `experiment_id` (Path) | Experiment details and delta comparison markdown. |
+
+---
+
+## How to Explore the Live Demo
+
+Follow these steps to explore the deployed EvalForge application:
+
+1. **Check System Health**:
+   * Open the [Backend Health Status](https://evalforge-backend.onrender.com/health) page in your browser. Confirm that `"database"` reports `"postgresql"` and `"status"` is `"healthy"`.
+2. **Inspect Datasets**:
+   * Navigate to the **Datasets** tab on the [EvalForge UI](https://evalforge.vercel.app). Check the available benchmark suites (e.g., `travel_v1`). Expand a suite to inspect its case categories, queries, expected tool calls, and constraints.
+3. **Audit Run History**:
+   * Open the **Run History** tab. Select a historical benchmark run (e.g., the `run-a0aa7aa3` validation sweep). Inspect the aggregated statistics cards showing overall success rate, latency averages, and USD costs.
+4. **Trace Trajectories**:
+   * Scroll down the run details and click on a test case (such as case `001` or `010`). Inspect the **Trajectory Trace Inspector** to view intermediate agent thoughts, parameters sent to tool APIs, observations returned, and LLM judge justifications.
+5. **Run a Benchmark**:
+   * Navigate to the **Overview** tab. Select a dataset, set the SUT concurrency (e.g., `3`), set max retries to `0`, and click **Launch Benchmark Run**. The status will display as "running" and update reactively as cases complete.
+
+---
+
+## Local Development
+
+### Prerequisites
+* **Python**: Version 3.11+
+* **Node.js**: Version 18+
+* **Docker**: Required for local PostgreSQL service testing (optional)
+
+### Setup Instructions
+
+#### 1. Setup Backend API
+Activate virtual environment and install packages:
 ```powershell
-python scratch/migrate_sqlite_to_postgres.py <path_to_sqlite_db> <postgres_connection_url>
+python -m venv .venv
+
+# Windows:
+.venv\Scripts\activate
+# macOS/Linux:
+source .venv/bin/activate
+
+pip install -r requirements.txt
 ```
-* The script creates a file-level SQLite safety backup before starting.
-* Performs database table migrations with `ON CONFLICT DO UPDATE` (upsert) queries.
-* Asserts matching row checksums between tables, ensuring data integrity.
 
----
+Create a root `.env` configuration file matching the environment templates:
+```env
+GEMINI_API_KEY=your_gemini_api_key
+OLLAMA_API_BASE=http://localhost:11434
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/evalforge
+ALLOWED_ORIGINS=http://localhost:3000
+```
 
-## 14. API Endpoints
-The backend FastAPI application exposes the following REST endpoints:
+Start the FastAPI application:
+```powershell
+python -m uvicorn src.adapters.api.app:app --host 0.0.0.0 --port 8000 --reload
+```
 
-* **`/health` (GET)**: Performs connectivity queries against active databases (SQLite or PostgreSQL) and returns status.
-* **`/api/datasets` (GET/POST)**: Lists registered datasets or registers new golden datasets (validates SemVer formats).
-* **`/api/runs` (GET)**: Lists previous evaluation sweeps, timestamp records, and summaries.
-* **`/api/runs/{run_id}` (GET)**: Retrieves detailed trajectory logs, step-by-step tool observations, and metric results.
-* **`/api/experiments` (GET/POST)**: Lists or creates experiments.
-* **`/api/experiments/{experiment_id}` (GET)**: Computes deltas and compiles comparative markdown summaries.
-* **`/api/benchmarks/run` (POST)**: Triggers an evaluation run asynchronously via background task threads, returning a `run_id` instantly.
+#### 2. Setup Frontend UI
+Navigate to `frontend/`, install node modules, and start dev server:
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+Open http://localhost:3000 to view the interface.
 
----
-
-## 15. Local Development Setup
-
-### Backend Setup
-1. Requirements: **Python 3.11+**.
-2. Activate a virtual environment:
-   ```powershell
-   python -m venv .venv
-   # Windows:
-   .venv\Scripts\activate
-   # macOS/Linux:
-   source .venv/bin/activate
-   ```
-3. Install dependencies:
-   ```powershell
-   pip install -r requirements.txt
-   ```
-4. Create a `.env` file at the root:
-   ```env
-   GEMINI_API_KEY=your_gemini_key_here
-   OLLAMA_API_BASE=http://localhost:11434
-   OPENROUTER_API_KEY=your_openrouter_key_here
-   DATABASE_URL=postgresql://postgres:postgres@localhost:5432/evalforge
-   ```
-5. Run the FastAPI development server:
-   ```powershell
-   python -m uvicorn src.adapters.api.app:app --host 0.0.0.0 --port 8000 --reload
-   ```
-
-### Frontend Setup
-1. Requirements: **Node.js 18+**.
-2. Navigate to the `frontend/` directory:
-   ```powershell
-   cd frontend
-   ```
-3. Install dependencies:
-   ```powershell
-   npm install
-   ```
-4. Run the Next.js development server:
-   ```powershell
-   npm run dev
-   ```
-5. Open the UI: http://localhost:3000
-
----
-
-## 16. Multi-Container Docker Build
-To spin up PostgreSQL, the backend API, and the Next.js UI concurrently:
+#### 3. Run with Docker Compose
+To run PostgreSQL, backend, and frontend containers automatically:
 ```powershell
 docker-compose up --build
 ```
-* **Frontend**: http://localhost:3000
-* **Backend**: http://localhost:8000
 
 ---
 
-## 17. Environment Variables
-Below is the complete list of system environment variables:
+## Environment Variables
 
-| Variable | Type | Description | Default |
-| :--- | :--- | :--- | :--- |
-| `DATABASE_URL` | String | Connection string for PostgreSQL database. | Fallback to local SQLite |
-| `GEMINI_API_KEY` | String | API key for Gemini models. | Required for Gemini provider |
-| `OLLAMA_API_BASE` | String | Base URL for Ollama local provider. | `http://localhost:11434` |
-| `OPENROUTER_API_KEY` | String | API key for OpenRouter models. | Optional |
-| `ALLOWED_ORIGINS` | String | CORS allowed origins split by commas. | `*` |
+### Backend Configuration (`.env`)
+* `DATABASE_URL` (Optional): Connection string for PostgreSQL database. If empty, fallback SQLite (`evalforge_platform.db`) is used.
+* `GEMINI_API_KEY` (Required for Gemini): API key for Gemini LLM models.
+* `OLLAMA_API_BASE` (Optional): Target address for local Ollama server. Default: `http://localhost:11434`.
+* `OPENROUTER_API_KEY` (Optional): API key for OpenRouter integrations.
+* `ALLOWED_ORIGINS` (Optional): CORS configuration comma-separated string of accepted host origins.
+
+### Frontend Configuration (`frontend/.env.local`)
+* `NEXT_PUBLIC_API_URL` (Required): Target URL of the backend FastAPI endpoint. Local default: `http://localhost:8000`.
 
 ---
 
-## 18. Testing
-Verify repository code quality using the automated tools:
+## Testing
 
-### Code Formatting Check
+Verify code quality and type alignments using the testing suites:
+
 ```powershell
+# 1. Format Verification
 python -m black --check src tests
-```
 
-### Linter Audit
-```powershell
+# 2. Pattern Linting
 python -m ruff check src tests
-```
 
-### Static Type Checks
-```powershell
+# 3. Static Type Verification
 python -m mypy src tests
-```
 
-### Test Suites Execution
-Run all unit and integration tests (including PostgreSQL integrations):
-```powershell
+# 4. Execute Complete Pytest Suite
 python -m pytest
 ```
 
----
-
-## 19. Production Deployment
-* **Backend (Render)**: Set the start command to launch uvicorn and supply the database connection URL in `DATABASE_URL`. Set CORS origins using `ALLOWED_ORIGINS`.
-* **Frontend (Vercel)**: Build settings run Next.js build. Supply `NEXT_PUBLIC_API_URL` pointing to the Render backend address.
-
----
-
-## 20. Engineering Decisions & Design Principles
-* **Separation of Concerns**: Core modules contain no business details of reference applications (`examples/travel_agent/`).
-* **Registry Pattern**: Metric and Judge registries manage modular discovery, enabling developers to add new evaluators without touching the runner.
-* **Fault Shielding**: Exceptions inside individual test case runs are caught and logged inside the step metadata to prevent the entire benchmark suite from crashing.
-* **Structured Output Guarantee**: Qualitative evaluation scores are strictly validated against Pydantic schemas, with retry loops handling parsing exceptions.
+### What the Test Suite Protects Against
+* **API Breakages**: Verifies FastAPI endpoint responses and CORS origin header rejections.
+* **PostgreSQL Concurrency Limits**: Asserts that concurrent database writes do not exhaust the connection pool or trigger deadlock errors.
+* **Registry Duplicates**: Prevents naming collisions when registering new metrics or cognitive judges.
+* **LLM Judge Fault Fallbacks**: Asserts that when LLM judges return conversational text instead of JSON, the parsing regex extracts correct values and validates schemas properly.
 
 ---
 
-## 21. Limitations & Future Work
-EvalForge is a self-hostable evaluation dashboard, not a commercial SaaS platform. Current limitations include:
-* **BackgroundTasks queue**: Evaluation jobs run on FastAPI background thread workers rather than distributed task queues (e.g. Celery/Redis).
-* **Single-user UX**: Visual layout is designed for local developers and contains no authentication or multi-tenant workspace separation.
-* **Polling status checks**: Next.js dashboard polls run details endpoints for execution trace updates rather than using WebSockets or Server-Sent Events (SSE).
+## Production Deployment
+
+EvalForge is deployed using Vercel for the static frontend and Render for the API services:
+
+```
+               [ User Web Browser ]
+                        │
+                        ▼ (HTTPS)
+            +───────────────────────+
+            │   Vercel Deployment   │
+            │   (Next.js Frontend)  │
+            +───────────┬───────────+
+                        │
+                        │ API Queries (CORS validation)
+                        ▼
+            +───────────────────────+
+            │   Render Deployment   │
+            │   (FastAPI Backend)   │
+            +───────────┬───────────+
+                        │
+                        ▼ (SQL pool)
+            +───────────────────────+
+            │   Render PostgreSQL   │
+            │    (Database Node)    │
+            +───────────────────────+
+```
+
+* **CORS Policies**: The backend's `ALLOWED_ORIGINS` is configured to target the Vercel app domain, rejecting other unauthorized domain headers.
+* **Database Url Conversions**: The backend handles Render database string updates internally, sanitizing the connection schema before establishing psycopg2 connections.
 
 ---
 
-## 22. Project Status
-**Completed & Stable**. The core evaluation framework, PostgreSQL connection pool, dataset and experiment engines, and UI dashboard are fully implemented, verified, and certified.
+## Challenges & Engineering Decisions
+
+### 1. PostgreSQL Schema Mapping and Syntax Divergence
+* **Problem**: SQLite supports `INSERT OR REPLACE` and `?` query placeholders. PostgreSQL does not, throwing syntax exceptions on the original adapter code.
+* **Cause**: SQLite and PostgreSQL follow distinct SQL standards for conflict resolution and query bindings.
+* **Decision**: Implement a separate `PostgresEvaluationRepository` implementing the abstract `EvaluationRepository` interface.
+* **Fix**: Rewrote SQL statements in the PostgreSQL repository to use standard `%s` placeholders and `ON CONFLICT (PK) DO UPDATE SET` upsert syntax.
+* **Learning**: Decoupling database queries into adapter implementations keeps core business code independent of database syntax differences.
+
+### 2. Async Event Loop Blockage from Database Operations
+* **Problem**: FastAPI's async loops would block when executing database writes, causing concurrent HTTP requests to time out.
+* **Cause**: Python's standard `sqlite3` and `psycopg2` drivers are blocking (synchronous) libraries.
+* **Decision**: Offload database adapter calls to separate worker threads.
+* **Fix**: Wrapped all repository CRUD execution blocks in `asyncio.to_thread` functions inside both SQL adapters.
+* **Learning**: Running blocking driver I/O on distinct threadpool workers preserves the non-blocking execution of the FastAPI async event loop.
+
+### 3. Connection Exhaustion under Concurrency
+* **Problem**: High-concurrency benchmark runs (e.g. running 10 test cases in parallel) would crash with connection errors.
+* **Cause**: Spawning thread pools without pooling database connections caused database server connection limits to be exceeded.
+* **Decision**: Introduce a thread-safe connection pooling system.
+* **Fix**: Configured `psycopg2.pool.ThreadedConnectionPool` on backend boot, and implemented a clean context manager that releases connections back to the pool in a `finally` block even when errors occur.
+* **Learning**: Bounding connection counts via a context-managed pool is necessary to guarantee database stability under concurrent execution stress.
+
+### 4. Pydantic-to-TypeScript Contract Alignment
+* **Problem**: Next.js dashboard components would crash when loading evaluation runs, throwing type errors.
+* **Cause**: Pydantic serialized metric results as dictionaries (`dict[str, MetricResult]`), whereas the TypeScript frontend expected list arrays for map rendering.
+* **Decision**: Standardize payload mapping at the API layer.
+* **Fix**: Intercepted the returned model payload in the FastAPI router `/api/runs/{run_id}` to serialize dictionary values into standard list shapes before returning the JSON response.
+* **Learning**: Normalizing payload shapes at the API controller boundary prevents type-mismatch crashes on frontend dashboard clients.
+
+### 5. Integration Test Isolation and Database Cleaning
+* **Problem**: Running PostgreSQL repository integration tests would dirty local development database tables, causing subsequent runs or experiments to report wrong metrics.
+* **Cause**: Test assertions were running against the same database schema used for development.
+* **Decision**: Implement clean table isolation fixtures.
+* **Fix**: Created a `clean_db` fixture in `test_postgres_repository.py` that executes a `TRUNCATE ... CASCADE` script before and after every test, ensuring a clean isolated database state for assertions.
+* **Learning**: Cleaning up persistent databases using transaction truncation fixtures is necessary to guarantee test repeatability.
 
 ---
 
-## 23. License
-This project is licensed under the MIT License. See package details for information.
+## What I Learned
+
+1. **Evaluation Trajectories are Critical**: Testing AI agents requires inspecting the *intermediate steps* (retrieval quality, tool call structure, reasoning), not just verifying final string outcomes.
+2. **Deterministic and Cognitive Metrics Complement Each Other**: Programmatic checkers evaluate budget boundaries, whereas LLM Judges grade language accuracy. They solve distinct problems.
+3. **Database Portability requires Abstraction**: Wrapping database operations in repository interfaces is the only way to support SQLite and PostgreSQL side-by-side without duplicating business code.
+4. **Async Runtimes Need Thread Offloading**: Standard relational database drivers run synchronously. Offloading these queries using `asyncio.to_thread` is necessary to maintain non-blocking API performance.
+5. **Data Migration Requires Validation**: Writing ETL scripts requires verifying row counts and checksums at completion. Blind copying risks silent encoding failures.
+
+---
+
+## Limitations & Future Work
+
+* **Task Queue Distribution**: Current benchmarks run on local FastAPI background task threads. In production, this should be offloaded to a distributed task queue (like Celery or Redis Workers).
+* **Trajectory Streaming**: The Next.js dashboard polls `/api/runs` to update trace details. Implementing WebSockets or Server-Sent Events (SSE) would allow live trace streaming.
+* **Authentication & RBAC**: The platform has no security boundary. Future work should introduce OAuth2 and Role-Based Access Control (RBAC) to restrict access.
+* **Automated CI/CD Gating**: Running evaluations as PR checks to block code commits that trigger regression deltas.
+
+---
+
+## Project Status
+
+**Completed & Stable**. The evaluation framework, PostgreSQL repository connection pool, dataset and experiment engines, Next.js workspace tabs, and logging modules are fully implemented, verified, and green.
+
+---
+
+## License
+
+This project is licensed under the MIT License. See package configuration files for license attributes.
